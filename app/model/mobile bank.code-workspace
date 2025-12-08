@@ -1,0 +1,15 @@
+{
+  "folders": [
+    {
+      "name": "mob_bank_db",
+      "path": "../.."
+    },
+    {
+      "name": "mob_bank",
+      "path": "../../../mob_bank"
+    }
+  ],
+  "settings": {
+    "liveServer.settings.multiRootWorkspaceName": "mob_bank"
+  }
+}

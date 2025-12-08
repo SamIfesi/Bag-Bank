@@ -1,0 +1,192 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Stack+Sans+Text:wght@200..700&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css");
+:root {
+  /* The card has a slight gradient, here is a close approximation */
+  --primary-gradient: linear-gradient(135deg, #5200a3 0%, #2a0054 100%);
+  --primary-black: #121212; /* The dark 'Add money' button */
+  --green-light: #6dc474;
+  /* --- Text Colors --- */
+  /* Main headings (e.g., "Hi, John!", "$16,567.00") */
+  --text-gray: #807b7b;
+  --text-primary: #000000;
+  /* Subtitles and labels (e.g., "How are you today?", "Number") */
+  --text-secondary: #8a8a8f;
+  /* Text inside the purple card and dark buttons */
+  --text-white: #f2f4f8;
+  /* Link text (e.g., "See All") */
+  --text-link: #1a56c4;
+
+  /* --- Background Surfaces --- */
+  /* The main app background */
+  --bg-body: #f4f6f8;
+  /* The light blue-grey background for action buttons (Send, Receive) & Transaction items */
+  --bg-surface-light: #f2f4f8;
+
+  /* --- Semantic/Status Colors --- */
+  /* Success/Deposit (Green text + Light green badge bg) */
+  --color-success: #2e7d32;
+  --bg-success-light: #e8f5e9;
+
+  /* Expense/Transfer (Red/Pink text + Light pink bg) */
+  --color-danger: #c62828;
+  --bg-danger-light: #ffebee;
+
+  /* Info/Neutral (Teal for Top up icon) */
+  --color-info: #00bcd4;
+  --bg-info-light: #e0f7fa;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Stack Sans Text", "Inter";
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+/* html{
+  overflow-x: hidden;
+} */
+.body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--bg-body);
+  padding: 1.5rem;
+}
+.form-group,
+.btn-submit {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+form {
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+}
+.form-group {
+  position: relative;
+  border-radius: 2rem;
+  overflow: hidden;
+}
+.icon {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  transform: translateY(-50%);
+}
+.input-form {
+  width: 100%;
+  padding: 1rem 1.3rem;
+  border: transparent;
+  outline: transparent;
+  font-size: 1rem;
+}
+.input-form::placeholder {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+.btn-submit {
+  width: 100%;
+  background: var(--primary-gradient);
+  color: var(--text-white);
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 2rem;
+  margin: 0.5rem 0;
+  border: none;
+  cursor: pointer;
+}
+#register {
+  background: var(--bg-success-light);
+  color: var(--text-secondary);
+}
+.psd-check{
+  display: inline-block;
+  border-radius: 2rem;
+  padding: 0.3rem .8rem;
+  margin: 0.3rem 0 0 .6rem;
+  font-size: 0.67rem;
+  color: var(--text-secondary);
+  background: #807b7b2d;
+  transition: all 0.75s ease;
+}
+.check-container{
+  margin: .5rem 0 1rem;
+  text-align: center;
+}
+.error {
+  display: block;
+  color: var(--color-danger);
+  font-size: 0.75rem;
+  margin: 0.5rem 1.5rem;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.msg-success {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--color-success);
+  text-align: center;
+  font-size: 0.9rem;
+  font-style: italic;
+  padding: 1.5rem;
+  margin: 2rem 0 0;
+  max-height: 1rem;
+  min-width: 100vw;
+}
+.alt-login {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 6rem; /* Adjust as needed */
+  width: 6rem;  /* Adjust as needed */
+}
+.spinner {
+  width: 3.125rem;
+  height: 3.125rem;
+  border: 5px solid #e4dbdb; /* Light grey */
+  border-top: 5px solid #3498db; /* Blue */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.showMsg{
+  max-height: 3rem;
+  opacity: 1;
+}
+.valid {
+  color: var(--color-success);
+  background: var(--bg-success-light);
+  border: 1px solid var(--color-success);
+}
+.back{
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.hide{
+    display: none;
+}
