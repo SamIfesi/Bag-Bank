@@ -2,87 +2,334 @@ const id = (id) => document.getElementById(id);
 const qa = (s) => document.querySelectorAll(s);
 const q = (s) => document.querySelector(s);
 
-// forms
-const userLoginForm = id("userLogin-form");
-const pswdLoginForm = id("pswdLogin-form");
-const passwordform = id("password-form");
-const emailform = id("email-form");
-const nameform = id("name-form");
-const confirmPswdform = id("confirm-Pswd-form");
+const CONFIG = {
+  loaderDelay: 800,
+  patterns: {
+    email: /^[A-Za-z\d._%+-]+@[A-Za-z\d.-]+\.[A-Za-z]{2,}$/,
+    username: /^[a-zA-Z][a-zA-Z0-9_]{2,15}$/,
+    fullname: /^[\p{L}\s'-]+$/u,
+    password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])(?=.*[\W_]).{8,}$/,
+  },
+};
 
-const regBtn = id("register");
+let tempUserData = {
+  password: "",
+};
+const elements = {
+  forms: {
+    login: id("login-form"),
+    register: id("register-form"),
+    steps: {
+      email: id("email-form"),
+      name: id("name-form"),
+      password: id("password-form"),
+      confirm: id("confirm-Pswd-form"),
+      userLogin: id("userLogin-form"),
+      passLogin: id("pswdLogin-form"),
+    },
+  },
+  inputs: {
+    email: id("email"),
+    fullname: id("fullname"),
+    username: id("username"),
+    password: id("password"),
+    cfmPassword: id("cfm-password"),
+  },
+  errors: {
+    email: id("email-error"),
+    fullname: id("fullname-error"),
+    username: id("user-error"),
+    password: id("password-error"),
+    confirm: id("cfm-psd-error"),
+  },
+  btns: {
+    emailNext: id("continueEmail"),
+    nameNext: id("continueName"),
+    passNext: id("continuePassword"),
+    loginNext: id("continueLogin"),
+    regNext: id("registerUser"),
+  },
 
-// inputs
-const username = id("username");
-const password = id("password");
-const email = id("email");
-const fullname = id("fullname");
-const cfmPassword = id("cfm-password");
-const checker = qa(".psd-check");
+  checkers: qa(".psd-check"),
+  loader: id("loader"),
 
-// show password icons
-const psdShow = id("psdShow");
-const cfmPsdShow = id("iconCmf-psdShow");
+  toggles: {
+    psd: id("psdShow"),
+    cfm: id("cfmPsdShow"),
+  },
+};
+/**
+ * Universal Inpur Validator
+ * @para {HTMLElement} inputElement - The input element
+ * @param {RegExp} pattern - Regex pattern
+ * @param {HTMLElement} errorElement - The error display element
+ * @param {string} patternMsg - Message to show on failure
+ * @param {string} requireMsg - Message to show if empty
+ * @param {boolean} isValid
+ *
+ * handle navigation to registration page
+ * @param {HTMLElement} regBtn - Register button element
+ * @param {HTMLElement} currentStep - Div to hide
+ * @param {HTMLElement} nextStep - Div to show
+ */
 
-// messages
-const msgSuccess = id("msg-success");
-const userMsg = id("user-error");
-const pwdMsg = id("password-error");
-const emailMsg = id("email-error");
-const fullnameMsg = id("fullname-error");
-const cfmPwdMsg = id("cfm-psd-error");
+const clearInputs = () => {
+  if (elements.inputs.email) elements.inputs.email.value = "";
+  if (elements.inputs.fullname) elements.inputs.fullname.value = "";
+  if (elements.inputs.username) elements.inputs.username.value = "";
+  if (elements.inputs.password) elements.inputs.password.value = "";
+  if (elements.inputs.cfmPassword) elements.inputs.cfmPassword.value = "";
 
-// Arrows
-const backLogin = id("backLogin");
-const backEmail = id("backEmail");
-const backName = id("backName");
-const backPsd = id("backPsd");
+  elements.checkers.forEach((item) => item.classList.remove("valid"));
+  Object.values(elements.errors).forEach((error) => {
+    if (error) {
+      error.textContent = "";
+      error.classList.remove("showMsg");
+    }
+  });
+};
 
-// Loader
-const loader = id("loader");
+const validateInput = (
+  inputElement,
+  pattern,
+  errorElement,
+  patternMsg,
+  requireMsg
+) => {
+  if (!inputElement) return true;
 
-// Navigate to registration page
-if (regBtn) {
-  regBtn.addEventListener("click", (e) => {
+  if (!inputElement || !errorElement) {
+    console.warn("Missing input or error element:", inputElement, errorElement);
+    return false;
+  }
+  const value = inputElement.value.trim();
+  errorElement.textContent = "";
+  errorElement.classList.remove("showMsg");
+
+  if (value.length === 0) {
+    errorElement.textContent = requireMsg;
+    errorElement.classList.add("showMsg");
+    return false;
+  }
+
+  if (pattern && !pattern.test(value)) {
+    errorElement.textContent = patternMsg;
+    errorElement.classList.add("showMsg");
+    return false;
+  }
+  return true;
+};
+
+const transitionStep = (currentStep, nextStep) => {
+  if (!currentStep || !nextStep) return;
+
+  currentStep.classList.add("hide");
+  elements.loader.classList.remove("hide");
+
+  setTimeout(() => {
+    elements.loader.classList.add("hide");
+    nextStep.classList.remove("hide");
+  }, CONFIG.loaderDelay);
+};
+
+// Registration Logic
+const initRegistration = () => {
+  // email step
+  if (!elements.forms.register) return;
+  elements.btns.emailNext.addEventListener("click", (e) => {
     e.preventDefault();
-    window.location.href = "register.php";
+    const isValid = validateInput(
+      elements.inputs.email,
+      CONFIG.patterns.email,
+      elements.errors.email,
+      "Please enter a valid email address.",
+      "Email is required."
+    );
+    if (isValid)
+      transitionStep(elements.forms.steps.email, elements.forms.steps.name);
   });
-}
 
-// Password show/hide toggle
-if (psdShow) {
-  psdShow.addEventListener("click", (e) => {
-    const eye = e.target;
-    if (
-      eye.classList.contains("ti-eye") &&
-      !eye.classList.contains("ti-eye-off") &&
-      password.type === "password"
-    ) {
-      eye.classList.replace("ti-eye", "ti-eye-off");
-      password.type = "text";
-    } else {
-      eye.classList.replace("ti-eye-off", "ti-eye");
-      password.type = "password";
+  // fullname and username step
+  elements.btns.nameNext.addEventListener("click", (e) => {
+    e.preventDefault();
+    const validName = validateInput(
+      elements.inputs.fullname,
+      CONFIG.patterns.fullname,
+      elements.errors.fullname,
+      "Invalid fullname format.",
+      "Fullname is required."
+    );
+    const validUser = validateInput(
+      elements.inputs.username,
+      CONFIG.patterns.username,
+      elements.errors.username,
+      "Username must be alphanumeric, 3-16 chars.",
+      "Username is required."
+    );
+
+    if (validName && validUser)
+      transitionStep(elements.forms.steps.name, elements.forms.steps.password);
+  });
+  // password step and Live Rquirement Checker
+  elements.inputs.password.addEventListener("input", (e) => {
+    const value = e.target.value;
+    const check = [
+      { text: "Minimum 8 characters", regex: /.{8,}/ },
+      { text: "1 uppercase character", regex: /[A-Z]/ },
+      { text: "1 lowercase character", regex: /[a-z]/ },
+      { text: "1 number character", regex: /[\d]/ },
+      { text: "Atleast 1 special character", regex: /[\W_]/ },
+    ];
+    elements.checkers.forEach((item) => {
+      const match = check.find((c) =>
+        item.textContent.toLowerCase().includes(c.text.toLowerCase())
+      );
+      if (match) item.classList.toggle("valid", match.regex.test(value));
+    });
+  });
+
+  elements.btns.passNext.addEventListener("click", (e) => {
+    e.preventDefault();
+    const isValid = validateInput(
+      elements.inputs.password,
+      CONFIG.patterns.password,
+      elements.errors.password,
+      "Password does not meet requirements.",
+      "Password is required."
+    );
+
+    if (isValid) {
+      tempUserData.password = elements.inputs.password.value;
+      transitionStep(
+        elements.forms.steps.password,
+        elements.forms.steps.confirm
+      );
     }
   });
-}
-// Confirm Password show/hide toggle
-if (cfmPsdShow) {
-  cfmPsdShow.addEventListener("click", (e) => {
-    const eye = e.target;
-    if (
-      eye.classList.contains("ti-eye") &&
-      !eye.classList.contains("ti-eye-off") &&
-      cfmPassword.type === "password"
-    ) {
-      eye.classList.replace("ti-eye", "ti-eye-off");
-      cfmPassword.type = "text";
-    } else {
-      eye.classList.replace("ti-eye-off", "ti-eye");
-      cfmPassword.type = "password";
+
+  // final Submission Step
+  elements.forms.register.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const cfmValue = elements.inputs.cfmPassword.value;
+    elements.errors.confirm.classList.remove("showMsg");
+
+    if (cfmValue !== tempUserData.password) {
+      elements.errors.confirm.textContent = "Passwords do not match.";
+      elements.errors.confirm.classList.add("showMsg");
+      return;
+    }
+
+    elements.loader.classList.remove("hide");
+    elements.forms.steps.confirm.classList.add("hide");
+  });
+};
+
+// Initialize login Process
+const initLogin = () => {
+  if (!elements.forms.login) return;
+  elements.btns.loginNext.addEventListener("click", (e) => {
+    e.preventDefault();
+    const isValid = validateInput(
+      elements.inputs.username,
+      CONFIG.patterns.username,
+      elements.errors.username,
+      "Invalid username format.",
+      "Username is required."
+    );
+    if (isValid)
+      transitionStep(
+        elements.forms.steps.userLogin,
+        elements.forms.steps.passLogin
+      );
+  });
+
+  elements.forms.login.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const isValid = validateInput(
+      elements.inputs.password,
+      null,
+      elements.errors.password,
+      "",
+      "Password is required."
+    );
+    if (isValid) {
+      elements.loader.classList.remove("hide");
+      elements.forms.steps.passLogin.classList.add("hide");
     }
   });
-}
+};
+
+const initUtilities = () => {
+  const toggleHandler = (icon, input) => {
+    if (!icon || !input) return;
+    icon.addEventListener("click", () => {
+      const isText = input.type === "text";
+      input.type = isText ? "password" : "text";
+      icon.classList.toggle("ti-eye");
+      icon.classList.toggle("ti-eye-off");
+    });
+  };
+
+  toggleHandler(elements.toggles.psd, elements.inputs.password);
+  toggleHandler(elements.toggles.cfm, elements.inputs.cfmPassword);
+
+  // Back Button Navigation
+  const backNavs = [
+    {
+      btn: id("backLogin"),
+      current: elements.forms.steps.email,
+      prev: null,
+      link: "login.php",
+    },
+    {
+      btn: id("backEmail"),
+      current: elements.forms.steps.name,
+      prev: elements.forms.steps.email,
+    },
+    {
+      btn: id("backName"),
+      current: elements.forms.steps.password,
+      prev: elements.forms.steps.name,
+    },
+    {
+      btn: id("backPsd"),
+      current: elements.forms.steps.confirm,
+      prev: elements.forms.steps.password,
+    },
+    {
+      btn: id("backToLogin"),
+      current: elements.forms.steps.passLogin,
+      prev: elements.forms.steps.userLogin,
+    },
+  ];
+
+  backNavs.forEach((nav) => {
+    if (nav.btn) {
+      nav.btn.addEventListener("click", () => {
+        if (nav.link) {
+          window.location.href = nav.link;
+        } else {
+          nav.current.classList.add("hide");
+          nav.prev.classList.remove("hide");
+        }
+      });
+    }
+  });
+
+  const regBtn = id("register");
+  if (regBtn) {
+    regBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.location.href = "register.php";
+    });
+  }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  initRegistration();
+  initLogin();
+  initUtilities();
+});
 
 // Check if user is authenticated
 function checkAuth() {
@@ -102,354 +349,3 @@ function checkAuth() {
   }
 }
 // checkAuth();
-
-function loginUsers() {
-  // Username form for Login
-  if (userLoginForm) {
-    userLoginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const usernameValue = username.value.toLowerCase().trim();
-      const userPattern = /^[a-zA-Z][a-zA-Z0-9_]{2,15}$/;
-
-      let valid = true;
-      userMsg.textContent = "";
-      userMsg.classList.remove("showMsg");
-
-      const validation = [
-        {
-          condition: usernameValue.length === 0,
-          message: "Username is required",
-          element: userMsg,
-        },
-        {
-          condition: usernameValue !== "" && !userPattern.test(usernameValue),
-          message: "Invalid username.",
-          element: userMsg,
-        },
-      ];
-
-      for (const validate of validation) {
-        if (validate.condition) {
-          valid = false;
-          validate.element.textContent = validate.message;
-          validate.element.classList.add("showMsg");
-          break;
-        }
-      }
-
-      if (valid) {
-        loginData.username = usernameValue;
-        userMsg.textContent = "";
-        userMsg.classList.remove("showMsg");
-
-        userLoginForm.classList.add("hide");
-        loader.classList.remove("hide");
-        setTimeout(() => {
-          loader.classList.add("hide");
-          pswdLoginForm.classList.remove("hide");
-        }, 1500);
-      }
-    });
-  }
-
-  if (pswdLoginForm) {
-    pswdLoginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const pswdValue = password.value;
-
-      let valid = true;
-      pwdMsg.textContent = "";
-      pwdMsg.classList.remove("showMsg");
-
-      const validation = [
-        {
-          condition: pswdValue === "",
-          message: "Password is required",
-          element: pwdMsg,
-        },
-      ];
-
-      for (let validate of validation) {
-        if (validate.condition) {
-          valid = false;
-          validate.element.textContent = validate.message;
-          validate.element.classList.add("showMsg");
-          break;
-        }
-      }
-    });
-  }
-}
-loginUsers();
-
-
-//Function for registerUsers()
-
-function registerUsers() {
-  //  Email form submission
-  if (emailform) {
-    emailform.addEventListener("submit", (e) => {
-      e.preventDefault();
-      let emailValue = email.value.toLowerCase().trim();
-      const emailPattern = /^[A-Za-z\d._%+-]+@[A-Za-z\d.-]+\.[A-Za-z]{2,}$/;
-
-      let valid = true;
-      emailMsg.textContent = "";
-      emailMsg.classList.remove("showMsg");
-
-      const validation = [
-        {
-          condition: emailValue.length === 0,
-          message: "Email is required.",
-          element: emailMsg,
-        },
-        {
-          condition: !emailPattern.test(emailValue),
-          message: "Invalid email address.",
-          element: emailMsg,
-        },
-      ];
-
-      if (email) {
-        for (const validate of validation) {
-          if (validate.condition) {
-            valid = false;
-            validate.element.textContent = validate.message;
-            validate.element.classList.add("showMsg");
-            break;
-          }
-        }
-      }
-
-      if (valid) {
-        emailMsg.textContent = "";
-        emailMsg.classList.remove("showMsg");
-
-        emailform.classList.add("hide");
-        loader.classList.remove("hide");
-        setTimeout(() => {
-          loader.classList.add("hide");
-          nameform.classList.remove("hide");
-        }, 1500);
-      }
-    });
-  }
-
-  //   Name form submission
-  if (nameform) {
-    nameform.addEventListener("submit", (e) => {
-      e.preventDefault();
-      let nameValue = fullname.value.toLowerCase().trim();
-      let usernameValue = username.value.toLowerCase().trim();
-      const namePattern = /^[\p{L}\s'-]+$/u;
-      const userPattern = /^[a-zA-Z][a-zA-Z0-9_]{2,15}$/;
-
-      let valid = true;
-      fullnameMsg.textContent = "";
-      userMsg.textContent = "";
-      fullnameMsg.classList.remove("showMsg");
-      userMsg.classList.remove("showMsg");
-
-      const validation = [
-        {
-          condition: nameValue.length === 0,
-          message: "Fullname is required.",
-          element: fullnameMsg,
-        },
-        {
-          condition: nameValue.length > 0 && !namePattern.test(nameValue),
-          message: "Invalid fullname.",
-          element: fullnameMsg,
-        },
-        {
-          condition: usernameValue.length === 0,
-          message: "Username is required.",
-          element: userMsg,
-        },
-        {
-          condition:
-            usernameValue.length > 0 && !userPattern.test(usernameValue),
-          message: "Invalid username.",
-          element: userMsg,
-        },
-      ];
-
-      if (fullname) {
-        for (const validate of validation) {
-          if (validate.condition) {
-            valid = false;
-            validate.element.textContent = validate.message;
-            validate.element.classList.add("showMsg");
-          }
-        }
-      }
-
-      if (valid) {
-        fullnameMsg.textContent = "";
-        userMsg.textContent = "";
-        fullnameMsg.classList.remove("showMsg");
-        userMsg.classList.remove("showMsg");
-
-        nameform.classList.add("hide");
-        loader.classList.remove("hide");
-        setTimeout(() => {
-          loader.classList.add("hide");
-          passwordform.classList.remove("hide");
-        }, 1500);
-      }
-    });
-  }
-
-  //  password form submission
-  if (passwordform) {
-    const pswdPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])(?=.*[\W_]).{8,}$/;
-    password.addEventListener("input", () => {
-      let pwdValue = password.value;
-
-      checker.forEach((check) => {
-        if (check.textContent.includes("Minimum 8 characters")) {
-          check.classList.toggle("valid", pwdValue.length >= 8);
-        }
-        if (check.textContent.includes("1 uppercase character")) {
-          check.classList.toggle("valid", /[A-Z]/.test(pwdValue));
-        }
-        if (check.textContent.includes("1 lowercase character")) {
-          check.classList.toggle("valid", /[a-z]/.test(pwdValue));
-        }
-        if (check.textContent.toLowerCase().includes("1 number character")) {
-          check.classList.toggle("valid", /[\d]/.test(pwdValue));
-        }
-        if (check.textContent.includes("Atleast 1 special character")) {
-          check.classList.toggle("valid", /[\W_]/.test(pwdValue));
-        }
-      });
-      pwdMsg.textContent = "";
-      pwdMsg.classList.remove("showMsg");
-    });
-
-    passwordform.addEventListener("submit", (e) => {
-      e.preventDefault();
-      let pwdValue = password.value;
-
-      let valid = true;
-      pwdMsg.textContent = "";
-      pwdMsg.classList.remove("showMsg");
-
-      const validation = [
-        {
-          condition: pwdValue.length === 0,
-          message: "Password is required.",
-          element: pwdMsg,
-        },
-        {
-          condition: pwdValue.length > 0 && !pswdPattern.test(pwdValue),
-          message: "Password must meet all requirements.",
-          element: pwdMsg,
-        },
-      ];
-
-      if (password) {
-        for (const validate of validation) {
-          if (validate.condition) {
-            valid = false;
-            validate.element.textContent = validate.message;
-            validate.element.classList.add("showMsg");
-          }
-        }
-      }
-
-      if (valid) {
-        pwdMsg.textContent = "";
-        pwdMsg.classList.remove("showMsg");
-        passwordform.classList.add("hide");
-        loader.classList.remove("hide");
-        setTimeout(() => {
-          loader.classList.add("hide");
-          confirmPswdform.classList.remove("hide");
-        }, 1500);
-      }
-    });
-  }
-
-  // Confirm password form submission
-  if (confirmPswdform) {
-    confirmPswdform.addEventListener("submit", (e) => {
-      e.preventDefault();
-      let cfmPsdValue = cfmPassword.value;
-
-      let valid = true;
-      cfmPwdMsg.textContent = "";
-      cfmPwdMsg.classList.remove("showMsg");
-
-      const validation = [
-        {
-          condition: cfmPsdValue.length === 0,
-          message: "Confirm Password is required.",
-          element: cfmPwdMsg,
-        },
-        {
-          condition: cfmPsdValue !== userData.password,
-          message: "Passwords do not match.",
-          element: cfmPwdMsg,
-        },
-      ];
-
-      if (cfmPassword) {
-        for (const validate of validation) {
-          if (validate.condition) {
-            valid = false;
-            validate.element.textContent = validate.message;
-            validate.element.classList.add("showMsg");
-            break;
-          }
-        }
-      }
-
-      if (valid) {
-      }
-    });
-  }
-}
-registerUsers();
-
-// Back buttons functionality
-if (backPsd) {
-  backPsd.addEventListener("click", () => {
-    loader.classList.remove("hide");
-    confirmPswdform.classList.add("hide");
-    setTimeout(() => {
-      loader.classList.add("hide");
-      passwordform.classList.remove("hide");
-    }, 1500);
-  });
-}
-if (backName) {
-  backName.addEventListener("click", () => {
-    loader.classList.remove("hide");
-    passwordform.classList.add("hide");
-    setTimeout(() => {
-      loader.classList.add("hide");
-      nameform.classList.remove("hide");
-    }, 1500);
-  });
-}
-if (backEmail) {
-  backEmail.addEventListener("click", () => {
-    loader.classList.remove("hide");
-    nameform.classList.add("hide");
-    setTimeout(() => {
-      loader.classList.add("hide");
-      emailform.classList.remove("hide");
-    }, 1500);
-  });
-}
-if (backLogin) {
-  backLogin.addEventListener("click", () => {
-    loader.classList.remove("hide");
-    emailform.classList.add("hide");
-    setTimeout(() => {
-      loader.classList.add("hide");
-      window.location.href = "/index.html";
-    }, 1500);
-  });
-}
