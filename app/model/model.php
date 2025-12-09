@@ -1,7 +1,5 @@
 <?php
-
-// require('config/autoload.php');
-require_once('Database.php');
+require_once(__DIR__ . '/Database.php');
 class Model extends Database {
 
     public static function create (string $table, array $data){

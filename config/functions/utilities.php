@@ -7,7 +7,7 @@ function check_empty_fields(array $required_fields, array $user_inputs, array $e
 {
     foreach ($user_inputs as $key => $value) {
         if (in_array($key, $required_fields) && strlen($value) < 1) {
-            array_push($errors, "please fill in $key");
+            array_push($error, "please fill in $key");
         }
     }
 }

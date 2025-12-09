@@ -1,9 +1,5 @@
 <?php
-require_once "app/model/model.php";
-// public function user_exist($username){
-
-// };
-
+require_once __DIR__ . "/../model/model.php";
 class userController
 {
     public function show_all()
@@ -20,7 +16,8 @@ class userController
     }
 
     // get user: it gets the details of a single user
-    public static function get_user($username){
+    public static function get_user($username)
+    {
         $user = Model::find('users', 'username', $username);
         return $user;
     }

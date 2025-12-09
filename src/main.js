@@ -209,11 +209,15 @@ const initRegistration = () => {
 
   // final Submission Step
   elements.forms.register.addEventListener("submit", (e) => {
-    e.preventDefault();
+    if(elements.forms.steps.confirm.classList.contains('hide')) {
+      e.preventDefault();
+      return;
+    }
     const cfmValue = elements.inputs.cfmPassword.value;
     elements.errors.confirm.classList.remove("showMsg");
-
+    
     if (cfmValue !== tempUserData.password) {
+      e.preventDefault();
       elements.errors.confirm.textContent = "Passwords do not match.";
       elements.errors.confirm.classList.add("showMsg");
       return;

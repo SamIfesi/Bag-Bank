@@ -1,5 +1,11 @@
 <?php
-require_once "includes/components/process_register.php";
+session_start();
+
+// Get errors from session and clear them
+$errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
+$old_input = isset($_SESSION['old_input']) ? $_SESSION['old_input'] : [];
+unset($_SESSION['errors']);
+unset($_SESSION['old_input']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,17 +21,17 @@ require_once "includes/components/process_register.php";
 <body class="body">
     <main>
         <img src="public/logo-stacked.svg" alt="" class="logo" />
-        <?php if (!empty($errors)): ?>
+        <!-- <?php if (!empty($errors)): ?>
             <div class="error-container">
                 <?php foreach ($errors as $error): ?>
-                    <span class="error"><?php echo htmlspecialchars($error); ?></span>
+                    <span class="error showMsg"><?php echo htmlspecialchars($error); ?></span>
                 <?php endforeach; ?>
             </div>
-        <?php endif; ?>
+        <?php endif; ?> -->
         <div class="loader-container hide" id="loader">
             <div class="spinner"></div>
         </div>
-        <form action="" method="post" id="register-form">
+        <form action="includes/components/process_register.php" method="post" id="register-form">
             <!-- Email input form -->
             <div id="email-form">
                 <i class="ti ti-chevron-left back" id="backLogin"></i>
@@ -39,6 +45,9 @@ require_once "includes/components/process_register.php";
                         placeholder="Enter email" />
                 </div>
                 <span class="error" id="email-error">
+                    <?php foreach ($errors as $error): ?>
+                        <?php echo htmlspecialchars($error); ?>
+                    <?php endforeach; ?>
                 </span>
 
                 <button type="button" class="btn-submit continue" id="continueEmail">Continue</button>
