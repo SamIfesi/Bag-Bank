@@ -35,13 +35,13 @@ unset($_SESSION['errors']);
                         name="username"
                         placeholder="Enter username" />
                 </div>
-                <span class="error" id="user-error">
+                <span class="error showMsg" id="user-error">
                     <?php foreach ($errors as $error): ?>
                         <?php echo htmlspecialchars($error); ?>
                     <?php endforeach; ?>
                 </span>
                 <button type="submit" class="btn-submit continue" id="continueLogin">Continue</button>
-                <button type="button" id="register" class="btn-submit" onclick="window.location.href='register.php'">Register</button>
+                <button type="button" id="register" class="btn-submit" >Register</button>
             </div>
 
             <!-- Password div -->
@@ -56,11 +56,7 @@ unset($_SESSION['errors']);
                         name="password"
                         placeholder="Enter password" />
                 </div>
-                <span class="error" id="password-error">
-                    <?php foreach ($errors as $error): ?>
-                        <?php echo htmlspecialchars($error); ?>
-                    <?php endforeach; ?>
-                </span>
+                <span class="error" id="password-error"></span>
                 <button type="submit" class="btn-submit">Login</button>
                 <p class="alt-login">
                     Don't have an account? <a href="register.php">Register here</a>

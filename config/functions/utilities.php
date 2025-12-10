@@ -47,7 +47,7 @@ function redirect_to($location)
 
 // authenticate user
 function is_logged_in(){
-    if(!isset($_SESSION['user']) && !is_empty($_SESSION['user'])){
+    if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
         return true;
     } else {
         return false;

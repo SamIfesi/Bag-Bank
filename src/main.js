@@ -56,7 +56,9 @@ const elements = {
   toggles: {
     psd: id("psdShow"),
     cfm: id("cfmPsdShow"),
+    bal: id("balShow"),
   },
+  bal: id("bal"),
 };
 /**
  * Universal Inpur Validator
@@ -209,13 +211,13 @@ const initRegistration = () => {
 
   // final Submission Step
   elements.forms.register.addEventListener("submit", (e) => {
-    if(elements.forms.steps.confirm.classList.contains('hide')) {
+    if (elements.forms.steps.confirm.classList.contains("hide")) {
       e.preventDefault();
       return;
     }
     const cfmValue = elements.inputs.cfmPassword.value;
     elements.errors.confirm.classList.remove("showMsg");
-    
+
     if (cfmValue !== tempUserData.password) {
       e.preventDefault();
       elements.errors.confirm.textContent = "Passwords do not match.";
@@ -256,9 +258,10 @@ const initLogin = () => {
       "Password is required."
     );
     if (isValid) {
-      e.preventDefault();
       elements.loader.classList.remove("hide");
       elements.forms.steps.passLogin.classList.add("hide");
+    } else {
+      e.preventDefault();
     }
   });
 };
@@ -276,6 +279,23 @@ const initUtilities = () => {
 
   toggleHandler(elements.toggles.psd, elements.inputs.password);
   toggleHandler(elements.toggles.cfm, elements.inputs.cfmPassword);
+
+  const toggleBalance = () => {
+    const toggleBtn = elements.toggles.bal;
+    const balContainer = elements.bal;
+
+    if (!toggleBtn || !balContainer) return;
+    toggleBtn.addEventListener("click", function () {
+      const isCurrentlyHidden = amountText.textContent === "****";
+      const realAmount = balContainer.getAttribute("data-amount");
+
+      if (isCurrentlyHidden) {
+        amountText.textContent = realAmount;
+        balIcon.classList.remove("ti-eye");
+        balIcon.classList.add("ti-eye-off");
+      }
+    });
+  };
 
   // Back Button Navigation
   const backNavs = [
