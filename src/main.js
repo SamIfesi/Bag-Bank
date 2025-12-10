@@ -58,7 +58,15 @@ const elements = {
     cfm: id("cfmPsdShow"),
     bal: id("balShow"),
   },
-  bal: id("bal"),
+  balance: {
+    bal: id("bal"),
+    amountText: id("amount-text"),
+    balIcon: id("balIcon"),
+  },
+  account: {
+    accBtn: id("acctToggleBtn"),
+    accNum: id("acctText"),
+  },
 };
 /**
  * Universal Inpur Validator
@@ -280,23 +288,6 @@ const initUtilities = () => {
   toggleHandler(elements.toggles.psd, elements.inputs.password);
   toggleHandler(elements.toggles.cfm, elements.inputs.cfmPassword);
 
-  const toggleBalance = () => {
-    const toggleBtn = elements.toggles.bal;
-    const balContainer = elements.bal;
-
-    if (!toggleBtn || !balContainer) return;
-    toggleBtn.addEventListener("click", function () {
-      const isCurrentlyHidden = amountText.textContent === "****";
-      const realAmount = balContainer.getAttribute("data-amount");
-
-      if (isCurrentlyHidden) {
-        amountText.textContent = realAmount;
-        balIcon.classList.remove("ti-eye");
-        balIcon.classList.add("ti-eye-off");
-      }
-    });
-  };
-
   // Back Button Navigation
   const backNavs = [
     {
@@ -349,10 +340,68 @@ const initUtilities = () => {
   }
 };
 
+// Initialize all functionalities on DashBoard
+const initDashboard = () => {
+  // Balance Toggle
+  const toggleBalance = () => {
+    let toggleBtn = elements.balance.balIcon;
+    let balContainer = elements.balance.bal;
+    let amountText = elements.balance.amountText;
+
+    if (!toggleBtn || !balContainer || !amountText) return;
+    toggleBtn.addEventListener("click", function () {
+      const isCurrentlyHidden = amountText.textContent === "****";
+      const realAmount = balContainer.getAttribute("data-amount");
+
+      if (isCurrentlyHidden) {
+        amountText.textContent = realAmount;
+        balIcon.classList.remove("ti-eye");
+        balIcon.classList.add("ti-eye-off");
+      } else {
+        amountText.textContent = "****";
+        balIcon.classList.remove("ti-eye-off");
+        balIcon.classList.add("ti-eye");
+      }
+
+      fetch("includes/components/toggler.php?item=balance", {
+        method: "POST",
+      }).catch((err) => console.error("Failed to save preference", err));
+    });
+  };
+  toggleBalance();
+
+  // Account Number Toggle
+  const toggleAccountNumber = () => {
+    let toggleBtn = elements.account.accBtn;
+    let accNum = elements.account.accNum;
+    if (!toggleBtn || !accNum) return;
+    toggleBtn.addEventListener("click", () => {
+      const fullNum = toggleBtn.getAttribute("data-full");
+      const maskedNum = toggleBtn.getAttribute("data-masked");
+
+      const currentText = accNum.textContent.trim();
+      if (currentText === maskedNum) {
+        accNum.textContent = fullNum;
+      } else {
+        accNum.textContent = maskedNum;
+      }
+      // toggleBtn.textContent = currentText === maskedNum ? "Hide Account Number", accNum.textContent = fullNum : "Show Account Number", accNum.textContent = maskedNum;
+
+      fetch("includes/components/toggler.php?item=account_number", {
+        method: "POST",
+      }).catch((err) => {
+        console.error("Failed to save acct state", err);
+      });
+    });
+  };
+  toggleAccountNumber();
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   initRegistration();
   initLogin();
   initUtilities();
+  initDashboard();
 });
 
 // Check if user is authenticated

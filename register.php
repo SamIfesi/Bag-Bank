@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . "/includes/check_auth.php";
 session_start();
 
 // Get errors from session and clear them

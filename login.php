@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . "/includes/check_auth.php";
 
 // Get errors from session and clear them
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
@@ -41,7 +41,7 @@ unset($_SESSION['errors']);
                     <?php endforeach; ?>
                 </span>
                 <button type="submit" class="btn-submit continue" id="continueLogin">Continue</button>
-                <button type="button" id="register" class="btn-submit" >Register</button>
+                <button type="button" id="register" class="btn-submit">Register</button>
             </div>
 
             <!-- Password div -->

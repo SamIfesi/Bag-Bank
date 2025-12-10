@@ -16,3 +16,7 @@
         <span>Profile</span>
     </a>
 </nav>
+<script src="src/main.js"></script>
+</body>
+
+</html>
