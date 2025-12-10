@@ -248,7 +248,6 @@ const initLogin = () => {
   });
 
   elements.forms.login.addEventListener("submit", (e) => {
-    e.preventDefault();
     const isValid = validateInput(
       elements.inputs.password,
       null,
@@ -257,6 +256,7 @@ const initLogin = () => {
       "Password is required."
     );
     if (isValid) {
+      e.preventDefault();
       elements.loader.classList.remove("hide");
       elements.forms.steps.passLogin.classList.add("hide");
     }

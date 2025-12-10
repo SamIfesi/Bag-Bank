@@ -21,13 +21,6 @@ unset($_SESSION['old_input']);
 <body class="body">
     <main>
         <img src="public/logo-stacked.svg" alt="" class="logo" />
-        <!-- <?php if (!empty($errors)): ?>
-            <div class="error-container">
-                <?php foreach ($errors as $error): ?>
-                    <span class="error showMsg"><?php echo htmlspecialchars($error); ?></span>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?> -->
         <div class="loader-container hide" id="loader">
             <div class="spinner"></div>
         </div>
@@ -44,7 +37,7 @@ unset($_SESSION['old_input']);
                         name="email"
                         placeholder="Enter email" />
                 </div>
-                <span class="error" id="email-error">
+                <span class="error showMsg" id="email-error">
                     <?php foreach ($errors as $error): ?>
                         <?php echo htmlspecialchars($error); ?>
                     <?php endforeach; ?>

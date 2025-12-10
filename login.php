@@ -1,3 +1,10 @@
+<?php
+session_start();
+
+// Get errors from session and clear them
+$errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
+unset($_SESSION['errors']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,7 +24,7 @@
             <div class="spinner"></div>
         </div>
 
-        <form action="" method="post" id="login-form">
+        <form action="includes/components/process_login.php" method="post" id="login-form">
             <div id="userLogin-form">
                 <div class="form-group">
                     <i class="ti ti-user icon"></i>
@@ -28,9 +35,13 @@
                         name="username"
                         placeholder="Enter username" />
                 </div>
-                <span class="error" id="user-error"></span>
+                <span class="error" id="user-error">
+                    <?php foreach ($errors as $error): ?>
+                        <?php echo htmlspecialchars($error); ?>
+                    <?php endforeach; ?>
+                </span>
                 <button type="submit" class="btn-submit continue" id="continueLogin">Continue</button>
-                <button type="submit" id="register" class="btn-submit">Register</button>
+                <button type="button" id="register" class="btn-submit" onclick="window.location.href='register.php'">Register</button>
             </div>
 
             <!-- Password div -->
@@ -45,7 +56,11 @@
                         name="password"
                         placeholder="Enter password" />
                 </div>
-                <span class="error" id="password-error"></span>
+                <span class="error" id="password-error">
+                    <?php foreach ($errors as $error): ?>
+                        <?php echo htmlspecialchars($error); ?>
+                    <?php endforeach; ?>
+                </span>
                 <button type="submit" class="btn-submit">Login</button>
                 <p class="alt-login">
                     Don't have an account? <a href="register.php">Register here</a>
