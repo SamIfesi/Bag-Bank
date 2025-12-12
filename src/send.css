@@ -194,12 +194,11 @@ body {
 }
 
 /* Validation message */
-.msg {
-  display: block;
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
+.error {
+  display: none;
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
   color: var(--color-danger);
-  text-align: center;
 }
 @media (min-width: 44rem) {
   .send-container {

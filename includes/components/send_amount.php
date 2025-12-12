@@ -4,18 +4,19 @@
         <div class="input-group">
             <span class="send-icon">₦</span>
             <input
-                type="number"
+                type="text"
                 class="input"
                 id="amount"
                 placeholder="0.00"
-                min="0"
-                step="0.01" />
+                inputmode="decimal"
+                data-max="1000000" />
         </div>
+        <span class="error" id="amount-error">The amount should be within ₦10.00 - ₦5,000,000.00</span>
     </div>
 
     <div class="section">
-        <label for="description">Description (Optional)</label>
-        <span type="text" id="description" placeholder="What's this for?" class="form-grp" />
+        <label for="description">Note</label>
+        <input type="text" id="description" placeholder="What's this for? (Optional)" class="form-grp" />
     </div>
 
     <div class="quick-amounts">

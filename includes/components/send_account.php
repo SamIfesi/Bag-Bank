@@ -1,16 +1,16 @@
- <?php
-    require_once __DIR__ . '/../../app/model/model.php';
-    ?>
  <main class="send-container">
-     <section id="recipient-section">
+     <section id="recipient-section" class="">
          <div class="section" id="">
              <label for="recipient">Recipient</label>
              <div class="input-group">
                  <i class="ti ti-user send-icon"></i>
                  <input
-                     type="number"
+                     type="text"
                      class="input"
                      id="recipient"
+                     pattern="\d{10}"
+                     maxlength="10"
+                     inputmode="numeric"
                      placeholder="Enter 10-digit Account No." />
              </div>
          </div>

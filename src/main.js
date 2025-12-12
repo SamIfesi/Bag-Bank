@@ -10,6 +10,17 @@ const CONFIG = {
     fullname: /^[\p{L}\s'-]+$/u,
     password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])(?=.*[\W_]).{8,}$/,
   },
+  send: {
+    amount: {
+      maxAmount: 5000000,
+      patAmount: /^\d+(\.\d{1,2})?$/,
+      maxlength: 10,
+    },
+    recipient: {
+      pattern: /^\d{10}$/,
+      maxlength: 10,
+    },
+  },
 };
 
 let tempUserData = {
@@ -71,13 +82,27 @@ const elements = {
     send: id("sendBtn"),
   },
   send: {
-    bank: id("bank"),
-    recipient: id("recipient"),
-    amount: id("amount"),
-  }
+    inputs: {
+      bank: id("bank"),
+      recipient: id("recipient"),
+      amount: id("amount"),
+      accname: id("name"),
+    },
+    btns: {
+      next: id("nextBtn"),
+      send: id("sendMoneyBtn"),
+      quickAmounts: qa(".quick-btn"),
+    },
+    errors: {
+      recipient: id("recipient-error"),
+      amount: id("amount-error"),
+      bank: id("bank-error"),
+      accname: id("accname-error"),
+    },
+  },
 };
 /**
- * Universal Inpur Validator
+ * Universal Input Validator
  * @para {HTMLElement} inputElement - The input element
  * @param {RegExp} pattern - Regex pattern
  * @param {HTMLElement} errorElement - The error display element
@@ -404,31 +429,93 @@ const initDashboard = () => {
   toggleAccountNumber();
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  initRegistration();
-  initLogin();
-  initUtilities();
-  initDashboard();
-});
-
 // action buttons for reloctions
 /**
  * @param {HTMLElement} sendBtn - Send Money button
  */
 
 const initActionButtons = () => {
-  const sendBtn = elements.action.send;
+  const sendBtn = elements.action?.send;
   if (sendBtn) {
-    sendBtn.addEventListener("click", () => {
+    sendBtn.addEventListener("click", (e) => {
+      e.preventDefault();
       window.location.href = "send.php";
     });
   }
 };
-initActionButtons();
 
 // validate send money form inputs
+
 const initSendMoneyForm = () => {
-  const recipientInput = elements.inputs.recipient;
-  const amountInput = elements.inputs.amount;
-  const nextBtn = id("nextBtn");
+  const { recipient, amount, bank, accName } = elements.send?.inputs;
+  const { next, quickAmounts } = elements.send?.btns;
+  if (!recipient || !amount || !bank || !next) return;
+
+  const formatDigitInput = (input, maxLength) => {
+    let value = input.value.replace(/\D/g, "");
+    if (value.length > maxLength) {
+      value = value.substring(0, maxLength);
+    }
+    input.value = value;
+  };
+  const formatAmountInput = (input, maxLength) => {
+    let value = input.value.replace(/[^\d.]/g, "");
+    const parts = value.split(".");
+    if (parts.length > 2) {
+      value = parts[0] + "." + parts.slice(1).join("");
+    }
+    if (parts[1] && parts[1].length > 2) {
+      value = parts[0] + "." + parts[1].substring(0, 2);
+    }
+    if (value.length > maxLength) {
+      value = value.substring(0, maxLength);
+    }
+    input.value = value;
+  };
+
+  const validateSendForm = () => {
+    let recipientVal = recipient.value.trim();
+    let amountVal = parseFloat(amount.value);
+    let bankVal = bank.value;
+
+    const isRecipientValid = CONFIG.send.recipient.pattern.test(recipientVal);
+    const isBankValid = bankVal !== "";
+    const isAmountPatternValid = CONFIG.send.amount.patAmount.test(
+      amount.value
+    );
+    const isAmountValueValid =
+      !isNaN(amountVal) &&
+      amountVal > 0 &&
+      amountVal <= CONFIG.send.amount.maxAmount;
+    const isAmountValid = isAmountPatternValid && isAmountValueValid;
+
+    next.disabled = !(isRecipientValid && isAmountValid && isBankValid);
+  };
+  if (quickAmounts) {
+    quickAmounts.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        elements.send.inputs.amount.value = btn.getAttribute("data-amount");
+        validateSendForm();
+      });
+    });
+  }
+
+  recipient.addEventListener("input", () => {
+    formatDigitInput(recipient, CONFIG.send.recipient.maxlength);
+    validateSendForm();
+  });
+  amount.addEventListener("input", () => {
+    formatAmountInput(amount, CONFIG.send.amount.maxlength);
+    validateSendForm();
+    elements.send.errors.amount.style.display = amount.value ? "block" : "none";
+  });
+  bank.addEventListener("change", validateSendForm);
 };
+document.addEventListener("DOMContentLoaded", () => {
+  initRegistration();
+  initLogin();
+  initUtilities();
+  initDashboard();
+  initSendMoneyForm();
+  initActionButtons();
+});
