@@ -1,4 +1,4 @@
-<section class="hide" id="amount-section">
+<form class="hide" id="amount-section">
     <div class="section">
         <label for="amount">Amount</label>
         <div class="input-group">
@@ -11,7 +11,7 @@
                 inputmode="decimal"
                 data-max="1000000" />
         </div>
-        <span class="error" id="amount-error">The amount should be within ₦10.00 - ₦5,000,000.00</span>
+        <span class="error" id="amount-error">The amount should be within ₦100.00 - ₦5,000,000.00</span>
     </div>
 
     <div class="section">
@@ -28,13 +28,13 @@
         <button class="quick-btn" data-amount="20000">₦20,000</button>
     </div>
 
-    <button class="btn-send" id="sendMoneyBtn">
-        <i class="ti ti-send"></i>
-        Send Money
+    <button class="btn-send" id="sendMoneyBtn" disabled>
+        <!-- <i class="ti ti-send"></i> -->
+        Next
     </button>
-</section>
+</form>
 </main>
-<script type="module" src="src/main.js"></script>
+<script type="module" src="src/send.js"></script>
 </body>
 
 </html>

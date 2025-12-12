@@ -1,5 +1,5 @@
  <main class="send-container">
-     <section id="recipient-section" class="">
+     <form id="account-section" class="hid">
          <div class="section" id="">
              <label for="recipient">Recipient</label>
              <div class="input-group">
@@ -8,7 +8,6 @@
                      type="text"
                      class="input"
                      id="recipient"
-                     pattern="\d{10}"
                      maxlength="10"
                      inputmode="numeric"
                      placeholder="Enter 10-digit Account No." />
@@ -31,7 +30,9 @@
              <input type="text" id="name" class="form-grp" aria-disabled="true" aria-readonly="true" disabled />
          </div>
 
+         <span class="error" id="recipient-error">The amount should be within ₦100.00 - ₦5,000,000.00</span>
+
          <button class="btn-send" id="nextBtn" disabled>
              Next
          </button>
-     </section>
+     </form>
