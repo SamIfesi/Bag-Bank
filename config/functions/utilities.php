@@ -1,4 +1,20 @@
 <?php
+
+function old_value($word)
+{
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        if(isset($_POST[$word])){
+            return htmlspecialchars($_POST[$word]);
+        }
+    }else if ($_SERVER['REQUEST_METHOD'] === 'GET'){
+        if(isset($_GET[$word])){
+            return htmlspecialchars($_GET[$word]);
+        }
+    }else if(isset($_SESSION['old_input'][$word])){
+        return htmlspecialchars($_SESSION['old_input'][$word]);
+    }
+}
+
 function is_empty($value)
 {
     return !isset($value) || (trim($value) === '');

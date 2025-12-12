@@ -156,14 +156,14 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 6rem; /* Adjust as needed */
-  width: 6rem;  /* Adjust as needed */
+  height: 6rem;
+  width: 6rem; 
 }
 .spinner {
   width: 3.125rem;
   height: 3.125rem;
-  border: 5px solid #e4dbdb; /* Light grey */
-  border-top: 5px solid #3498db; /* Blue */
+  border: 5px solid #e4dbdb;
+  border-top: 5px solid #3498db;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }

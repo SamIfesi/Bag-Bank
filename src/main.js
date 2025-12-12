@@ -67,6 +67,14 @@ const elements = {
     accBtn: id("acctToggleBtn"),
     accNum: id("acctText"),
   },
+  action: {
+    send: id("sendBtn"),
+  },
+  send: {
+    bank: id("bank"),
+    recipient: id("recipient"),
+    amount: id("amount"),
+  }
 };
 /**
  * Universal Inpur Validator
@@ -363,7 +371,7 @@ const initDashboard = () => {
         balIcon.classList.add("ti-eye");
       }
 
-      fetch("includes/components/toggler.php?item=balance", {
+      fetch("includes/toggler.php?item=balance", {
         method: "POST",
       }).catch((err) => console.error("Failed to save preference", err));
     });
@@ -385,9 +393,8 @@ const initDashboard = () => {
       } else {
         accNum.textContent = maskedNum;
       }
-      // toggleBtn.textContent = currentText === maskedNum ? "Hide Account Number", accNum.textContent = fullNum : "Show Account Number", accNum.textContent = maskedNum;
 
-      fetch("includes/components/toggler.php?item=account_number", {
+      fetch("includes/toggler.php?item=account_number", {
         method: "POST",
       }).catch((err) => {
         console.error("Failed to save acct state", err);
@@ -404,21 +411,24 @@ document.addEventListener("DOMContentLoaded", () => {
   initDashboard();
 });
 
-// Check if user is authenticated
-function checkAuth() {
-  const userStored = JSON.parse(sessionStorage.getItem("tempUser"));
-  const isAuthenticated =
-    userStored && userStored.username && userStored.isLoggedIn;
+// action buttons for reloctions
+/**
+ * @param {HTMLElement} sendBtn - Send Money button
+ */
 
-  // Get current page path
-  const currentPage = window.location.pathname;
-
-  const publicPages = ["/", "/index.html", "/pages/register.html"];
-
-  if (!isAuthenticated && !publicPages.includes(currentPage)) {
-    window.location.href = "/index.html";
-  } else if (isAuthenticated && publicPages.includes(currentPage)) {
-    window.location.href = "/pages/home.html";
+const initActionButtons = () => {
+  const sendBtn = elements.action.send;
+  if (sendBtn) {
+    sendBtn.addEventListener("click", () => {
+      window.location.href = "send.php";
+    });
   }
-}
-// checkAuth();
+};
+initActionButtons();
+
+// validate send money form inputs
+const initSendMoneyForm = () => {
+  const recipientInput = elements.inputs.recipient;
+  const amountInput = elements.inputs.amount;
+  const nextBtn = id("nextBtn");
+};

@@ -9,7 +9,3 @@ if (!is_logged_in()) {
     exit();
 }
 $user = Auth::user();
-require_once __DIR__ . "/includes/components/dash_header.php";
-require_once __DIR__ . "/includes/components/dash_card.php";
-require_once __DIR__ . "/includes/components/dash_trans.php";
-require_once __DIR__ . "/includes/components/dash_footer.php";

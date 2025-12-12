@@ -1,7 +1,5 @@
 <?php
 require_once __DIR__ . "/includes/check_auth.php";
-session_start();
-
 // Get errors from session and clear them
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
 $old_input = isset($_SESSION['old_input']) ? $_SESSION['old_input'] : [];

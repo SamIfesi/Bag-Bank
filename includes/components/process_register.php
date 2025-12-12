@@ -1,6 +1,5 @@
 <?php
 session_start();
-require_once __DIR__ . "/../../app/model/model.php";
 require_once __DIR__ . "/../../config/functions/utilities.php";
 require_once __DIR__ . "/../../app/controller/userController.php";
 
