@@ -354,8 +354,6 @@ const initUtilities = () => {
   }
 };
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
   initRegistration();
   initLogin();

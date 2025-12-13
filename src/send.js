@@ -202,6 +202,42 @@ const initSendMoneyForm = () => {
   });
 };
 
+const backBtns = [
+  {
+    btn: id("backToAccountBtn"),
+    from: id("amount-section"),
+    to: id("account-section"),
+  },
+  {
+    btn: id("backToDashBtn"),
+    from: id("account-section"),
+    to: null,
+    link: "dashboard.php",
+  },
+];
+backBtns.forEach(({ btn, from, to, link }) => {
+  if (btn) {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const { loader } = element.forms;
+      loader.classList.remove("hide");
+
+      setTimeout(() => {
+        from.classList.add("hide");
+      }, 500);
+      if (to) {
+        setTimeout(() => {
+          to.classList.remove("hide");
+        }, 800);
+      } else if (link) {
+        setTimeout(() => {
+          window.location.href = link;
+        }, 800);
+      }
+    });
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   initSendMoneyForm();
 });
