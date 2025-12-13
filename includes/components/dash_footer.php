@@ -16,7 +16,7 @@
         <span>Profile</span>
     </a>
 </nav>
-<script src="src/main.js"></script>
+<script src="src/dash.js"></script>
 </body>
 
 </html>

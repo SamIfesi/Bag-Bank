@@ -354,78 +354,10 @@ const initUtilities = () => {
   }
 };
 
-// Initialize all functionalities on DashBoard
-const initDashboard = () => {
-  // Balance Toggle
-  const toggleBalance = () => {
-    let toggleBtn = elements.balance.balIcon;
-    let balContainer = elements.balance.bal;
-    let amountText = elements.balance.amountText;
-
-    if (!toggleBtn || !balContainer || !amountText) return;
-    toggleBtn.addEventListener("click", function () {
-      const isCurrentlyHidden = amountText.textContent === "****";
-      const realAmount = balContainer.getAttribute("data-amount");
-
-      if (isCurrentlyHidden) {
-        amountText.textContent = realAmount;
-        balIcon.classList.remove("ti-eye");
-        balIcon.classList.add("ti-eye-off");
-      } else {
-        amountText.textContent = "****";
-        balIcon.classList.remove("ti-eye-off");
-        balIcon.classList.add("ti-eye");
-      }
-
-      fetch("includes/toggler.php?item=balance", {
-        method: "POST",
-      }).catch((err) => console.error("Failed to save preference", err));
-    });
-  };
-  toggleBalance();
-
-  // Account Number Toggle
-  const toggleAccountNumber = () => {
-    let toggleBtn = elements.account.accBtn;
-    let accNum = elements.account.accNum;
-    if (!toggleBtn || !accNum) return;
-    toggleBtn.addEventListener("click", () => {
-      const fullNum = toggleBtn.getAttribute("data-full");
-      const maskedNum = toggleBtn.getAttribute("data-masked");
-
-      const currentText = accNum.textContent.trim();
-      if (currentText === maskedNum) {
-        accNum.textContent = fullNum;
-      } else {
-        accNum.textContent = maskedNum;
-      }
-
-      fetch("includes/toggler.php?item=account_number", {
-        method: "POST",
-      }).catch((err) => {
-        console.error("Failed to save acct state", err);
-      });
-    });
-  };
-  toggleAccountNumber();
-};
-
-// action buttons for reloctions
-const initActionButtons = () => {
-  const sendBtn = elements.action?.send;
-  if (sendBtn) {
-    sendBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      window.location.href = "send.php";
-    });
-  }
-};
 
 
 document.addEventListener("DOMContentLoaded", () => {
   initRegistration();
   initLogin();
   initUtilities();
-  initDashboard();
-  initActionButtons();
 });

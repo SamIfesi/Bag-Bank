@@ -11,7 +11,9 @@
                 inputmode="decimal"
                 data-max="1000000" />
         </div>
-        <span class="error" id="amount-error">The amount should be within ₦100.00 - ₦5,000,000.00</span>
+        <span class="error" id="amount-error">
+            The amount should be within ₦100.00 - ₦5,000,000.00
+        </span>
     </div>
 
     <div class="section">

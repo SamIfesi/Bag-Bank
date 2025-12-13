@@ -90,7 +90,6 @@ body {
 }
 .section {
   width: 100%;
-  /* max-width */
   margin-bottom: 0.8rem;
 }
 .input-group {
@@ -107,7 +106,6 @@ body {
   font-size: 1rem;
   color: var(--text-gray);
 }
-
 .send-icon {
   position: absolute;
   top: 0.5rem;
@@ -150,7 +148,6 @@ body {
   color: var(--text-primary);
   font-size: 1rem;
 }
-/* Quick amounts */
 .quick-amounts {
   width: 100%;
   margin: 1rem 0;
@@ -192,8 +189,6 @@ body {
   cursor: not-allowed;
   opacity: 0.6;
 }
-
-/* Validation message */
 .error {
   display: none;
   margin-top: 0.3rem;

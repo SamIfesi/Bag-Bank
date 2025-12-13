@@ -85,7 +85,7 @@ const initSendMoneyForm = () => {
     const isAmountValid = isAmountPatternValid && isAmountValueValid;
     const isAmountLengthValid = amount.value.length > 2;
 
-    next.disabled = !(isRecipientValid && isBankValid);
+    next.disabled = !(isRecipientValid && isBankValid && isAccountVerified);
     nextSend.disabled = !(isAmountValid && isAmountLengthValid);
   };
   if (quickAmounts) {
@@ -99,6 +99,7 @@ const initSendMoneyForm = () => {
 
   recipient.addEventListener("input", () => {
     formatDigitInput(recipient, config.recipient.maxlength);
+    isAccountVerified = false;
     validateSendForm();
   });
   amount.addEventListener("input", () => {
@@ -114,69 +115,93 @@ const initSendMoneyForm = () => {
       element.errors.amount.style.display = "none";
     }
   });
-  bank.addEventListener("change", validateSendForm);
 
-  //   next.addEventListener("click", (e) => {
-  //     e.preventDefault();
+  const fetchAccountName = async (accountNumber, bank) => {
+    const url = "includes/components/resolve_account.php";
+    try {
+      const formData = new FormData();
+      formData.append("account_number", accountNumber);
+      formData.append("bank_code", bank);
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+      if (!response.ok) throw new Error("Network error");
 
-  //     const { loader, accountSection, amountSection } = element.forms;
-  //     loader.classList.remove("hide");
-
-  //     setTimeout(() => {
-  //       accountSection.classList.add("hide");
-  //     }, config.loader800);
-  //     setTimeout(() => {
-  //       amountSection.classList.remove("hide");
-  //     }, config.loader1000);
-  //     setTimeout(() => {
-  //       loader.classList.add("hide");
-  //     }, config.loader1500);
-  //   });
-};
-
-const fetchAccountName = async (accountNumber, bank) => {
-  const url = "";
-  try {
-    loader.classlist.remove("hide");
-    const response = await fetch(url, {
-      method: "POST",
-      body: formData,
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || `HTTP Error: ${response.status}`);
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.log("error during fetch of name", error);
+      return { success: false, message: "Unable to verify account" };
     }
-    const data = await response.json();
-    loader.classlist.add("hide");
-    return data;
-  } catch (error) {
-    console.error("error during fetch of name", error);
-  }
+  };
+
+  let isAccountVerified = false;
+
+  const handleAccountLookup = async () => {
+    const { loader } = element.forms;
+    const { recipient, bank, accname } = element.inputs;
+    const { errors } = element;
+
+    const recipientVal = recipient.value.trim();
+    const bankVal = bank.value;
+
+    if (!config.recipient.pattern.test(recipientVal) || !bankVal) {
+      accname.value = "";
+      isAccountVerified = false;
+      validateSendForm();
+      return;
+    }
+    loader.classList.remove("hide");
+
+    const result = await fetchAccountName(recipientVal, bankVal);
+    await new Promise((resolve) => setTimeout(resolve, config.loader800));
+
+    if (result.success) {
+      accname.value = result.name;
+      errors.recipient.style.display = "none";
+      isAccountVerified = true;
+    } else {
+      accname.value = "";
+      errors.recipient.textContent = result.message || "Account not found";
+      errors.recipient.style.display = "block";
+      isAccountVerified = false;
+    }
+    loader.classList.add("hide");
+    validateSendForm();
+  };
+
+  bank.addEventListener("change", () => {
+    validateSendForm();
+    handleAccountLookup();
+  });
+
+  recipient.addEventListener("blur", () => {
+    if (config.recipient.pattern.test(recipient.value.trim()) && bank.value) {
+      handleAccountLookup();
+    }
+  });
+
+  next.addEventListener("click", (e) => {
+    e.preventDefault();
+    const { loader, accountSection, amountSection } = element.forms;
+
+    loader.classList.remove("hide");
+
+    setTimeout(() => {
+      accountSection.classList.add("hide");
+    }, 500);
+
+    setTimeout(() => {
+      amountSection.classList.remove("hide");
+    }, 800);
+
+    setTimeout(() => {
+      loader.classList.add("hide");
+    }, 1000);
+  });
 };
-element.forms.accountSection.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const { loader, accountSection, amountSection } = element.forms;
-  const { recipient, bank, accname } = element.inputs;
-  const { errors } = element;
-  errors.recipient.style.display = "none";
-  errors.recipient.textContent = "";
-  loader.classList.remove("hide");
 
-  const result = await fetchAccountName(recipient.value.trim(), bank.value);
-  await new Promise((resolve) => setTimeout(resolve, config.loader800));
-
-  if (result.success) {
-    accname.value = result.name;
-
-    accountSection.classList.add("hide");
-    amountSection.classList.remove("hide");
-  } else {
-    errors.recipient.textContent = result.message || "Account not found";
-    errors.recipient.style.display = "block";
-    errors.recipient.classList.add("showMsg");
-  }
-  loader.classList.add("hide");
-});
 document.addEventListener("DOMContentLoaded", () => {
   initSendMoneyForm();
 });

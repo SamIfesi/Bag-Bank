@@ -30,7 +30,7 @@
              <input type="text" id="name" class="form-grp" aria-disabled="true" aria-readonly="true" disabled />
          </div>
 
-         <span class="error" id="recipient-error">The amount should be within ₦100.00 - ₦5,000,000.00</span>
+         <span class="error" id="recipient-error"></span>
 
          <button class="btn-send" id="nextBtn" disabled>
              Next
