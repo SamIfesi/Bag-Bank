@@ -40,8 +40,14 @@ const element = {
     accountSection: id("account-section"),
     amountSection: id("amount-section"),
   },
+  details: {
+    name: id("recipient-name"),
+    account: id("recipient-account"),
+    banks: id("recipient-bank"),
+    // image: url("public/logo-icon.svg")
+  },
 };
-// validate send money form inputs
+
 
 const initSendMoneyForm = () => {
   const { recipient, amount, bank, accName } = element?.inputs;
@@ -90,7 +96,8 @@ const initSendMoneyForm = () => {
   };
   if (quickAmounts) {
     quickAmounts.forEach((btn) => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
         element.inputs.amount.value = btn.getAttribute("data-amount");
         validateSendForm();
       });
@@ -142,6 +149,7 @@ const initSendMoneyForm = () => {
     const { loader } = element.forms;
     const { recipient, bank, accname } = element.inputs;
     const { errors } = element;
+    const {name, account, banks, image} = element.details;
 
     const recipientVal = recipient.value.trim();
     const bankVal = bank.value;
@@ -159,8 +167,16 @@ const initSendMoneyForm = () => {
 
     if (result.success) {
       accname.value = result.name;
+      
+      // user details on Amount Page
+      name.innerText = result.name;
+      account.innerText = recipientVal;
+      if (bankVal === "mybank") banks.innerText = "D'bag Bank";
+      // image.src =      
+
       errors.recipient.style.display = "none";
       isAccountVerified = true;
+      
     } else {
       accname.value = "";
       errors.recipient.textContent = result.message || "Account not found";
@@ -202,6 +218,7 @@ const initSendMoneyForm = () => {
   });
 };
 
+function navigateBack() {
 const backBtns = [
   {
     btn: id("backToAccountBtn"),
@@ -237,8 +254,9 @@ backBtns.forEach(({ btn, from, to, link }) => {
       }
     });
   }
-});
+});}
 
 document.addEventListener("DOMContentLoaded", () => {
   initSendMoneyForm();
+  navigateBack();
 });

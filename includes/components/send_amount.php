@@ -2,6 +2,18 @@
     <button class="back-btn" id="backToAccountBtn">
         <i class="ti ti-chevron-left"></i>
     </button>
+    <div class="details" id="user">
+        <span class="img">
+            <img src="public/logo-icon.svg" alt="bank logo" />
+        </span>
+        <span class="user-detail">
+            <h3 id="recipient-name"></h3>
+            <div class="user-account">
+                <p id="recipient-account"></p>
+                <p id="recipient-bank"></p>
+            </div>
+        </span>
+    </div>
     <div class="section">
         <label for="amount">Amount</label>
         <div class="input-group">
