@@ -44,10 +44,9 @@ const element = {
     name: id("recipient-name"),
     account: id("recipient-account"),
     banks: id("recipient-bank"),
-    // image: url("public/logo-icon.svg")
   },
 };
-
+// validate send money form inputs
 
 const initSendMoneyForm = () => {
   const { recipient, amount, bank, accName } = element?.inputs;
@@ -149,7 +148,7 @@ const initSendMoneyForm = () => {
     const { loader } = element.forms;
     const { recipient, bank, accname } = element.inputs;
     const { errors } = element;
-    const {name, account, banks, image} = element.details;
+    const { name, account, banks } = element.details;
 
     const recipientVal = recipient.value.trim();
     const bankVal = bank.value;
@@ -167,16 +166,11 @@ const initSendMoneyForm = () => {
 
     if (result.success) {
       accname.value = result.name;
-      
-      // user details on Amount Page
       name.innerText = result.name;
       account.innerText = recipientVal;
-      if (bankVal === "mybank") banks.innerText = "D'bag Bank";
-      // image.src =      
-
+      if (bankVal === "my_bank") banks.innerText = "D'bag Bank";
       errors.recipient.style.display = "none";
       isAccountVerified = true;
-      
     } else {
       accname.value = "";
       errors.recipient.textContent = result.message || "Account not found";
@@ -219,42 +213,43 @@ const initSendMoneyForm = () => {
 };
 
 function navigateBack() {
-const backBtns = [
-  {
-    btn: id("backToAccountBtn"),
-    from: id("amount-section"),
-    to: id("account-section"),
-  },
-  {
-    btn: id("backToDashBtn"),
-    from: id("account-section"),
-    to: null,
-    link: "dashboard.php",
-  },
-];
-backBtns.forEach(({ btn, from, to, link }) => {
-  if (btn) {
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      const { loader } = element.forms;
-      loader.classList.remove("hide");
+  const backBtns = [
+    {
+      btn: id("backToAccountBtn"),
+      from: id("amount-section"),
+      to: id("account-section"),
+    },
+    {
+      btn: id("backToDashBtn"),
+      from: id("account-section"),
+      to: null,
+      link: "dashboard.php",
+    },
+  ];
+  backBtns.forEach(({ btn, from, to, link }) => {
+    if (btn) {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const { loader } = element.forms;
+        loader.classList.remove("hide");
 
-      setTimeout(() => {
-        from.classList.add("hide");
-      }, 500);
-      if (to) {
         setTimeout(() => {
-          to.classList.remove("hide");
-          loader.classList.add("hide");
-        }, 800);
-      } else if (link) {
-        setTimeout(() => {
-          window.location.href = link;
-        }, 800);
-      }
-    });
-  }
-});}
+          from.classList.add("hide");
+        }, 500);
+        if (to) {
+          setTimeout(() => {
+            to.classList.remove("hide");
+            loader.classList.add("hide");
+          }, 800);
+        } else if (link) {
+          setTimeout(() => {
+            window.location.href = link;
+          }, 800);
+        }
+      });
+    }
+  });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   initSendMoneyForm();
