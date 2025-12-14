@@ -228,6 +228,7 @@ backBtns.forEach(({ btn, from, to, link }) => {
       if (to) {
         setTimeout(() => {
           to.classList.remove("hide");
+          loader.classList.add("hide");
         }, 800);
       } else if (link) {
         setTimeout(() => {

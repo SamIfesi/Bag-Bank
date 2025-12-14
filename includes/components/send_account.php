@@ -1,5 +1,8 @@
  <main class="send-container">
      <form id="account-section" class="hid">
+         <button class="back-btn" id="backToDashBtn">
+             <i class="ti ti-chevron-left"></i>
+         </button>
          <div class="section" id="">
              <label for="recipient">Recipient</label>
              <div class="input-group">

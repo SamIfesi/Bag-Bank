@@ -67,9 +67,8 @@ body {
   }
 }
 .send-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  width: 100%;
+  text-align: center;
   padding: 1rem;
   background: var(--bg-surface-light);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -79,6 +78,9 @@ body {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
 }
 .send-header h2 {
   font-size: 1.25rem;

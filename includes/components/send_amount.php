@@ -1,4 +1,7 @@
 <form class="hide" id="amount-section">
+    <button class="back-btn" id="backToAccountBtn">
+        <i class="ti ti-chevron-left"></i>
+    </button>
     <div class="section">
         <label for="amount">Amount</label>
         <div class="input-group">

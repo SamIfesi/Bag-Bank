@@ -16,9 +16,5 @@
         </div>
     </div>
     <header class="send-header">
-        <button class="back-btn" id="backBtn">
-            <i class="ti ti-chevron-left"></i>
-        </button>
         <h2>Send Money</h2>
-        <div></div>
     </header>
