@@ -51,32 +51,33 @@
     </button>
 
     <!-- confirmation -->
-    <div class="confirm-model" id="confirm-model">
-        <div class="model-header">
-            <h3>Payment</h3>
-            <i class="ti ti-x" id="close-confirm-model"></i>
+    <div class="model" id="model">
+        <div class="confirm-model" id="confirm-model">
+            <div class="model-header">
+                <h3>Payment</h3>
+                <i class="ti ti-x" id="close-confirm-model"></i>
+            </div>
+            <div class="summary">
+                <div class="model-grp">
+                    <span>Amount</span>
+                    <span id="model-amount" class="txt"></span>
+                </div>
+                <div class="model-grp">
+                    <span>Account Number</span>
+                    <span id="model-account-number" class="txt"></span>
+                </div>
+                <div class="model-grp">
+                    <span>Account Name</span>
+                    <span id="model-account-name" class="txt"></span>
+                </div>
+                <div class="model-grp">
+                    <span>Bank Name</span>
+                    <span id="model-bank-name" class="txt"></span>
+                </div>
+            </div>
+            <button type="button" class="btn-send" id="payBtn">Proceed</button>
         </div>
-        <div class="summary">
-            <div class="model-grp">
-                <span>Amount</span>
-                <span id="model-amount" class="txt"></span>
-            </div>
-            <div class="model-grp">
-                <span>Account Number</span>
-                <span id="model-account-number" class="txt"></span>
-            </div>
-            <div class="model-grp">
-                <span>Account Name</span>
-                <span id="model-account-name" class="txt"></span>
-            </div>
-            <div class="model-grp">
-                <span>Bank Name</span>
-                <span id="model-bank-name" class="txt"></span>
-            </div>
-        </div>
-        <button type="button" class="btn-send" id="payBtn">Proceed</button>
     </div>
-
 </form>
 </main>
 <script type="module" src="src/send.js"></script>

@@ -46,6 +46,7 @@ const element = {
     banks: id("recipient-bank"),
   },
   confirmation: {
+    container: id("model"),
     model: id("confirm-model"),
     close: id("close-confirm-model"),
     amount: id("model-amount"),
@@ -55,8 +56,6 @@ const element = {
     pay: id("payBtn"),
   },
 };
-let { model, close, amount, bank, account, name } = element.confirmation;
-console.log({ model, close, amount, bank, account, name });
 
 // validate send money form inputs
 const initSendMoneyForm = () => {
@@ -271,6 +270,7 @@ function navigateBack() {
       name: detailName,
     } = element.details;
     const {
+      container,
       model,
       close,
       amount: modelAmount,
@@ -289,11 +289,13 @@ function navigateBack() {
     modelName.innerText = detailName.innerText;
 
     model.classList.add("active");
+    container.classList.add("active");
 
     if (close) {
       close.addEventListener("click", (e) => {
         e.preventDefault();
         model.classList.remove("active");
+        container.classList.remove("active");
       });
     }
   });
@@ -302,24 +304,28 @@ function navigateBack() {
     e.preventDefault();
     const { model } = element.confirmation;
     const { loader } = element.forms;
+    const amountInput = element.inputs.amount;
+    const recipientInput = element.inputs.recipient;
+    const nameInput = element.inputs.accName;
+    const bankInput = element.inputs.bank;
 
     pay.disabled = true;
     pay.innerText = "Processing...";
-
     loader.classList.remove("hide");
 
     try {
       const formData = new FormData();
-      formData.append("amount", amount.value);
-      formData.append("recipient_account", recipient.value);
-      formData.append("recipient_name", accName.value);
-      formData.append("bank_code", bank.value);
+      formData.append("amount", amountInput.value);
+      formData.append("recipient_account", recipientInput.value);
+      formData.append("recipient_name", nameInput.value);
+      formData.append("bank_code", bankInput.value);
 
       const url = "includes/components/process_transfer.php";
       const response = await fetch(url, {
         method: "POST",
         body: formData,
       });
+      if (!response.ok) throw new Error("Network response was not ok");
       const result = await response.json();
 
       await new Promise((resolve) => setTimeout(resolve, config.loader1500));

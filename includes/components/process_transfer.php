@@ -1,7 +1,8 @@
 <?php
 session_start();
-require_once __DIR__ . "/../../app/controller/userController.php";
-require_once __DIR__ . "/../../config/functions/utilities.php";
+require_once __DIR__ . "/../../app/model/model.php";
+require_once __DIR__ . "/../../app/controller/userController.php"; 
+require_once __DIR__ . "/../../config/functions/utilities.php"; 
 
 header('Content-Type: application/json');
 
@@ -19,7 +20,7 @@ const internal_bank_code = "my_bank";
 $user_id = $_SESSION['user'];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $amount = filter_var($_POST['amount'],  FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+    $amount = floatval($_POST['amount'] ?? 0);
     $recipient_acc = sanitize_input($_POST["recipient_account"] ?? '');
     $recipient_name = sanitize_input($_POST["recipient_name"] ?? '');
     $bank_code = sanitize_input($_POST["bank_code"] ?? '');
@@ -46,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
     $db = new Database();
     $newSenderBalance = $sender->balance - $amount;
-    $updateSender = Model::update('users', $sender->id, ['balance' => $newSenderBalance]);
+    $updateSender = Model::update('users', ['balance' => $newSenderBalance], $sender->id);
 
     if ($updateSender) {
         $debitData = [
@@ -61,11 +62,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             'timestamp' => date('Y-m-d H:i:s'),
         ];
         Model::create('transactions', $debitData);
-        if ($bank_code === internal_bank_code){
+        if ($bank_code === internal_bank_code) {
             $recipient = Model::find('users', 'account_number', $recipient_acc);
             if ($recipient) {
                 $newRecipientBalance = $recipient->balance + $amount;
-                Model::update('users', $recipient->id, ['balance' => $newRecipientBalance]);
+                Model::update('users', ['balance' => $newRecipientBalance], $recipient->id);
                 $creditData = [
                     'user_id' => $recipient->id,
                     'type' => 'credit',
@@ -73,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     'sender_account' => $sender->account_number,
                     'sender_name' => $sender->name,
                     'bank_code' => $bank_code,
-                    'description' => "Transfer from  $sender->name",
+                    'description' => "Transfer from  {$sender->name}",
                     'status' => 'success',
                     'timestamp' => date('Y-m-d H:i:s'),
                 ];
