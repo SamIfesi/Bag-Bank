@@ -1,4 +1,4 @@
-<form class="hid" id="amount-section">
+<form class="hide" id="amount-section">
     <button class="back-btn" id="backToAccountBtn">
         <i class="ti ti-chevron-left"></i>
     </button>
@@ -45,7 +45,7 @@
         <button class="quick-btn" data-amount="20000">₦20,000</button>
     </div>
 
-    <button class="btn-send" id="sendMoneyBtn" disabled>
+    <button class="btn-send" id="confirmBtn" disabled>
         <!-- <i class="ti ti-send"></i> -->
         Next
     </button>
@@ -59,7 +59,7 @@
         <div class="summary">
             <div class="model-grp">
                 <span>Amount</span>
-                <span id="model-amount" class="txt">₦</span>
+                <span id="model-amount" class="txt"></span>
             </div>
             <div class="model-grp">
                 <span>Account Number</span>

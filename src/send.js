@@ -22,18 +22,18 @@ const element = {
     bank: id("bank"),
     recipient: id("recipient"),
     amount: id("amount"),
-    accname: id("name"),
+    accName: id("name"),
   },
   btns: {
     next: id("nextBtn"),
-    nextConfirm: id("sendMoneyBtn"),
+    nextConfirm: id("confirmBtn"),
     quickAmounts: qa(".quick-btn"),
   },
   errors: {
     recipient: id("recipient-error"),
     amount: id("amount-error"),
     bank: id("bank-error"),
-    accName: id("accname-error"),
+    accName: id("accName-error"),
   },
   forms: {
     loader: id("loader"),
@@ -53,8 +53,10 @@ const element = {
     account: id("model-account-number"),
     name: id("model-account-name"),
     pay: id("payBtn"),
-  }
+  },
 };
+let { model, close, amount, bank, account, name } = element.confirmation;
+console.log({ model, close, amount, bank, account, name });
 
 // validate send money form inputs
 const initSendMoneyForm = () => {
@@ -155,7 +157,7 @@ const initSendMoneyForm = () => {
 
   const handleAccountLookup = async () => {
     const { loader } = element.forms;
-    const { recipient, bank, accname } = element.inputs;
+    const { recipient, bank, accName } = element.inputs;
     const { errors } = element;
     const { name, account, banks } = element.details;
 
@@ -163,7 +165,7 @@ const initSendMoneyForm = () => {
     const bankVal = bank.value;
 
     if (!config.recipient.pattern.test(recipientVal) || !bankVal) {
-      accname.value = "";
+      accName.value = "";
       isAccountVerified = false;
       validateSendForm();
       return;
@@ -174,14 +176,14 @@ const initSendMoneyForm = () => {
     await new Promise((resolve) => setTimeout(resolve, config.loader800));
 
     if (result.success) {
-      accname.value = result.name;
+      accName.value = result.name;
       name.innerText = result.name;
       account.innerText = recipientVal;
       if (bankVal === "my_bank") banks.innerText = "D'bag Bank";
       errors.recipient.style.display = "none";
       isAccountVerified = true;
     } else {
-      accname.value = "";
+      accName.value = "";
       errors.recipient.textContent = result.message || "Account not found";
       errors.recipient.style.display = "block";
       isAccountVerified = false;
@@ -258,8 +260,90 @@ function navigateBack() {
       });
     }
   });
-}
 
+  const { nextConfirm } = element.btns;
+  nextConfirm.addEventListener("click", (e) => {
+    e.preventDefault();
+    const { amount } = element.inputs;
+    const {
+      banks: detailBank,
+      account: detailAccount,
+      name: detailName,
+    } = element.details;
+    const {
+      model,
+      close,
+      amount: modelAmount,
+      bank: modelBank,
+      account: modelAccount,
+      name: modelName,
+    } = element.confirmation;
+
+    const formattedAmount = parseFloat(amount.value).toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+    modelAmount.innerText = "₦" + formattedAmount;
+    modelBank.innerText = detailBank.innerText;
+    modelAccount.innerText = detailAccount.innerText;
+    modelName.innerText = detailName.innerText;
+
+    model.classList.add("active");
+
+    if (close) {
+      close.addEventListener("click", (e) => {
+        e.preventDefault();
+        model.classList.remove("active");
+      });
+    }
+  });
+  const { pay } = element.confirmation;
+  pay.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const { model } = element.confirmation;
+    const { loader } = element.forms;
+
+    pay.disabled = true;
+    pay.innerText = "Processing...";
+
+    loader.classList.remove("hide");
+
+    try {
+      const formData = new FormData();
+      formData.append("amount", amount.value);
+      formData.append("recipient_account", recipient.value);
+      formData.append("recipient_name", accName.value);
+      formData.append("bank_code", bank.value);
+
+      const url = "includes/components/process_transfer.php";
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+      const result = await response.json();
+
+      await new Promise((resolve) => setTimeout(resolve, config.loader1500));
+      loader.classList.add("hide");
+      if (result.success) {
+        model.classList.remove("active");
+        window.location.href =
+          "transfer_success.php?ref=" + result.transaction_ref;
+      } else {
+        pay.disabled = false;
+        pay.innerText = "Proceed";
+        confirmModel.classList.remove("active");
+        alert(
+          "Transfer failed: " + (result.message || "Please try again later.")
+        );
+      }
+    } catch (error) {
+      console.log("Payment error:", error);
+      loader.classList.add("hide");
+      pay.disabled = false;
+      pay.innerText = "Proceed";
+    }
+  });
+}
 document.addEventListener("DOMContentLoaded", () => {
   initSendMoneyForm();
   navigateBack();
