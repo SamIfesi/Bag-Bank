@@ -32,4 +32,18 @@ class Model extends Database {
         $result = $stmt->fetch();
         return $result ? $result : false;
     }
+    public static function update($table, $data, $id){
+        $fields = "";
+        foreach($data as $key => $value){
+            $fields .= "$key = ?, ";
+        }
+        $fields = rtrim($fields, ', ');
+        $sql = "UPDATE $table SET $fields WHERE id = ?";
+        $values = array_values($data);
+        $values[] = $id;
+
+        $instance = new self;
+        $stmt = $instance->pdo->prepare($sql);
+        return $stmt->execute($values);
+    }
 }

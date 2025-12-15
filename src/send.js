@@ -26,7 +26,7 @@ const element = {
   },
   btns: {
     next: id("nextBtn"),
-    nextSend: id("sendMoneyBtn"),
+    nextConfirm: id("sendMoneyBtn"),
     quickAmounts: qa(".quick-btn"),
   },
   errors: {
@@ -45,13 +45,22 @@ const element = {
     account: id("recipient-account"),
     banks: id("recipient-bank"),
   },
+  confirmation: {
+    model: id("confirm-model"),
+    close: id("close-confirm-model"),
+    amount: id("model-amount"),
+    bank: id("model-bank-name"),
+    account: id("model-account-number"),
+    name: id("model-account-name"),
+    pay: id("payBtn"),
+  }
 };
-// validate send money form inputs
 
+// validate send money form inputs
 const initSendMoneyForm = () => {
   const { recipient, amount, bank, accName } = element?.inputs;
-  const { next, quickAmounts, nextSend } = element?.btns;
-  if (!recipient || !amount || !bank || !next || !nextSend) return;
+  const { next, quickAmounts, nextConfirm } = element?.btns;
+  if (!recipient || !amount || !bank || !next || !nextConfirm) return;
 
   const formatDigitInput = (input, maxLength) => {
     let value = input.value.replace(/\D/g, "");
@@ -91,7 +100,7 @@ const initSendMoneyForm = () => {
     const isAmountLengthValid = amount.value.length > 2;
 
     next.disabled = !(isRecipientValid && isBankValid && isAccountVerified);
-    nextSend.disabled = !(isAmountValid && isAmountLengthValid);
+    nextConfirm.disabled = !(isAmountValid && isAmountLengthValid);
   };
   if (quickAmounts) {
     quickAmounts.forEach((btn) => {

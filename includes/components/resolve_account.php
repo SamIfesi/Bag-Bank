@@ -3,7 +3,7 @@ require_once "../../app/controller/userController.php";
 require_once "../../config/functions/utilities.php";
 
 header('Content-Type: application/json');
-const my_bank = "mybank";
+const my_bank = "my_bank";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $account_number = sanitize_input($_POST['account_number'] ?? '');
     $bank_code = sanitize_input($_POST['bank_code'] ?? '');
