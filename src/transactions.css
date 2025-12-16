@@ -1,0 +1,228 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Stack+Sans+Text:wght@200..700&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", "Stack Sans Text";
+}
+
+:root {
+  --primary: #6c5ce7;
+  --success: #00b894;
+  --danger: #d63031;
+  --dark: #2d3436;
+  --light: #dfe6e9;
+  --white: #ffffff;
+}
+
+body.transactions-body {
+  background: #f5f6fa;
+  min-height: 100vh;
+}
+
+.trans-header {
+  background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--white);
+}
+
+.back-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.back-btn i {
+  font-size: 24px;
+  color: var(--white);
+}
+
+.trans-header h2 {
+  font-size: 20px;
+}
+
+.trans-main {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.trans-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trans-item {
+  background: var(--white);
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.trans-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.trans-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.trans-icon.credit {
+  background: rgba(0, 184, 148, 0.1);
+  color: var(--success);
+}
+
+.trans-icon.debit {
+  background: rgba(214, 48, 49, 0.1);
+  color: var(--danger);
+}
+
+.trans-icon i {
+  font-size: 24px;
+}
+
+.trans-details {
+  flex: 1;
+}
+
+.trans-title {
+  color: var(--dark);
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.trans-desc {
+  color: #636e72;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.trans-date {
+  color: #b2bec3;
+  font-size: 12px;
+}
+
+.trans-amount-wrapper {
+  text-align: right;
+}
+
+.trans-amount {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.trans-amount.credit {
+  color: var(--success);
+}
+
+.trans-amount.debit {
+  color: var(--danger);
+}
+
+.trans-status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.trans-status.success {
+  background: rgba(0, 184, 148, 0.1);
+  color: var(--success);
+}
+
+.trans-status.failed {
+  background: rgba(214, 48, 49, 0.1);
+  color: var(--danger);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-state i {
+  font-size: 80px;
+  color: var(--light);
+  margin-bottom: 20px;
+}
+
+.empty-state h3 {
+  color: var(--dark);
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  color: #636e72;
+  margin-bottom: 30px;
+}
+
+.btn-send-money {
+  background: var(--primary);
+  color: var(--white);
+  padding: 14px 30px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-send-money:hover {
+  background: #5f4dd1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .trans-item {
+    padding: 12px;
+  }
+
+  .trans-icon {
+    width: 45px;
+    height: 45px;
+  }
+
+  .trans-title {
+    font-size: 15px;
+  }
+
+  .trans-amount {
+    font-size: 15px;
+  }
+}

@@ -302,7 +302,7 @@ function navigateBack() {
   const { pay } = element.confirmation;
   pay.addEventListener("click", async (e) => {
     e.preventDefault();
-    const { model } = element.confirmation;
+    const { model, container } = element.confirmation;
     const { loader } = element.forms;
     const amountInput = element.inputs.amount;
     const recipientInput = element.inputs.recipient;
@@ -325,19 +325,28 @@ function navigateBack() {
         method: "POST",
         body: formData,
       });
-      if (!response.ok) throw new Error("Network response was not ok");
-      const result = await response.json();
+
+      const responseText = await response.text();
+      console.log("Response:", responseText);
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok" + responseText);
+      }
+
+      // const result = await response.json();
+      const result = JSON.parse(responseText);
 
       await new Promise((resolve) => setTimeout(resolve, config.loader1500));
       loader.classList.add("hide");
       if (result.success) {
         model.classList.remove("active");
-        window.location.href =
-          "transfer_success.php?ref=" + result.transaction_ref;
+        container.classList.remove("active");
+        window.location.href ="transfer_success.php?ref=" + result.transaction_ref;
       } else {
         pay.disabled = false;
         pay.innerText = "Proceed";
-        confirmModel.classList.remove("active");
+        model.classList.remove("active");
+        container.classList.remove("active");
         alert(
           "Transfer failed: " + (result.message || "Please try again later.")
         );
@@ -347,6 +356,8 @@ function navigateBack() {
       loader.classList.add("hide");
       pay.disabled = false;
       pay.innerText = "Proceed";
+      model.classList.remove("active");
+      container.classList.remove("active");
     }
   });
 }

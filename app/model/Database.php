@@ -28,4 +28,8 @@ class Database
             exit;
         }
     }
+    public function getPdo()
+    {
+        return $this->pdo;
+    }
 }
