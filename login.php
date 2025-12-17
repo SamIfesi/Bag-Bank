@@ -24,6 +24,7 @@ unset($_SESSION['errors']);
             <div class="spinner"></div>
         </div>
 
+        <i class="ti ti-chevron-left back" onclick="window.location.href='index.php'"></i>
         <form action="includes/components/process_login.php" method="post" id="login-form">
             <div id="userLogin-form">
                 <div class="form-group">
