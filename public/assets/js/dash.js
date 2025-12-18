@@ -88,7 +88,44 @@ const initActionButtons = () => {
   }
 };
 
+// Sidebar collapse toggle
+const initSidebar = () => {
+  const sidebar = document.getElementById("sidebar");
+  const sidebarToggle = document.getElementById("sidebarToggle");
+  const homeBody = document.querySelector(".home-body");
+
+  if (!sidebar || !sidebarToggle) {
+    console.log("Sidebar elements not found");
+    return;
+  }
+
+  console.log("Sidebar initialized");
+
+  // Load saved state from localStorage
+  const isCollapsed = localStorage.getItem("sidebarCollapsed") === "true";
+  if (isCollapsed) {
+    sidebar.classList.add("collapsed");
+    if (homeBody) homeBody.classList.add("sidebar-collapsed");
+  }
+
+  sidebarToggle.addEventListener("click", (e) => {
+    e.preventDefault();
+    const collapsed = sidebar.classList.toggle("collapsed");
+
+    if (homeBody) {
+      homeBody.classList.toggle("sidebar-collapsed");
+    }
+
+    // Save state to localStorage
+    // localStorage.setItem("sidebarCollapsed", collapsed.toString());
+    console.log("Sidebar toggled:", collapsed);
+  });
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   initDashboard();
   initActionButtons();
+  initSidebar();
 });
+
+console.log("hello");

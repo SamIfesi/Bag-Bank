@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="" />
     <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="public/assets/css/home.css">
+    <link rel="stylesheet" href="public/assets/css/dash.css">
     <title>D'Bag Bank - Dashboard</title>
 </head>
 
