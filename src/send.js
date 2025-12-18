@@ -169,6 +169,7 @@ const initSendMoneyForm = () => {
       validateSendForm();
       return;
     }
+
     loader.classList.remove("hide");
 
     const result = await fetchAccountName(recipientVal, bankVal);
@@ -341,15 +342,17 @@ function navigateBack() {
       if (result.success) {
         model.classList.remove("active");
         container.classList.remove("active");
-        window.location.href ="transfer_success.php?ref=" + result.transaction_ref;
+        window.location.href =
+          "transfer_success.php?ref=" + result.transaction_ref;
       } else {
         pay.disabled = false;
         pay.innerText = "Proceed";
         model.classList.remove("active");
         container.classList.remove("active");
-        alert(
-          "Transfer failed: " + (result.message || "Please try again later.")
-        );
+        
+        // Show error message
+        element.errors.amount.innerText = result.message || "Transfer failed. Please try again.";
+        element.errors.amount.style.display = "block";
       }
     } catch (error) {
       console.log("Payment error:", error);

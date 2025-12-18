@@ -8,7 +8,6 @@ require_once __DIR__ . "/../../config/functions/utilities.php";
 require_once __DIR__ . "/../../config/Auth.php";
 require_once __DIR__ . "/../check_auth.php";
 
-// Set JSON header
 header('Content-Type: application/json');
 
 if (!isset($_SESSION['user'])) {
@@ -30,17 +29,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Validation
     if (empty($amount) || $amount <= 0 || !is_numeric($amount)) {
-        echo json_encode(['success' => false, 'message' => 'Invalid amount']);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Invalid amount'
+        ]);
         exit;
     }
-    
+
     if ($amount < 100) {
-        echo json_encode(['success' => false, 'message' => 'Minimum transfer amount is 100']);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Minimum transfer amount is 100'
+        ]);
         exit;
     }
-    
+
     if ($amount > 5000000) {
-        echo json_encode(['success' => false, 'message' => 'Amount exceeds transfer limit of 5,000,000']);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Amount exceeds transfer limit of 5,000,000'
+        ]);
         exit;
     }
 
@@ -48,21 +56,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $sender = Model::find('users', 'id', $user_id);
 
     if (!$sender) {
-        echo json_encode(['success' => false, 'message' => 'User not found']);
+        echo json_encode([
+            'success' => false,
+            'message' => 'User not found'
+        ]);
         exit;
     }
-    
+
+    // Convert both to strings and trim whitespace for comparison
+    $recipient_acc_clean = trim((string)$recipient_acc);
+    $sender_acc_clean = trim((string)$sender->account_number);
+
+    if ($recipient_acc_clean === $sender_acc_clean) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Cannot transfer to your own account'
+        ]);
+        exit;
+    }
+
     if ($amount > $sender->balance) {
-        echo json_encode(['success' => false, 'message' => 'Insufficient balance']);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Insufficient balance'
+        ]);
         exit;
     }
 
     try {
-        // Start transaction
         $db = new Database();
         $db->getPdo()->beginTransaction();
 
-        // Deduct from sender
         $newSenderBalance = $sender->balance - $amount;
         $updateSender = Model::update('users', ['balance' => $newSenderBalance], $sender->id);
 
@@ -72,10 +96,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit;
         }
 
-        // Generate transaction reference
         $transaction_ref = 'TXN' . time() . rand(1000, 9999);
 
-        // Create debit transaction
         $debitData = [
             'user_id' => $sender->id,
             'type' => 'debit',
@@ -87,9 +109,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             'description' => "Transfer to $recipient_name",
             'status' => 'success',
             'reference' => $transaction_ref,
-            'created_at' => date('Y-m-d H: i:s'),
+            'created_at' => date('Y-m-d H:i:s'),
         ];
-        
+
         $debitTransaction = Model::create('transactions', $debitData);
 
         if (!$debitTransaction) {
@@ -98,10 +120,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit;
         }
 
-        // If internal transfer, credit recipient
         if ($bank_code === INTERNAL_BANK_CODE) {
             $recipient = Model::find('users', 'account_number', $recipient_acc);
-            
+
             if ($recipient) {
                 $newRecipientBalance = $recipient->balance + $amount;
                 $updateRecipient = Model::update('users', ['balance' => $newRecipientBalance], $recipient->id);
@@ -112,7 +133,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     exit;
                 }
 
-                // Create credit transaction for recipient
                 $creditData = [
                     'user_id' => $recipient->id,
                     'type' => 'credit',
@@ -124,9 +144,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     'description' => "Transfer from {$sender->name}",
                     'status' => 'success',
                     'reference' => $transaction_ref,
-                    'created_at' => date('Y-m-d H:i: s'),
+                    'created_at' => date('Y-m-d H:i:s'),
                 ];
-                
+
                 $creditTransaction = Model::create('transactions', $creditData);
 
                 if (!$creditTransaction) {
@@ -137,27 +157,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
         }
 
-        // Commit transaction
         $db->getPdo()->commit();
 
         echo json_encode([
-            'success' => true, 
+            'success' => true,
             'message' => 'Transfer successful',
             'transaction_ref' => $transaction_ref
         ]);
-        
     } catch (Exception $e) {
         if (isset($db) && $db->getPdo()->inTransaction()) {
             $db->getPdo()->rollBack();
         }
-        
-        // Log the error
+
         error_log("Transfer Error: " . $e->getMessage());
-        
+
         echo json_encode([
-            'success' => false, 
+            'success' => false,
             'message' => 'Transfer failed. Please try again.',
-            'error' => $e->getMessage() // Remove this in production
+            'error' => $e->getMessage(),
         ]);
     }
 } else {
