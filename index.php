@@ -8,7 +8,7 @@ require_once __DIR__ .  "/includes/check_auth.php";
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="src/index.css">
+    <link rel="stylesheet" href="public/assets/css/index.css">
     <title>D'Bag Bank - Your Digital Banking Partner</title>
 </head>
 
@@ -45,7 +45,7 @@ require_once __DIR__ .  "/includes/check_auth.php";
             <li><a href="#how-it-works">How It Works</a></li>
             <li><a href="#security">Security</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li><a href="login. php" class="mobile-login">Login</a></li>
+            <li><a href="login.php" class="mobile-login">Login</a></li>
             <li><a href="register.php" class="mobile-signup">Sign Up</a></li>
         </ul>
     </div>
@@ -359,7 +359,7 @@ require_once __DIR__ .  "/includes/check_auth.php";
         </div>
     </footer>
 
-    <script src="src/index.js"></script>
+    <script src="public/assets/js/index.js"></script>
 </body>
 
 </html>

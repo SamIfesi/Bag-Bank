@@ -31,7 +31,7 @@ $user = Auth::user();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="src/receipt.css">
+    <link rel="stylesheet" href="public/assets/css/receipt.css">
     <title>Transfer Receipt - D'Bag Bank</title>
 </head>
 
@@ -139,7 +139,7 @@ $user = Auth::user();
         </div>
     </main>
 
-    <script src="src/receipt.js"></script>
+    <script src="public/assets/js/receipt.js"></script>
 </body>
 
 </html>

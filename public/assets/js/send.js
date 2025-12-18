@@ -133,7 +133,7 @@ const initSendMoneyForm = () => {
   });
 
   const fetchAccountName = async (accountNumber, bank) => {
-    const url = "includes/components/resolve_account.php";
+    const url = "app/handlers/resolve_account.php";
     try {
       const formData = new FormData();
       formData.append("account_number", accountNumber);
@@ -321,20 +321,18 @@ function navigateBack() {
       formData.append("recipient_name", nameInput.value);
       formData.append("bank_code", bankInput.value);
 
-      const url = "includes/components/process_transfer.php";
+      const url = "app/handlers/process_transfer.php";
       const response = await fetch(url, {
         method: "POST",
         body: formData,
       });
 
       const responseText = await response.text();
-      console.log("Response:", responseText);
 
       if (!response.ok) {
         throw new Error("Network response was not ok" + responseText);
       }
 
-      // const result = await response.json();
       const result = JSON.parse(responseText);
 
       await new Promise((resolve) => setTimeout(resolve, config.loader1500));
@@ -349,9 +347,9 @@ function navigateBack() {
         pay.innerText = "Proceed";
         model.classList.remove("active");
         container.classList.remove("active");
-        
-        // Show error message
-        element.errors.amount.innerText = result.message || "Transfer failed. Please try again.";
+
+        element.errors.amount.innerText =
+          result.message || "Transfer failed. Please try again.";
         element.errors.amount.style.display = "block";
       }
     } catch (error) {

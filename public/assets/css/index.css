@@ -8,7 +8,7 @@
   --green-light: #6dc474;
   --text-gray: #807b7b;
   --text-primary: #000000;
-  --text-secondary:  #8a8a8f;
+  --text-secondary: #8a8a8f;
   --text-white: #f2f4f8;
   --text-link: #1a56c4;
   --bg-body: #f4f6f8;
@@ -29,7 +29,7 @@
 }
 
 html {
--webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth;
 }
 
@@ -44,7 +44,7 @@ body.landing-body {
   position: fixed;
   top: 0;
   left: 0;
-  right:  0;
+  right: 0;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   padding: 20px 0;
@@ -175,13 +175,11 @@ body.landing-body {
   border-radius: 8px;
   margin-top: 10px;
 }
-
-.mobile-login {
+a.mobile-login {
   border: 2px solid #5200a3;
   color: #5200a3;
 }
-
-.mobile-signup {
+a.mobile-signup {
   background: var(--primary-gradient);
   color: white;
 }
@@ -194,11 +192,11 @@ body.landing-body {
 
 .hero-container {
   max-width: 1200px;
-  margin:  0 auto;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 60px;
-  align-items:  center;
+  align-items: center;
 }
 
 .hero-badge {
@@ -206,7 +204,7 @@ body.landing-body {
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background:  var(--bg-success-light);
+  background: var(--bg-success-light);
   color: var(--color-success);
   border-radius: 20px;
   font-size: 14px;
@@ -216,7 +214,7 @@ body.landing-body {
 
 .hero-title {
   font-size: 56px;
-  font-weight:  700;
+  font-weight: 700;
   line-height: 1.2;
   margin-bottom: 24px;
   color: var(--primary-black);
@@ -231,7 +229,7 @@ body.landing-body {
 
 .hero-description {
   font-size: 18px;
-  line-height:  1.8;
+  line-height: 1.8;
   color: var(--text-gray);
   margin-bottom: 40px;
 }
@@ -251,7 +249,7 @@ body.landing-body {
   color: white;
   text-decoration: none;
   border-radius: 12px;
-  font-weight:  600;
+  font-weight: 600;
   font-size: 16px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 20px rgba(82, 0, 163, 0.3);
@@ -264,7 +262,7 @@ body.landing-body {
 
 .btn-primary.large {
   padding: 20px 40px;
-  font-size:  18px;
+  font-size: 18px;
 }
 
 .btn-secondary {
@@ -277,7 +275,7 @@ body.landing-body {
   text-decoration: none;
   border: 2px solid #5200a3;
   border-radius: 12px;
-  font-weight:  600;
+  font-weight: 600;
   font-size: 16px;
   transition: all 0.3s ease;
 }
@@ -342,7 +340,7 @@ body.landing-body {
   position: absolute;
   background: white;
   padding: 20px;
-  border-radius:  16px;
+  border-radius: 16px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
@@ -363,7 +361,7 @@ body.landing-body {
 
 .card-value {
   font-size: 20px;
-  font-weight:  700;
+  font-weight: 700;
   color: var(--primary-black);
 }
 
@@ -380,17 +378,18 @@ body.landing-body {
 .card-2 {
   top: 200px;
   right: -80px;
-  animation-delay:  1s;
+  animation-delay: 1s;
 }
 
 .card-3 {
   bottom: 100px;
   left: -30px;
-  animation-delay:  2s;
+  animation-delay: 2s;
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -407,7 +406,7 @@ body.landing-body {
 
 .section-container {
   max-width: 1200px;
-  margin:  0 auto;
+  margin: 0 auto;
 }
 
 .section-header {
@@ -418,17 +417,17 @@ body.landing-body {
 .section-badge {
   display: inline-block;
   padding: 8px 16px;
-  background:  var(--bg-info-light);
+  background: var(--bg-info-light);
   color: var(--color-info);
   border-radius: 20px;
   font-size: 14px;
-  font-weight:  600;
+  font-weight: 600;
   margin-bottom: 15px;
 }
 
 .section-title {
-  font-size:  42px;
-  font-weight:  700;
+  font-size: 42px;
+  font-weight: 700;
   color: var(--primary-black);
   margin-bottom: 15px;
 }
@@ -450,7 +449,7 @@ body.landing-body {
 .feature-card {
   background: white;
   padding: 40px;
-  border-radius:  20px;
+  border-radius: 20px;
   transition: all 0.3s ease;
   border: 2px solid transparent;
 }
@@ -517,10 +516,10 @@ body.landing-body {
   background: var(--primary-gradient);
   color: white;
   border-radius: 50%;
-  display:  flex;
-  align-items:  center;
-  justify-content:  center;
-  font-weight:  700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
   font-size: 20px;
 }
 
@@ -537,12 +536,12 @@ body.landing-body {
 }
 
 .step-icon i {
-  font-size:  40px;
+  font-size: 40px;
 }
 
 .step h3 {
   font-size: 22px;
-  margin-bottom:  12px;
+  margin-bottom: 12px;
   color: var(--primary-black);
 }
 
@@ -559,7 +558,7 @@ body.landing-body {
 }
 
 .step-connector::after {
-  content: '';
+  content: "";
   position: absolute;
   right: -5px;
   top: 50%;
@@ -579,7 +578,7 @@ body.landing-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 60px;
-  align-items:  center;
+  align-items: center;
 }
 
 .security-description {
@@ -598,7 +597,7 @@ body.landing-body {
 .security-item {
   display: flex;
   gap: 20px;
-  align-items:  flex-start;
+  align-items: flex-start;
 }
 
 .security-item i {
@@ -645,11 +644,11 @@ body.landing-body {
 .badge-1 {
   top: 50px;
   left: 30px;
-  animation:  float 3s ease-in-out infinite;
+  animation: float 3s ease-in-out infinite;
 }
 
 .badge-2 {
-  top:  200px;
+  top: 200px;
   right: 30px;
   animation: float 3s ease-in-out infinite 1s;
 }
@@ -697,12 +696,12 @@ body.landing-body {
 .footer {
   background: var(--primary-black);
   color: white;
-  padding:  60px 20px 20px;
+  padding: 60px 20px 20px;
 }
 
 .footer-container {
   max-width: 1200px;
-  margin:  0 auto;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 40px;
@@ -734,8 +733,8 @@ body.landing-body {
   display: flex;
   align-items: center;
   justify-content: center;
-  color:  white;
-  text-decoration:  none;
+  color: white;
+  text-decoration: none;
   transition: all 0.3s ease;
 }
 
@@ -754,7 +753,7 @@ body.landing-body {
 }
 
 .footer-section ul li {
-  margin-bottom:  12px;
+  margin-bottom: 12px;
 }
 
 .footer-section ul li a {
@@ -764,13 +763,13 @@ body.landing-body {
 }
 
 .footer-section ul li a:hover {
-  color:  white;
+  color: white;
 }
 
 .footer-bottom {
-  text-align:  center;
-  padding-top:  30px;
-  border-top:  1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: #aaa;
 }
 
@@ -836,7 +835,7 @@ body.landing-body {
 
 @media (max-width: 600px) {
   .hero-title {
-    font-size:  32px;
+    font-size: 32px;
   }
 
   .section-title {

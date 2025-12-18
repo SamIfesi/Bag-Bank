@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="" />
     <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="src/home.css">
+    <link rel="stylesheet" href="public/assets/css/home.css">
     <title>D'Bag Bank - Dashboard</title>
 </head>
 
 <body class="home-body">
     <header class="home-header flex-space">
         <div class="topbar-left">
-            <h2>Hi, 
+            <h2>Hi,
                 <span><?php echo htmlspecialchars($user->username); ?></span>
             </h2>
             <p>How are you today?</p>

@@ -113,6 +113,11 @@ D'bag_Bank/
 ├── app/
 │   ├── controller/
 │   │   └── userController.php      # User CRUD operations
+│   ├── handlers/                    # ✨ API/Form handlers (NEW)
+│   │   ├── process_login.php       # Login form processor
+│   │   ├── process_register.php    # Registration processor
+│   │   ├── process_transfer.php    # Transfer processor
+│   │   └── resolve_account.php     # Account lookup API
 │   └── model/
 │       ├── Database.php             # Database connection
 │       └── model.php                # Base model with CRUD methods
@@ -123,15 +128,11 @@ D'bag_Bank/
 │   ├── autoload.php                 # Class autoloader
 │   └── config.php                   # Configuration constants
 ├── includes/
-│   ├── components/
+│   ├── components/                  # UI Components only
 │   │   ├── dash_card.php           # Dashboard balance card
 │   │   ├── dash_footer.php         # Dashboard footer
 │   │   ├── dash_header.php         # Dashboard header
 │   │   ├── dash_trans.php          # Dashboard transactions
-│   │   ├── process_login.php       # Login form processor
-│   │   ├── process_register.php    # Registration processor
-│   │   ├── process_transfer.php    # Transfer processor
-│   │   ├── resolve_account.php     # Account lookup API
 │   │   ├── send_account.php        # Send money step 1
 │   │   ├── send_amount.php         # Send money step 2
 │   │   └── send_header.php         # Send page header
@@ -139,23 +140,24 @@ D'bag_Bank/
 │   ├── check_auth.php              # Authentication middleware
 │   └── toggler.php                 # Toggle visibility handler
 ├── public/
+│   ├── assets/                      # ✨ Organized assets (NEW)
+│   │   ├── css/                    # All stylesheets
+│   │   │   ├── home.css           # Dashboard styles
+│   │   │   ├── index.css          # Landing page styles
+│   │   │   ├── receipt.css        # Receipt styles
+│   │   │   ├── send.css           # Send money styles
+│   │   │   ├── style.css          # Auth pages styles
+│   │   │   └── transactions.css   # Transaction history styles
+│   │   └── js/                     # All JavaScript files
+│   │       ├── dash.js            # Dashboard JavaScript
+│   │       ├── index.js           # Landing page JavaScript
+│   │       ├── main.js            # Auth pages JavaScript
+│   │       ├── receipt.js         # Receipt JavaScript
+│   │       └── send.js            # Send money JavaScript
 │   ├── favicon.svg                 # Site favicon
 │   ├── logo.svg                    # Full logo
 │   ├── logo-icon.svg               # Logo icon
 │   └── logo-stacked.svg            # Stacked logo
-├── src/
-│   ├── dash.js                     # Dashboard JavaScript
-│   ├── home.css                    # Landing page styles
-│   ├── index.css                   # Landing page styles
-│   ├── index.js                    # Landing page JavaScript
-│   ├── main.js                     # Global JavaScript
-│   ├── receipt.css                 # Receipt styles
-│   ├── receipt.js                  # Receipt JavaScript
-│   ├── send.css                    # Send money styles
-│   ├── send.js                     # Send money JavaScript
-│   ├── style.css                   # Global styles
-│   ├── transactions.css            # Transactions page styles
-│   └── transactions.js             # Transactions page JavaScript
 ├── dashboard.php                   # User dashboard
 ├── index.php                       # Landing page
 ├── login.php                       # Login page
@@ -164,10 +166,18 @@ D'bag_Bank/
 ├── send.php                        # Send money page
 ├── transactions.php                # Transaction history
 ├── transfer_success.php            # Success page
-├── database_updates.sql            # Database migrations
-├── TRANSFER_SETUP.md              # Transfer setup guide
 └── README.md                       # Project documentation
 ```
+
+### 📂 Folder Organization
+
+- **`app/handlers/`** - Backend API endpoints and form processors
+- **`app/controller/`** - Business logic controllers
+- **`app/model/`** - Database models and abstraction layer
+- **`config/`** - Configuration files and utilities
+- **`includes/components/`** - Reusable UI components
+- **`public/assets/`** - Static assets (CSS, JavaScript, images)
+- **Root directory** - Page files (views)
 
 ---
 
@@ -296,14 +306,14 @@ UPDATE users SET balance = 25000.00 WHERE id = 2;
 
 If your project is not in the root directory, update the fetch URLs in JavaScript files:
 
-**Example: `src/send.js`**
+**Example: `public/assets/js/send.js`**
 
 ```javascript
 // Change this line based on your setup
-const url = "/php_sandbox/D'bag_Bank/includes/components/process_transfer.php";
+const url = "/php_sandbox/D'bag_Bank/app/handlers/process_transfer.php";
 
 // For root directory:
-const url = "/includes/components/process_transfer.php";
+const url = "/app/handlers/process_transfer.php";
 ```
 
 ### Session Configuration
@@ -429,7 +439,7 @@ if ($recipient_account === $sender->account_number) {
 
 ### Account Lookup
 
-**Endpoint:** `includes/components/resolve_account.php`  
+**Endpoint:** `app/handlers/resolve_account.php`  
 **Method:** POST  
 **Parameters:**
 
@@ -447,7 +457,7 @@ if ($recipient_account === $sender->account_number) {
 
 ### Process Transfer
 
-**Endpoint:** `includes/components/process_transfer.php`  
+**Endpoint:** `app/handlers/process_transfer.php`  
 **Method:** POST  
 **Parameters:**
 

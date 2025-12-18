@@ -23,7 +23,7 @@ $all_transactions = $stmt->fetchAll();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="src/transactions.css">
+    <link rel="stylesheet" href="public/assets/css/transactions.css">
     <title>Transaction History - D'Bag Bank</title>
 </head>
 

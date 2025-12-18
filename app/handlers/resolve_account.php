@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once "../../app/controller/userController.php";
-require_once "../../config/functions/utilities.php";
-require_once "../../config/Auth.php";
+require_once __DIR__ . "/../controller/userController.php";
+require_once __DIR__ . "/../../config/functions/utilities.php";
+require_once __DIR__ . "/../../config/Auth.php";
 
 header('Content-Type: application/json');
 const my_bank = "my_bank";
@@ -18,14 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => false, 'message' => 'Amount not found in selected bank']);
         exit;
     }
-    
+
     // Get current logged-in user
     $current_user = Auth::user();
     if ($current_user && $current_user->account_number === $account_number) {
         echo json_encode(['success' => false, 'message' => 'You cannot send money to yourself']);
         exit;
     }
-    
+
     $user = Model::find('users', 'account_number', $account_number);
 
     if ($user) {

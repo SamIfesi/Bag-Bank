@@ -80,7 +80,7 @@
     </div>
 </form>
 </main>
-<script type="module" src="src/send.js"></script>
+<script type="module" src="public/assets/js/send.js"></script>
 </body>
 
 </html>

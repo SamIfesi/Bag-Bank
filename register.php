@@ -13,7 +13,7 @@ unset($_SESSION['old_input']);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="src/style.css" />
+    <link rel="stylesheet" href="public/assets/css/style.css" />
     <title>D'Bag Bank - Register</title>
 </head>
 
@@ -23,7 +23,7 @@ unset($_SESSION['old_input']);
         <div class="loader-container hide" id="loader">
             <div class="spinner"></div>
         </div>
-        <form action="includes/components/process_register.php" method="post" id="register-form">
+        <form action="app/handlers/process_register.php" method="post" id="register-form">
             <!-- Email input form -->
             <div id="email-form">
                 <i class="ti ti-chevron-left back" id="backLogin"></i>
@@ -126,7 +126,7 @@ unset($_SESSION['old_input']);
         </form>
     </main>
     <span class="msg-success" id="msg-success"></span>
-    <script type="module" src="src/main.js"></script>
+    <script type="module" src="public/assets/js/main.js"></script>
 </body>
 
 </html>

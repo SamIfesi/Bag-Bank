@@ -13,7 +13,7 @@ unset($_SESSION['errors']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="" />
     <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="src/style.css">
+    <link rel="stylesheet" href="public/assets/css/style.css">
     <title>D'Bag Bank - Login</title>
 </head>
 
@@ -25,7 +25,7 @@ unset($_SESSION['errors']);
         </div>
 
         <i class="ti ti-chevron-left back" onclick="window.location.href='index.php'"></i>
-        <form action="includes/components/process_login.php" method="post" id="login-form">
+        <form action="app/handlers/process_login.php" method="post" id="login-form">
             <div id="userLogin-form">
                 <div class="form-group">
                     <i class="ti ti-user icon"></i>
@@ -67,7 +67,7 @@ unset($_SESSION['errors']);
         </form>
     </main>
     <span class="msg-success" id="msg-success"></span>
-    <script type="module" src="src/main.js"></script>
+    <script type="module" src="public/assets/js/main.js"></script>
 </body>
 
 </html>
