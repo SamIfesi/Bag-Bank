@@ -4,6 +4,7 @@
 :root {
   --primary-gradient: linear-gradient(135deg, #5200a3 0%, #2a0054 100%);
   --secondary-gradient: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+  --primary-purple: #5200a3;
   --primary-black: #121212;
   --green-light: #6dc474;
   --text-gray: #807b7b;
@@ -253,18 +254,17 @@ a.mobile-signup {
   font-size: 16px;
   transition: all 0.3s ease;
   box-shadow: 0 4px 20px rgba(82, 0, 163, 0.3);
+  i {
+    transition: all 0.3s ease;
+  }
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
   box-shadow: 0 6px 25px rgba(82, 0, 163, 0.4);
+  i {
+    transform: translateX(-2px);
+  }
 }
-
-.btn-primary.large {
-  padding: 20px 40px;
-  font-size: 18px;
-}
-
 .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -686,10 +686,6 @@ a.mobile-signup {
 .cta-actions .btn-primary {
   background: white;
   color: #5200a3;
-}
-
-.cta-actions .btn-primary:hover {
-  transform: translateY(-2px) scale(1.05);
 }
 
 /* Footer */

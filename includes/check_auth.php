@@ -6,7 +6,11 @@ if (session_status() === PHP_SESSION_NONE) {
 $public_pages = [
     'index.php',
     'login.php',
-    'register.php'
+    'register.php',
+    'about_us.php',
+    'blog.php',
+    'careers.php',
+    'press.php',
 ];
 
 function check_auth($public_pages)
@@ -17,7 +21,6 @@ function check_auth($public_pages)
     $isPublicPage = in_array($currentPage, $public_pages);
 
     // --- Redirection Logic ---
-
     if (!$isAuthenticated && !$isPublicPage) {
         header("Location: login.php");
         exit();
