@@ -51,7 +51,7 @@
     <div class="sidebar-footer">
 
         <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
-            <i class="ti ti-layout-sidebar-left-collapse"></i>
+            <i class="ti ti-layout-sidebar-left-collapse" id="collapse-icon"></i>
             <span>Collapse</span>
         </button>
         <a href="logout.php" class="sidebar-item logout">

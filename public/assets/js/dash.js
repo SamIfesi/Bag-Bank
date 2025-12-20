@@ -92,19 +92,16 @@ const initActionButtons = () => {
 const initSidebar = () => {
   const sidebar = document.getElementById("sidebar");
   const sidebarToggle = document.getElementById("sidebarToggle");
+  const icon = document.getElementById("collapse-icon");
   const homeBody = document.querySelector(".home-body");
 
-  if (!sidebar || !sidebarToggle) {
-    console.log("Sidebar elements not found");
-    return;
-  }
-
-  console.log("Sidebar initialized");
+  if (!sidebar || !sidebarToggle) return;
 
   // Load saved state from localStorage
   const isCollapsed = localStorage.getItem("sidebarCollapsed") === "true";
   if (isCollapsed) {
     sidebar.classList.add("collapsed");
+    icon.classList.replace("ti-layout-sidebar-left-collapse", "ti-layout-sidebar-right-collapse");
     if (homeBody) homeBody.classList.add("sidebar-collapsed");
   }
 
@@ -112,13 +109,19 @@ const initSidebar = () => {
     e.preventDefault();
     const collapsed = sidebar.classList.toggle("collapsed");
 
+    // Toggle icon classes
+    if (collapsed) {
+      icon.classList.replace("ti-layout-sidebar-left-collapse", "ti-layout-sidebar-right-collapse");
+    } else {
+      icon.classList.replace("ti-layout-sidebar-right-collapse", "ti-layout-sidebar-left-collapse");
+    }
+
     if (homeBody) {
       homeBody.classList.toggle("sidebar-collapsed");
     }
 
     // Save state to localStorage
-    // localStorage.setItem("sidebarCollapsed", collapsed.toString());
-    console.log("Sidebar toggled:", collapsed);
+    localStorage.setItem("sidebarCollapsed", collapsed.toString());
   });
 };
 
@@ -127,5 +130,3 @@ document.addEventListener("DOMContentLoaded", () => {
   initActionButtons();
   initSidebar();
 });
-
-console.log("hello");

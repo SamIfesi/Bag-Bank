@@ -16,8 +16,8 @@
          <div class="footer-section">
              <h4>Product</h4>
              <ul>
-                 <li><a href="#features">Features</a></li>
-                 <li><a href="#security">Security</a></li>
+                 <li><a href="index.php#features">Features</a></li>
+                 <li><a href="index.php#security">Security</a></li>
                  <li><a href="#">Pricing</a></li>
                  <li><a href="#">API</a></li>
              </ul>
