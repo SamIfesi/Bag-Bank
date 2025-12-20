@@ -11,6 +11,11 @@ $public_pages = [
     'blog.php',
     'careers.php',
     'press.php',
+    'pricing.php',
+    'help-center.php',
+    'contact.php',
+    'privacy-policy.php',
+    'terms-of-service.php',
 ];
 
 function check_auth($public_pages)

@@ -18,7 +18,7 @@
              <ul>
                  <li><a href="index.php#features">Features</a></li>
                  <li><a href="index.php#security">Security</a></li>
-                 <li><a href="#">Pricing</a></li>
+                 <li><a href="pricing.php">Pricing</a></li>
                  <li><a href="#">API</a></li>
              </ul>
          </div>
@@ -36,10 +36,10 @@
          <div class="footer-section">
              <h4>Support</h4>
              <ul>
-                 <li><a href="#">Help Center</a></li>
-                 <li><a href="#">Contact Us</a></li>
-                 <li><a href="#">Privacy Policy</a></li>
-                 <li><a href="#">Terms of Service</a></li>
+                 <li><a href="help-center.php">Help Center</a></li>
+                 <li><a href="contact.php">Contact Us</a></li>
+                 <li><a href="privacy-policy.php">Privacy Policy</a></li>
+                 <li><a href="terms-of-service.php">Terms of Service</a></li>
              </ul>
          </div>
      </div>
