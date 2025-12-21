@@ -46,8 +46,8 @@
             <li><a href="pricing.php">Pricing</a></li>
             <li><a href="help-center.php">Help</a></li>
             <li><a href="contact.php">Contact</a></li>
-            <li><a href="login. php" class="mobile-login">Login</a></li>
-            <li><a href="register. php" class="mobile-signup">Sign Up</a></li>
+            <li><a href="login.php" class="mobile-login">Login</a></li>
+            <li><a href="register.php" class="mobile-signup">Sign Up</a></li>
         </ul>
     </div>
 
@@ -430,7 +430,7 @@
     </section>
 
     <!-- Footer -->
-    <?= require_once __DIR__ .  "/includes/components/footer.php"; ?>
+    <?php require_once __DIR__ .  "/includes/components/footer.php"; ?>
 
     <script src="public/assets/js/legal-pages.js"></script>
 </body>

@@ -375,7 +375,7 @@
         </div>
     </section>
 
-    <?= require_once __DIR__ . "/includes/components/footer.php"; ?>
+    <?php require_once __DIR__ . "/includes/components/footer.php"; ?>
 
     <script src="public/assets/js/legal-pages.js"></script>
 </body>

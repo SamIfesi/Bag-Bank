@@ -255,13 +255,3 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     }
   });
 });
-
-// Console message
-console.log(
-  "%cD'Bag Bank Legal Pages",
-  "color: #5200a3; font-size: 1.5rem; font-weight: bold;"
-);
-console.log(
-  "%cThese legal documents are provided for your information.  Please read them carefully.",
-  "color: #666; font-size: 0.875rem;"
-);

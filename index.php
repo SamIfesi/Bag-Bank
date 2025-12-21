@@ -7,7 +7,7 @@ require_once __DIR__ .  "/includes/check_auth.php";
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="/public/favicon.svg" type="image/svg" />
+    <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
     <link rel="stylesheet" href="public/assets/css/index.css">
     <title>D'Bag Bank - Your Digital Banking Partner</title>
 </head>
@@ -307,7 +307,7 @@ require_once __DIR__ .  "/includes/check_auth.php";
         </div>
     </section>
 
-    <?= include_once __DIR__ . "/includes/components/footer.php"; ?>
+    <?php require_once __DIR__ . "/includes/components/footer.php"; ?>
 
     <script src="public/assets/js/index.js"></script>
 </body>
