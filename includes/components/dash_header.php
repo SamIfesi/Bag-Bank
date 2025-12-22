@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . "/dash_card.php";
+require_once __DIR__ . "/dash_trans.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,21 +15,3 @@
 </head>
 
 <body class="home-body">
-    <header class="home-header flex-space">
-        <div class="topbar-left">
-            <h2>Hi,
-                <span><?php echo htmlspecialchars($user->username); ?></span>
-            </h2>
-            <p>How are you today?</p>
-        </div>
-
-        <div class="topbar-right">
-            <button class="reward">
-                <i class="ti ti-gift"></i>
-                <span>Reward</span>
-            </button>
-            <button class="notifications">
-                <i class="ti ti-bell"></i>
-            </button>
-        </div>
-    </header>

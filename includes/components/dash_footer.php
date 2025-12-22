@@ -7,7 +7,7 @@
         <i class="ti ti-logs"></i>
         <span>Activity</span>
     </a>
-    <a href="#" class="nav-item">
+    <a href="#" class="nav-item show-card">
         <i class="ti ti-credit-card"></i>
         <span>Card</span>
     </a>
@@ -38,7 +38,7 @@
             <i class="ti ti-logs"></i>
             <span>Transactions</span>
         </a>
-        <a href="#" class="sidebar-item">
+        <a href="#" class="sidebar-item show-card">
             <i class="ti ti-credit-card"></i>
             <span>Cards</span>
         </a>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$valid_items = ['balance', 'account_number'];
+$valid_items = ['balance', 'account_number', 'card'];
 $item_key = isset($_GET['item']) ? $_GET['item'] : '';
 
 if (empty($item_key) || !in_array($item_key, $valid_items)) {
@@ -10,7 +10,7 @@ if (empty($item_key) || !in_array($item_key, $valid_items)) {
     exit();
 }
 
-$session_var = 'show_' . $item_key;
+$session_var = 'show_' . ($item_key === 'card' ? 'full_card' : $item_key);
 if (!isset($_SESSION[$session_var])) {
     $_SESSION[$session_var] = ($item_key === 'balance');
 }
