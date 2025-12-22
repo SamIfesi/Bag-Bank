@@ -26,7 +26,7 @@ unset($_SESSION['old_input']);
         <form action="app/handlers/process_register.php" method="post" id="register-form">
             <!-- Email input form -->
             <div id="email-form">
-                <i class="ti ti-chevron-left back" id="backLogin"></i>
+                <i class="ti ti-chevron-left back" onclick="window.location.href='index.php'"></i>
                 <div class="form-group">
                     <i class="ti ti-mail icon"></i>
                     <input

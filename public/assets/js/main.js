@@ -305,12 +305,6 @@ const initUtilities = () => {
   // Back Button Navigation
   const backNavs = [
     {
-      btn: id("backLogin"),
-      current: elements.forms.steps.email,
-      prev: null,
-      link: "login.php",
-    },
-    {
       btn: id("backEmail"),
       current: elements.forms.steps.name,
       prev: elements.forms.steps.email,
@@ -335,12 +329,8 @@ const initUtilities = () => {
   backNavs.forEach((nav) => {
     if (nav.btn) {
       nav.btn.addEventListener("click", () => {
-        if (nav.link) {
-          window.location.href = nav.link;
-        } else {
-          nav.current.classList.add("hide");
-          nav.prev.classList.remove("hide");
-        }
+        nav.current.classList.add("hide");
+        nav.prev.classList.remove("hide");
       });
     }
   });
