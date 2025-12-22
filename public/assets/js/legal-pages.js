@@ -161,8 +161,6 @@ const createProgressBar = () => {
     progressBar.style.width = `${Math.min(progress, 100)}%`;
   });
 };
-
-// Initialize progress bar
 createProgressBar();
 
 // Back to top button
