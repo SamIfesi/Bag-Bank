@@ -1,17 +1,17 @@
 <nav class="bottom-nav">
-    <a href="#" class="nav-item active">
+    <a href="#" class="nav-item active" data-page="home">
         <i class="ti ti-home"></i>
         <span>Home</span>
     </a>
-    <a href="#" class="nav-item">
+    <a href="#" class="nav-item" data-page="transactions">
         <i class="ti ti-logs"></i>
         <span>Activity</span>
     </a>
-    <a href="#" class="nav-item show-card">
+    <a href="#" class="nav-item show-card" data-page="card">
         <i class="ti ti-credit-card"></i>
         <span>Card</span>
     </a>
-    <a href="logout.php" class="nav-item">
+    <a href="#" class="nav-item" data-page="profile">
         <i class="ti ti-user"></i>
         <span>Profile</span>
     </a>
@@ -38,7 +38,7 @@
             <i class="ti ti-logs"></i>
             <span>Transactions</span>
         </a>
-        <a href="#" class="sidebar-item show-card">
+        <a href="#" class="sidebar-item show-card" data-page="card">
             <i class="ti ti-credit-card"></i>
             <span>Cards</span>
         </a>

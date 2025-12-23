@@ -1,4 +1,9 @@
-    <section class="nav-section">
+<?php
+// Determine if this section should be shown based on saved page
+$current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 'home';
+$hide_home = ($current_page !== 'home') ? 'hide' : '';
+?>
+    <section class="nav-section <?= $hide_home; ?>" data-name="home">
         <header class="home-header flex-space">
             <div class="topbar-left">
                 <h2>Hi,

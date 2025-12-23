@@ -14,4 +14,4 @@ require_once __DIR__ . "/dash_trans.php";
     <title>D'Bag Bank - Dashboard</title>
 </head>
 
-<body class="home-body">
+<body class="home-body" data-current-page="<?= isset($_SESSION['current_page']) ? htmlspecialchars($_SESSION['current_page']) : 'home'; ?>">

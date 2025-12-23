@@ -25,8 +25,8 @@
   box-sizing: border-box;
   font-family: "Stack Sans Text", "Inter";
   scroll-behavior: smooth;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
+  /* user-select: none;
+  -webkit-tap-highlight-color: transparent; */
 }
 .home-body {
   padding: 1.5rem;

@@ -16,9 +16,13 @@ if ($hasCard) {
 
     $show_full_card = isset($_SESSION['show_full_card']) ? $_SESSION['show_full_card'] : false;
     $display_card = $show_full_card ? $formatted_card : $masked_card;
+    
+    // Determine if this section should be shown based on saved page
+    $current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 'home';
+    $hide_card = ($current_page !== 'card') ? 'hide' : '';
 ?>
 
-    <section class="atm-card-container">
+    <section class="atm-card-container <?= $hide_card; ?> nav-section" data-name="card">
         <div class="atm-card">
             <div class="card-header">
                 <div class="card-logo">
@@ -47,7 +51,7 @@ if ($hasCard) {
             <div class="card-details">
                 <div class="card-holder">
                     <span class="label">CARD HOLDER</span>
-                    <span class="value"><?= strtoupper($user->first_name . ' ' . $user->last_name); ?></span>
+                    <span class="value"><?= strtoupper($user->name); ?></span>
                 </div>
                 <div class="card-expiry">
                     <span class="label">EXPIRES</span>
@@ -74,8 +78,31 @@ if ($hasCard) {
 } else {
     // User doesn't have a card - show apply button
 ?>
+<?php
+// Determine if this section should be shown based on saved page
+$current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 'home';
+$hide_card = ($current_page !== 'card') ? 'hide' : '';
+?>
+    <section class="atm-card-container <?= $hide_card; ?> nav-section" data-name="card">
+        <header class="home-header flex-space">
+            <div class="topbar-left">
+                <h2>Hi,
+                    <span><?php echo htmlspecialchars($user->username); ?></span>
+                </h2>
+                <p>How are you today?</p>
+            </div>
 
-    <section class="atm-card-container hide nav-section">
+            <div class="topbar-right">
+                <button class="reward">
+                    <i class="ti ti-gift"></i>
+                    <span>Reward</span>
+                </button>
+                <button class="notifications">
+                    <i class="ti ti-bell"></i>
+                </button>
+            </div>
+        </header>
+
         <div class="no-card-section">
             <div class="no-card-icon">
                 <i class="ti ti-credit-card"></i>
