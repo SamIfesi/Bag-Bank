@@ -16,33 +16,52 @@ if ($hasCard) {
 
     $show_full_card = isset($_SESSION['show_full_card']) ? $_SESSION['show_full_card'] : false;
     $display_card = $show_full_card ? $formatted_card : $masked_card;
-    
+
     // Determine if this section should be shown based on saved page
     $current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 'home';
     $hide_card = ($current_page !== 'card') ? 'hide' : '';
 ?>
 
     <section class="atm-card-container <?= $hide_card; ?> nav-section" data-name="card">
+        <header class="home-header flex-space">
+            <div class="topbar-left">
+                <h2>Hi,
+                    <span><?php echo htmlspecialchars($user->username); ?></span>
+                </h2>
+                <p>How are you today?</p>
+            </div>
+
+            <div class="topbar-right">
+                <button class="reward">
+                    <i class="ti ti-gift"></i>
+                    <span>Reward</span>
+                </button>
+                <button class="notifications">
+                    <i class="ti ti-bell"></i>
+                </button>
+            </div>
+        </header>
         <div class="atm-card">
             <div class="card-header">
-                <div class="card-logo">
-                    <span class="bank-name">D'bag Bank</span>
+                <div class="master-card">
+                    <div class="mastercard-logo">
+                        <svg width="60" height="40" viewBox="0 0 60 40">
+                            <circle cx="20" cy="20" r="15" fill="#EB001B" opacity="0.8" />
+                            <circle cx="40" cy="20" r="15" fill="#F79E1B" opacity="0.8" />
+                        </svg>
+                    </div>
                 </div>
                 <div class="card-type">
-                    <span>DEBIT</span>
+                    <span>DEBIT CARD</span>
                 </div>
             </div>
 
-            <div class="card-chip">
-                <svg width="50" height="40" viewBox="0 0 50 40">
-                    <rect x="5" y="5" width="40" height="30" rx="5" fill="#FFD700" />
-                    <rect x="10" y="10" width="10" height="8" fill="#FFA500" />
-                    <rect x="25" y="10" width="10" height="8" fill="#FFA500" />
-                    <rect x="10" y="22" width="10" height="8" fill="#FFA500" />
-                    <rect x="25" y="22" width="10" height="8" fill="#FFA500" />
-                </svg>
+            <div class="deco">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
-
+            
             <div class="card-number" id="cardNumberDisplay" data-full="<?= $formatted_card; ?>" data-masked="<?= $masked_card; ?>">
                 <span><?= $display_card; ?></span>
                 <i class="ti <?= $show_full_card ? 'ti-eye-off' : 'ti-eye'; ?> toggle-card-view" id="cardToggleIcon"></i>
@@ -62,15 +81,6 @@ if ($hasCard) {
                     <span class="value">***</span>
                 </div>
             </div>
-
-            <div class="card-footer">
-                <div class="mastercard-logo">
-                    <svg width="60" height="40" viewBox="0 0 60 40">
-                        <circle cx="20" cy="20" r="15" fill="#EB001B" opacity="0.8" />
-                        <circle cx="40" cy="20" r="15" fill="#F79E1B" opacity="0.8" />
-                    </svg>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -78,11 +88,11 @@ if ($hasCard) {
 } else {
     // User doesn't have a card - show apply button
 ?>
-<?php
-// Determine if this section should be shown based on saved page
-$current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 'home';
-$hide_card = ($current_page !== 'card') ? 'hide' : '';
-?>
+    <?php
+    // Determine if this section should be shown based on saved page
+    $current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 'home';
+    $hide_card = ($current_page !== 'card') ? 'hide' : '';
+    ?>
     <section class="atm-card-container <?= $hide_card; ?> nav-section" data-name="card">
         <header class="home-header flex-space">
             <div class="topbar-left">
