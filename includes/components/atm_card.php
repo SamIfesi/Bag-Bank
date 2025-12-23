@@ -23,19 +23,14 @@ if ($hasCard) {
 ?>
 
     <section class="atm-card-container <?= $hide_card; ?> nav-section" data-name="card">
-        <header class="home-header flex-space">
+        <header class="home-header flex-space card-header">
             <div class="topbar-left">
-                <h2>Hi,
-                    <span><?php echo htmlspecialchars($user->username); ?></span>
+                <h2>
+                    Card
                 </h2>
-                <p>How are you today?</p>
             </div>
 
             <div class="topbar-right">
-                <button class="reward">
-                    <i class="ti ti-gift"></i>
-                    <span>Reward</span>
-                </button>
                 <button class="notifications">
                     <i class="ti ti-bell"></i>
                 </button>
@@ -61,7 +56,7 @@ if ($hasCard) {
                 <span></span>
                 <span></span>
             </div>
-            
+
             <div class="card-number" id="cardNumberDisplay" data-full="<?= $formatted_card; ?>" data-masked="<?= $masked_card; ?>">
                 <span><?= $display_card; ?></span>
                 <i class="ti <?= $show_full_card ? 'ti-eye-off' : 'ti-eye'; ?> toggle-card-view" id="cardToggleIcon"></i>
@@ -94,26 +89,21 @@ if ($hasCard) {
     $hide_card = ($current_page !== 'card') ? 'hide' : '';
     ?>
     <section class="atm-card-container <?= $hide_card; ?> nav-section" data-name="card">
-        <header class="home-header flex-space">
+        <header class="home-header flex-space card-header">
             <div class="topbar-left">
-                <h2>Hi,
-                    <span><?php echo htmlspecialchars($user->username); ?></span>
+                <h2>
+                    Card
                 </h2>
-                <p>How are you today?</p>
             </div>
 
             <div class="topbar-right">
-                <button class="reward">
-                    <i class="ti ti-gift"></i>
-                    <span>Reward</span>
-                </button>
                 <button class="notifications">
                     <i class="ti ti-bell"></i>
                 </button>
             </div>
         </header>
 
-        <div class="no-card-section">
+        <div class="no-card-section" id="noCardSection">
             <div class="no-card-icon">
                 <i class="ti ti-credit-card"></i>
             </div>
@@ -124,7 +114,13 @@ if ($hasCard) {
             </button>
         </div>
 
-        <div class="loading-card" id="loadingCard" style="display: none;">
+
+        <div class="msg" id="msg">
+            <span id="icon"></span>
+            <span id="messageText"></span>
+        </div>
+
+        <div class="loading-card hide" id="loadingCard">
             <div class="spinner"></div>
             <p>Processing your application...</p>
         </div>

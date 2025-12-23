@@ -27,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 try {
     $user = Auth::user();
-
     // Check if user already has a card
     if ($user->card_status !== 'none' && !empty($user->card_number)) {
         header("Content-Type: application/json");

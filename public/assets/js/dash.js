@@ -24,6 +24,18 @@ const element = {
     navBtn: qa(".bottom-nav .nav-item"),
     pages: qa(".nav-section"),
   },
+  cardApply: {
+    applyBtn: id("applyCardBtn"),
+    loading: id("loadingCard"),
+    msg: id("msg"),
+    icon: id("icon"),
+    messageText: id("messageText"),
+    toggler: {
+      iconEye: id("cardToggleIcon"),
+      atmNumber: id("cardNumberDisplay"),
+    },
+    noCardSection: id("noCardSection"),
+  },
 };
 
 // Initialize all functionalities on DashBoard
@@ -142,24 +154,21 @@ const initSidebar = () => {
 // ATM Card functionality
 const initCardFunctionality = () => {
   // Card number toggle
-  const cardToggleIcon = id("cardToggleIcon");
-  const cardNumberDisplay = id("cardNumberDisplay");
+  const { iconEye, atmNumber } = element.cardApply.toggler;
 
-  if (cardToggleIcon && cardNumberDisplay) {
-    cardToggleIcon.addEventListener("click", function () {
-      const cardSpan = cardNumberDisplay.querySelector("span");
-      const fullCard = cardNumberDisplay.getAttribute("data-full");
-      const maskedCard = cardNumberDisplay.getAttribute("data-masked");
+  if (iconEye && atmNumber) {
+    iconEye.addEventListener("click", function () {
+      const cardSpan = atmNumber.querySelector("span");
+      const fullCard = atmNumber.getAttribute("data-full");
+      const maskedCard = atmNumber.getAttribute("data-masked");
       const isCurrentlyMasked = cardSpan.textContent.includes("*");
 
       if (isCurrentlyMasked) {
         cardSpan.textContent = fullCard;
-        cardToggleIcon.classList.remove("ti-eye");
-        cardToggleIcon.classList.add("ti-eye-off");
+        iconEye.classList.replace("ti-eye", "ti-eye-off");
       } else {
         cardSpan.textContent = maskedCard;
-        cardToggleIcon.classList.remove("ti-eye-off");
-        cardToggleIcon.classList.add("ti-eye");
+        iconEye.classList.replace("ti-eye-off", "ti-eye");
       }
 
       fetch("includes/toggler.php?item=card", {
@@ -169,64 +178,74 @@ const initCardFunctionality = () => {
   }
 
   // Apply for card
-  const applyCardBtn = id("applyCardBtn");
-  const loadingCard = id("loadingCard");
+  const { applyBtn, loading, msg, icon, messageText, noCardSection } =
+    element.cardApply;
 
-  if (applyCardBtn) {
-    applyCardBtn.addEventListener("click", async function () {
-      const noCardSection = q(".no-card-section");
+  if (!applyBtn || !loading || !msg || !icon || !messageText) return;
+  applyBtn.addEventListener("click", async () => {
+    const url = "app/handlers/apply_card.php";
+    noCardSection.classList.add("hide");
+    loading.classList.remove("hide");
+    msg.classList.remove("hidden");
+    msg.style.transform = "";
+    msg.style.opacity = "";
 
-      // Show loading state
-      if (noCardSection && loadingCard) {
-        noCardSection.style.display = "none";
-        loadingCard.style.display = "block";
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Network response status: ${response.statusText}`);
       }
 
-      try {
-        const response = await fetch("app/handlers/apply_card.php", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-          // Show success message
-          alert("🎉 " + data.message + "\n\nReloading page...");
-          // Reload page to show the card
-          window.location.reload();
-        } else {
-          // Show error message
-          alert("❌ " + data.message);
-          // Show apply button again
-          if (noCardSection && loadingCard) {
-            noCardSection.style.display = "block";
-            loadingCard.style.display = "none";
-          }
-        }
-      } catch (error) {
-        console.error("Error applying for card:", error);
-        alert("❌ An error occurred. Please try again.");
-        // Show apply button again
-        if (noCardSection && loadingCard) {
-          noCardSection.style.display = "block";
-          loadingCard.style.display = "none";
-        }
+      msg.classList.add("active");
+      const data = await response.json();
+      if (data.success) {
+        msg.classList.add("success");
+        icon.textContent = "✓";
       }
-    });
-  }
+      if (!data.success) {
+        msg.classList.add("error");
+        icon.textContent = "⚠️";
+        noCardSection.classList.add("hide");
+        loading.classList.remove("hide");
+      } else if (http === 500) {
+        msg.classList.add("error");
+        icon.textContent = "X";
+        noCardSection.classList.add("hide");
+        loading.classList.remove("hide");
+      } else if (http === 400) {
+        msg.classList.add("error");
+        icon.textContent = "❗";
+        noCardSection.classList.add("hide");
+        loading.classList.remove("hide");
+      } else if (http === 405) {
+        msg.classList.add("error");
+        icon.textContent = "⚠️";
+        noCardSection.classList.add("hide");
+        loading.classList.remove("hide");
+      }
+      messageText.textContent = data.message;
+    } catch (error) {
+      msg.classList.add("active", "error");
+      icon.textContent = "❌";
+      messageText.textContent =
+        "Network error occurred. Please try again later.";
+      loading.classList.add("hide");
+      noCardSection.classList.remove("hide");
+    }
+  });
 };
 
 const navLocation = () => {
   const { show, navBtn, pages } = element.card;
-  
-  // Restore the saved page on page load
   const restoreSavedPage = () => {
     // Get the saved page from data attribute (set by PHP)
-    const savedPage = document.body.getAttribute('data-current-page');
-    
+    const savedPage = document.body.getAttribute("data-current-page");
+
     if (savedPage && navBtn.length > 0) {
       navBtn.forEach((btn) => {
         const btnPage = btn.getAttribute("data-page");
@@ -247,26 +266,24 @@ const navLocation = () => {
       });
     }
   };
-
-  // Call restore on load
   restoreSavedPage();
-  
+
   navBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
       navBtn.forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
 
       const getPage = btn.getAttribute("data-page");
-      
+
       // Save current page to session
       fetch("includes/toggler.php?item=page", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ page: getPage })
+        body: JSON.stringify({ page: getPage }),
       }).catch((err) => console.error("Failed to save current page", err));
-      
+
       // let count = 0;
       pages.forEach((page) => {
         const pageName = page.getAttribute("data-name");
@@ -275,9 +292,69 @@ const navLocation = () => {
         } else {
           page.classList.add("hide");
         }
-      })
-    })
+      });
+    });
   });
+};
+
+const drag = () => {
+  const { msg } = element.cardApply;
+  if (!msg) return;
+
+  let startY = 0;
+  let currentY = 0;
+  let isDragging = false;
+
+  const startDrag = (e) => {
+    isDragging = true;
+    startY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY;
+    msg.style.transition = "none";
+  };
+
+  const duringDrag = (e) => {
+    if (!isDragging) return;
+
+    currentY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY;
+    const deltaY = currentY - startY;
+
+    // only allow dragging upwards (negative deltaY)
+    if (deltaY < 0) {
+      msg.style.transform = `translateX(-50%) translateY(${deltaY}px)`;
+
+      // fade out slightly as user drags up
+      msg.style.opacity = 1 - Math.abs(deltaY) / 100;
+    }
+  };
+
+  const endDrag = () => {
+    if (!isDragging) return;
+    isDragging = false;
+
+    msg.style.transition = "all 0.5s ease";
+    const deltaY = currentY - startY;
+    const msgHeight = msg.offsetHeight;
+    const dragPercentage = Math.abs(deltaY) / msgHeight;
+
+    // Close if dragged more than 65% or more than 50px
+    if (dragPercentage >= 0.65 || deltaY < -50) {
+      msg.classList.add("hidden");
+      msg.classList.remove("active");
+      msg.style.transform = "";
+      msg.style.opacity = "";
+    } else {
+      msg.style.transform = "translateX(-50%) translateY(0)";
+      msg.style.opacity = "1";
+    }
+  };
+
+  // Event Listeners
+  msg.addEventListener("mousedown", startDrag);
+  window.addEventListener("mousemove", duringDrag);
+  window.addEventListener("mouseup", endDrag);
+
+  msg.addEventListener("touchstart", startDrag);
+  window.addEventListener("touchmove", duringDrag);
+  window.addEventListener("touchend", endDrag);
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -285,5 +362,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initActionButtons();
   initSidebar();
   initCardFunctionality();
-  navLocation()
+  navLocation();
+  drag();
 });
