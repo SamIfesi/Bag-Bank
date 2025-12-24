@@ -53,6 +53,7 @@
     <!-- confirmation -->
     <div class="model" id="model">
         <div class="confirm-model" id="confirm-model">
+            <span class="drag-handle" id="drag"></span>
             <div class="model-header">
                 <h3>Payment</h3>
                 <i class="ti ti-x" id="close-confirm-model"></i>
@@ -61,6 +62,10 @@
                 <div class="model-grp">
                     <span>Amount</span>
                     <span id="model-amount" class="txt"></span>
+                </div>
+                <div class="model-grp">
+                    <span>Fee</span>
+                    <span class="txt">₦0.00</span>
                 </div>
                 <div class="model-grp">
                     <span>Account Number</span>

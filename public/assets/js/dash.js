@@ -205,7 +205,7 @@ const initCardFunctionality = () => {
       if (response.ok && data.success) {
         msg.classList.remove("error");
         msg.classList.add("success");
-        icon.textContent = "✓";
+        icon.classList.add("ti-circle-check");
         messageText.textContent = data.message;
 
         setTimeout(() => {
@@ -213,15 +213,14 @@ const initCardFunctionality = () => {
         }, 3000);
       } else {
         msg.classList.add("error");
-        // icon.textContent = "⚠️";
         if (response.status === 400) {
-          icon.textContent = "❗";
+          icon.classList.add("ti-alert-circle");
         } else if (response.status === 500) {
-          icon.textContent = "✕";
+          icon.classList.add("ti-alert-circle");
         } else if (response.status === 405) {
-          icon.textContent = "⚠️";
+          icon.classList.add("ti-alert-triangle");
         } else {
-          icon.textContent = "⚠️";
+          icon.classList.add("ti-alert-circle");
         }
         messageText.textContent = data.message || "Failed to issue card";
         noCardSection.classList.remove("hide");
@@ -229,12 +228,19 @@ const initCardFunctionality = () => {
       }
     } catch (error) {
       msg.classList.add("active", "error");
-      icon.textContent = "❌";
-      messageText.textContent =
-        "Network error occurred. Please try again later.";
+      icon.classList.add("ti-alert-octagon");
+      messageText.textContent = "An error occurred. Please try again.";
       loading.classList.add("hide");
       noCardSection.classList.remove("hide");
     }
+    setTimeout(() => {
+      msg.classList.remove("active", "error", "success");
+      msg.style.transform = "";
+      msg.style.opacity = "";
+      icon.className = "ti";
+      messageText.textContent = "";
+      msg.classList.add("hidden");
+    }, 2000);
   });
 };
 
@@ -333,9 +339,11 @@ const drag = () => {
     const msgHeight = msg.offsetHeight;
     const dragPercentage = Math.abs(deltaY) / msgHeight;
 
-    // Close if dragged more than 65% or more than 50px
-    if (dragPercentage >= 0.65 || deltaY < -50) {
+    // Close if dragged more than 50% or more than 50px
+    if (dragPercentage >= 0.5 || deltaY < -50) {
       msg.classList.add("hidden");
+      msg.style.transform = "";
+      msg.style.opacity = "";
     } else {
       msg.style.transform = "translateX(-50%) translateY(0)";
       msg.style.opacity = "1";

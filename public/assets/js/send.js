@@ -54,6 +54,7 @@ const element = {
     account: id("model-account-number"),
     name: id("model-account-name"),
     pay: id("payBtn"),
+    dragHandle: id("drag"),
   },
 };
 
@@ -362,7 +363,65 @@ function navigateBack() {
     }
   });
 }
+const drag = () => {
+  const { dragHandle, model, container } = element.confirmation;
+  if (!dragHandle) return;
+
+  let isDragging = false;
+  let startY = 0;
+  let currentY = 0;
+  const startDrag = (e) => {
+    isDragging = true;
+    startY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY;
+    model.style.transition = "none";
+  };
+
+  const duringDrag = (e) => {
+    if (!isDragging) return;
+
+    currentY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY;
+    let deltaY = currentY - startY;
+    if (deltaY > 0) {
+      model.style.transform = `translateY(${deltaY}px)`;
+      model.style.opacity = 1 - Math.abs(deltaY) / 600;
+    }
+  };
+
+  const endDrag = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    const finalY = currentY || startY;
+    let deltaY = finalY - startY;
+    currentY = 0;
+
+    if (deltaY > 200) {
+      model.style.transform = `translateY(100%)`;
+      model.style.transition = "transform 0.4s ease-out";
+      model.style.opacity = 0;
+      setTimeout(() => {
+        container.classList.remove("active");
+        model.classList.remove("active");
+
+        model.style.opacity = "";
+        model.style.transform = ""
+      }, 400);
+    } else {
+      model.style.transform = `translateY(0)`;
+      model.style.transition = "transform 0.3s ease";
+      model.style.opacity = 1;
+    }
+  };
+  dragHandle.addEventListener("mousedown", startDrag);
+  dragHandle.addEventListener("touchstart", startDrag);
+
+  window.addEventListener("mousemove", duringDrag);
+  window.addEventListener("touchmove", duringDrag);
+
+  window.addEventListener("mouseup", endDrag);
+  window.addEventListener("touchend", endDrag);
+};
 document.addEventListener("DOMContentLoaded", () => {
   initSendMoneyForm();
   navigateBack();
+  drag();
 });

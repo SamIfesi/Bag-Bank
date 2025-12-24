@@ -116,7 +116,9 @@ if ($hasCard) {
 
 
         <div class="msg" id="msg">
-            <span id="icon"></span>
+            <span>
+                <i class="ti" id="icon"></i>
+            </span>
             <span id="messageText"></span>
         </div>
 
