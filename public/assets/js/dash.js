@@ -197,38 +197,26 @@ const initCardFunctionality = () => {
           "Content-Type": "application/json",
         },
       });
-      if (!response.ok) {
-        throw new Error(`Network response status: ${response.statusText}`);
-      }
+
+      const data = await response.json();
 
       msg.classList.add("active");
-      const data = await response.json();
-      if (data.success) {
+
+      if (response.ok && data.success) {
         msg.classList.add("success");
         icon.textContent = "✓";
-      }
-      if (!data.success) {
+        messageText.textContent = data.message;
+        // Optionally reload after a delay to show the new card
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 2000);
+      } else {
         msg.classList.add("error");
         icon.textContent = "⚠️";
-        noCardSection.classList.add("hide");
-        loading.classList.remove("hide");
-      } else if (http === 500) {
-        msg.classList.add("error");
-        icon.textContent = "X";
-        noCardSection.classList.add("hide");
-        loading.classList.remove("hide");
-      } else if (http === 400) {
-        msg.classList.add("error");
-        icon.textContent = "❗";
-        noCardSection.classList.add("hide");
-        loading.classList.remove("hide");
-      } else if (http === 405) {
-        msg.classList.add("error");
-        icon.textContent = "⚠️";
-        noCardSection.classList.add("hide");
-        loading.classList.remove("hide");
+        messageText.textContent = data.message || "Failed to issue card";
+        noCardSection.classList.remove("hide");
+        loading.classList.add("hide");
       }
-      messageText.textContent = data.message;
     } catch (error) {
       msg.classList.add("active", "error");
       icon.textContent = "❌";
@@ -338,9 +326,6 @@ const drag = () => {
     // Close if dragged more than 65% or more than 50px
     if (dragPercentage >= 0.65 || deltaY < -50) {
       msg.classList.add("hidden");
-      msg.classList.remove("active");
-      msg.style.transform = "";
-      msg.style.opacity = "";
     } else {
       msg.style.transform = "translateX(-50%) translateY(0)";
       msg.style.opacity = "1";
