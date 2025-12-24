@@ -203,16 +203,26 @@ const initCardFunctionality = () => {
       msg.classList.add("active");
 
       if (response.ok && data.success) {
+        msg.classList.remove("error");
         msg.classList.add("success");
         icon.textContent = "✓";
         messageText.textContent = data.message;
-        // Optionally reload after a delay to show the new card
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 2000);
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       } else {
         msg.classList.add("error");
-        icon.textContent = "⚠️";
+        // icon.textContent = "⚠️";
+        if (response.status === 400) {
+          icon.textContent = "❗";
+        } else if (response.status === 500) {
+          icon.textContent = "✕";
+        } else if (response.status === 405) {
+          icon.textContent = "⚠️";
+        } else {
+          icon.textContent = "⚠️";
+        }
         messageText.textContent = data.message || "Failed to issue card";
         noCardSection.classList.remove("hide");
         loading.classList.add("hide");
