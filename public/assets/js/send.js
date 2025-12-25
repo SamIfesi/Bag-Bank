@@ -7,9 +7,10 @@ const config = {
   loader1000: 1000,
   loader1500: 1500,
   amount: {
+    minAmount: 100,
     maxAmount: 5000000,
     patAmount: /^\d+(\.\d{1,2})?$/,
-    maxlength: 10,
+    maxlength: 15,
   },
   recipient: {
     pattern: /^\d{10}$/,
@@ -58,75 +59,105 @@ const element = {
   },
 };
 
+// const getCleanAmount = (input) => {
+//   let value = typeof input === "string" ? input : input.value;
+
+//   if (typeof input !== "string" && input.dataset && input.dataset.cleanValue) {
+//     return parseFloat(input.dataset.cleanValue);
+//   }
+
+//   return parseFloat(value.replace(/,/g, ""));
+// };
+
 // validate send money form inputs
 const initSendMoneyForm = () => {
   const { recipient, amount, bank, accName } = element?.inputs;
   const { next, quickAmounts, nextConfirm } = element?.btns;
-  if (!recipient || !amount || !bank || !next || !nextConfirm) return;
+  let isAccountVerified = false;
 
-  const formatDigitInput = (input, maxLength) => {
-    let value = input.value.replace(/\D/g, "");
-    if (value.length > maxLength) {
-      value = value.substring(0, maxLength);
-    }
-    input.value = value;
-  };
-  const formatAmountInput = (input, maxLength) => {
-    let value = input.value.replace(/[^\d.]/g, "");
-    const parts = value.split(".");
-    if (parts.length > 2) {
-      value = parts[0] + "." + parts.slice(1).join("");
-    }
-    if (parts[1] && parts[1].length > 2) {
-      value = parts[0] + "." + parts[1].substring(0, 2);
-    }
-    if (value.length > maxLength) {
-      value = value.substring(0, maxLength);
-    }
-    input.value = value;
-  };
+  if (!recipient || !amount || !bank || !next || !nextConfirm) return;
 
   const validateSendForm = () => {
     let recipientVal = recipient.value.trim();
-    let amountVal = parseFloat(amount.value);
+    let rawAmount = amount.dataset.cleanValue || "";
+    let amountVal = parseFloat(rawAmount);
     let bankVal = bank.value;
 
     const isRecipientValid = config.recipient.pattern.test(recipientVal);
     const isBankValid = bankVal !== "";
-    const isAmountPatternValid = config.amount.patAmount.test(amount.value);
+
+    const isAmountPatternValid = config.amount.patAmount.test(rawAmount);
     const isAmountValueValid =
       !isNaN(amountVal) &&
       amountVal > 0 &&
-      amountVal <= config.amount.maxAmount;
+      amountVal >= config.amount.minAmount;
+    amountVal <= config.amount.maxAmount;
+
     const isAmountValid = isAmountPatternValid && isAmountValueValid;
-    const isAmountLengthValid = amount.value.length > 2;
+    // const isAmountLengthValid = rawAmount.length > 2;
 
     next.disabled = !(isRecipientValid && isBankValid && isAccountVerified);
-    nextConfirm.disabled = !(isAmountValid && isAmountLengthValid);
+    nextConfirm.disabled = !isAmountValid;
+    // nextConfirm.disabled = !(isAmountValid && isAmountLengthValid);
   };
+
+  const formatAmountInput = (input) => {
+    let value = input.value.replace(/[^\d.]/g, "");
+    const parts = value.split(".");
+
+    if (parts.length > 2) value = parts[0] + "." + parts.slice(1).join("");
+    if (parts[1] && parts[1].length > 2)
+      value = parts[0] + "." + parts[1].substring(0, 2);
+
+    input.dataset.cleanValue = value;
+
+    if (value !== "") {
+      const numValue = value.split(".");
+      numValue[0] = Number(numValue[0]).toLocaleString("en-NG");
+      input.value = numValue.join(".");
+    } else {
+      input.value = "";
+    }
+  };
+
   if (quickAmounts) {
     quickAmounts.forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
-        element.inputs.amount.value = btn.getAttribute("data-amount");
+        const amt = btn.getAttribute("data-amount");
+        amount.dataset.cleanValue = amt;
+        amount.value = Number(amt).toLocaleString("en-NG", {
+          minimumFractionDigits: 2,
+        });
         validateSendForm();
       });
     });
   }
 
   recipient.addEventListener("input", () => {
-    formatDigitInput(recipient, config.recipient.maxlength);
+    let value = recipient.value.replace(/\D/g, "");
+    if (value.length > config.recipient.maxlength) {
+      value = value.substring(0, config.recipient.maxlength);
+    }
+    recipient.value = value;
     isAccountVerified = false;
     validateSendForm();
   });
-  amount.addEventListener("input", () => {
-    formatAmountInput(amount, config.amount.maxlength);
+
+  amount.addEventListener("input", (e) => {
+    formatAmountInput(e.target);
     validateSendForm();
 
-    const amountLength = amount.value.length;
-    const amountValue = parseFloat(amount.value);
-
-    if (amountValue > 0 && amountLength > 0 && amountLength <= 2) {
+    const rawValue = e.target.dataset.cleanValue || "";
+    const amountVal = parseFloat(rawValue);
+    if (
+      rawValue.length > 0 &&
+      (rawValue.length < 3 || amountVal < config.amount.minAmount)
+    ) {
+      element.errors.amount.innerText = "Minimum amount is ₦100";
+      element.errors.amount.style.display = "block";
+    } else if (amountVal > config.amount.maxAmount) {
+      element.errors.amount.innerText = "Maximum amount is ₦5,000,000";
       element.errors.amount.style.display = "block";
     } else {
       element.errors.amount.style.display = "none";
@@ -152,8 +183,6 @@ const initSendMoneyForm = () => {
       return { success: false, message: "Unable to verify account" };
     }
   };
-
-  let isAccountVerified = false;
 
   const handleAccountLookup = async () => {
     const { loader } = element.forms;
@@ -281,7 +310,7 @@ function navigateBack() {
       name: modelName,
     } = element.confirmation;
 
-    const formattedAmount = parseFloat(amount.value).toLocaleString(undefined, {
+    const formattedAmount = parseFloat(amount.value).toLocaleString("en-NG", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
@@ -306,7 +335,7 @@ function navigateBack() {
     e.preventDefault();
     const { model, container } = element.confirmation;
     const { loader } = element.forms;
-    const amountInput = element.inputs.amount;
+    const amountInput = getCleanAmount(element.inputs.amount.value);
     const recipientInput = element.inputs.recipient;
     const nameInput = element.inputs.accName;
     const bankInput = element.inputs.bank;
@@ -317,7 +346,7 @@ function navigateBack() {
 
     try {
       const formData = new FormData();
-      formData.append("amount", amountInput.value);
+      formData.append("amount", amountInput);
       formData.append("recipient_account", recipientInput.value);
       formData.append("recipient_name", nameInput.value);
       formData.append("bank_code", bankInput.value);
@@ -363,6 +392,7 @@ function navigateBack() {
     }
   });
 }
+
 const drag = () => {
   const { dragHandle, model, container } = element.confirmation;
   if (!dragHandle) return;
@@ -403,7 +433,7 @@ const drag = () => {
         model.classList.remove("active");
 
         model.style.opacity = "";
-        model.style.transform = ""
+        model.style.transform = "";
       }, 400);
     } else {
       model.style.transform = `translateY(0)`;

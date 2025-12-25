@@ -1,5 +1,5 @@
  <main class="send-container">
-     <form id="account-section" class="hid">
+     <form id="account-section">
          <button class="back-btn" id="backToDashBtn">
              <i class="ti ti-chevron-left"></i>
          </button>
