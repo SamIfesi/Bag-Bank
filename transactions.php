@@ -37,10 +37,29 @@ $all_transactions = $stmt->fetchAll();
     </header>
 
     <main class="trans-main">
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <!-- Mobile Filter Buttons -->
+            <div class="filter-buttons-mobile">
+                <button class="filter-btn-mobile active" data-filter="all" onclick="filterTransactions('all')">All</button>
+                <button class="filter-btn-mobile" data-filter="credit" onclick="filterTransactions('credit')">Credit</button>
+                <button class="filter-btn-mobile" data-filter="debit" onclick="filterTransactions('debit')">Debit</button>
+                <button class="filter-btn-mobile" data-filter="topup" onclick="filterTransactions('topup')">Top Up</button>
+            </div>
+
+            <!-- Desktop Filter Buttons -->
+            <div class="filter-buttons-desktop">
+                <button class="filter-btn active" data-filter="all" onclick="filterTransactions('all')">All</button>
+                <button class="filter-btn" data-filter="credit" onclick="filterTransactions('credit')">Credit</button>
+                <button class="filter-btn" data-filter="debit" onclick="filterTransactions('debit')">Debit</button>
+                <button class="filter-btn" data-filter="topup" onclick="filterTransactions('topup')">Top Up</button>
+            </div>
+        </div>
+
         <?php if (count($all_transactions) > 0): ?>
-            <ul class="trans-list">
+            <ul class="trans-list" id="transactionsList">
                 <?php foreach ($all_transactions as $trans): ?>
-                    <li class="trans-item" onclick="window.location.href='transfer_success.php?ref=<?= $trans->reference ?>'">
+                    <li class="trans-item" data-type="<?= $trans->type ?>" data-description="<?= htmlspecialchars($trans->description) ?>" onclick="window.location.href='transfer_success.php?ref=<?= $trans->reference ?>'">
                         <div class="trans-icon <?= $trans->type ?>">
                             <i class="ti <?= $trans->type === 'credit' ? 'ti-arrow-down-left' : 'ti-arrow-up-right' ?>"></i>
                         </div>
@@ -60,6 +79,12 @@ $all_transactions = $stmt->fetchAll();
                     </li>
                 <?php endforeach; ?>
             </ul>
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <i class="ti ti-receipt-off"></i>
+                <h3>No Transactions Found</h3>
+                <p>No transactions match your selected filter</p>
+                <button class="btn-send-money" onclick="window.location.href='send.php'">Send Money</button>
+            </div>
         <?php else: ?>
             <div class="empty-state">
                 <i class="ti ti-receipt-off"></i>
@@ -69,6 +94,8 @@ $all_transactions = $stmt->fetchAll();
             </div>
         <?php endif; ?>
     </main>
+
+    <script src="public/assets/js/transactions.js"></script>
 </body>
 
 </html>
