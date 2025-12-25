@@ -7,8 +7,8 @@ const config = {
   loader1000: 1000,
   loader1500: 1500,
   amount: {
-    minAmount: 100,
-    maxAmount: 5000000,
+    minAmount: 100, 
+    maxAmount: 5000000, 
     patAmount: /^\d+(\.\d{1,2})?$/,
     maxlength: 15,
   },
@@ -59,52 +59,44 @@ const element = {
   },
 };
 
-// const getCleanAmount = (input) => {
-//   let value = typeof input === "string" ? input : input.value;
+const getCleanAmount = (input) => {
+  if (typeof input !== "string" && input.dataset && input.dataset.cleanValue) {
+    return parseFloat(input.dataset.cleanValue);
+  }
+  let val = typeof input === "string" ? input : input.value;
+  return parseFloat(val.replace(/,/g, ""));
+};
 
-//   if (typeof input !== "string" && input.dataset && input.dataset.cleanValue) {
-//     return parseFloat(input.dataset.cleanValue);
-//   }
-
-//   return parseFloat(value.replace(/,/g, ""));
-// };
-
-// validate send money form inputs
 const initSendMoneyForm = () => {
   const { recipient, amount, bank, accName } = element?.inputs;
   const { next, quickAmounts, nextConfirm } = element?.btns;
-  let isAccountVerified = false;
+  let isAccountVerified = false; 
 
   if (!recipient || !amount || !bank || !next || !nextConfirm) return;
 
   const validateSendForm = () => {
     let recipientVal = recipient.value.trim();
+    let bankVal = bank.value;
+
     let rawAmount = amount.dataset.cleanValue || "";
     let amountVal = parseFloat(rawAmount);
-    let bankVal = bank.value;
 
     const isRecipientValid = config.recipient.pattern.test(recipientVal);
     const isBankValid = bankVal !== "";
 
-    const isAmountPatternValid = config.amount.patAmount.test(rawAmount);
     const isAmountValueValid =
       !isNaN(amountVal) &&
-      amountVal > 0 &&
-      amountVal >= config.amount.minAmount;
-    amountVal <= config.amount.maxAmount;
-
-    const isAmountValid = isAmountPatternValid && isAmountValueValid;
-    // const isAmountLengthValid = rawAmount.length > 2;
+      amountVal >= config.amount.minAmount &&
+      amountVal <= config.amount.maxAmount;
 
     next.disabled = !(isRecipientValid && isBankValid && isAccountVerified);
-    nextConfirm.disabled = !isAmountValid;
-    // nextConfirm.disabled = !(isAmountValid && isAmountLengthValid);
+    nextConfirm.disabled = !isAmountValueValid;
   };
 
   const formatAmountInput = (input) => {
     let value = input.value.replace(/[^\d.]/g, "");
-    const parts = value.split(".");
 
+    const parts = value.split(".");
     if (parts.length > 2) value = parts[0] + "." + parts.slice(1).join("");
     if (parts[1] && parts[1].length > 2)
       value = parts[0] + "." + parts[1].substring(0, 2);
@@ -112,9 +104,9 @@ const initSendMoneyForm = () => {
     input.dataset.cleanValue = value;
 
     if (value !== "") {
-      const numValue = value.split(".");
-      numValue[0] = Number(numValue[0]).toLocaleString("en-NG");
-      input.value = numValue.join(".");
+      const numParts = value.split(".");
+      numParts[0] = Number(numParts[0]).toLocaleString("en-US");
+      input.value = numParts.join(".");
     } else {
       input.value = "";
     }
@@ -125,21 +117,21 @@ const initSendMoneyForm = () => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         const amt = btn.getAttribute("data-amount");
+
         amount.dataset.cleanValue = amt;
-        amount.value = Number(amt).toLocaleString("en-NG", {
+        amount.value = Number(amt).toLocaleString("en-US", {
           minimumFractionDigits: 2,
         });
+
         validateSendForm();
+        element.errors.amount.style.display = "none";
       });
     });
   }
 
   recipient.addEventListener("input", () => {
-    let value = recipient.value.replace(/\D/g, "");
-    if (value.length > config.recipient.maxlength) {
-      value = value.substring(0, config.recipient.maxlength);
-    }
-    recipient.value = value;
+    let val = recipient.value.replace(/\D/g, "");
+    recipient.value = val.substring(0, config.recipient.maxlength);
     isAccountVerified = false;
     validateSendForm();
   });
@@ -148,38 +140,35 @@ const initSendMoneyForm = () => {
     formatAmountInput(e.target);
     validateSendForm();
 
-    const rawValue = e.target.dataset.cleanValue || "";
-    const amountVal = parseFloat(rawValue);
-    if (
-      rawValue.length > 0 &&
-      (rawValue.length < 3 || amountVal < config.amount.minAmount)
-    ) {
-      element.errors.amount.innerText = "Minimum amount is ₦100";
-      element.errors.amount.style.display = "block";
-    } else if (amountVal > config.amount.maxAmount) {
-      element.errors.amount.innerText = "Maximum amount is ₦5,000,000";
-      element.errors.amount.style.display = "block";
+    const rawVal = e.target.dataset.cleanValue || "";
+    const amountNum = parseFloat(rawVal);
+
+    if (rawVal.length > 0) {
+      if (rawVal.length < 3 || amountNum < config.amount.minAmount) {
+        element.errors.amount.innerText = "Minimum amount is ₦100";
+        element.errors.amount.style.display = "block";
+      } else if (amountNum > config.amount.maxAmount) {
+        element.errors.amount.innerText = "Maximum amount is ₦5,000,000";
+        element.errors.amount.style.display = "block";
+      } else {
+        element.errors.amount.style.display = "none";
+      }
     } else {
       element.errors.amount.style.display = "none";
     }
   });
 
+  // --- Account Lookup Logic ---
   const fetchAccountName = async (accountNumber, bank) => {
     const url = "app/handlers/resolve_account.php";
     try {
       const formData = new FormData();
       formData.append("account_number", accountNumber);
       formData.append("bank_code", bank);
-      const response = await fetch(url, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(url, { method: "POST", body: formData });
       if (!response.ok) throw new Error("Network error");
-
-      const data = await response.json();
-      return data;
+      return await response.json();
     } catch (error) {
-      console.log("error during fetch of name", error);
       return { success: false, message: "Unable to verify account" };
     }
   };
@@ -187,8 +176,7 @@ const initSendMoneyForm = () => {
   const handleAccountLookup = async () => {
     const { loader } = element.forms;
     const { recipient, bank, accName } = element.inputs;
-    const { errors } = element;
-    const { name, account, banks } = element.details;
+    const { errors, details } = element;
 
     const recipientVal = recipient.value.trim();
     const bankVal = bank.value;
@@ -201,15 +189,14 @@ const initSendMoneyForm = () => {
     }
 
     loader.classList.remove("hide");
-
     const result = await fetchAccountName(recipientVal, bankVal);
     await new Promise((resolve) => setTimeout(resolve, config.loader800));
 
     if (result.success) {
       accName.value = result.name;
-      name.innerText = result.name;
-      account.innerText = recipientVal;
-      if (bankVal === "my_bank") banks.innerText = "D'bag Bank";
+      details.name.innerText = result.name;
+      details.account.innerText = recipientVal;
+      if (bankVal === "my_bank") details.banks.innerText = "D'bag Bank";
       errors.recipient.style.display = "none";
       isAccountVerified = true;
     } else {
@@ -236,20 +223,10 @@ const initSendMoneyForm = () => {
   next.addEventListener("click", (e) => {
     e.preventDefault();
     const { loader, accountSection, amountSection } = element.forms;
-
     loader.classList.remove("hide");
-
-    setTimeout(() => {
-      accountSection.classList.add("hide");
-    }, 500);
-
-    setTimeout(() => {
-      amountSection.classList.remove("hide");
-    }, 800);
-
-    setTimeout(() => {
-      loader.classList.add("hide");
-    }, 1000);
+    setTimeout(() => accountSection.classList.add("hide"), 500);
+    setTimeout(() => amountSection.classList.remove("hide"), 800);
+    setTimeout(() => loader.classList.add("hide"), 1000);
   });
 };
 
@@ -271,16 +248,12 @@ function navigateBack() {
     if (btn) {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
-        const { loader } = element.forms;
-        loader.classList.remove("hide");
-
-        setTimeout(() => {
-          from.classList.add("hide");
-        }, 500);
+        element.forms.loader.classList.remove("hide");
+        setTimeout(() => from.classList.add("hide"), 500);
         if (to) {
           setTimeout(() => {
             to.classList.remove("hide");
-            loader.classList.add("hide");
+            element.forms.loader.classList.add("hide");
           }, 800);
         } else if (link) {
           setTimeout(() => {
@@ -291,54 +264,54 @@ function navigateBack() {
     }
   });
 
+  // --- Confirm Modal Logic ---
   const { nextConfirm } = element.btns;
   nextConfirm.addEventListener("click", (e) => {
     e.preventDefault();
     const { amount } = element.inputs;
-    const {
-      banks: detailBank,
-      account: detailAccount,
-      name: detailName,
-    } = element.details;
+    const { banks, account, name } = element.details;
     const {
       container,
       model,
       close,
-      amount: modelAmount,
-      bank: modelBank,
-      account: modelAccount,
-      name: modelName,
+      amount: mAmount,
+      bank: mBank,
+      account: mAccount,
+      name: mName,
     } = element.confirmation;
 
-    const formattedAmount = parseFloat(amount.value).toLocaleString("en-NG", {
+    const rawVal = amount.dataset.cleanValue || getCleanAmount(amount);
+    const formatted = parseFloat(rawVal).toLocaleString("en-NG", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
-    modelAmount.innerText = "₦" + formattedAmount;
-    modelBank.innerText = detailBank.innerText;
-    modelAccount.innerText = detailAccount.innerText;
-    modelName.innerText = detailName.innerText;
+
+    mAmount.innerText = "₦" + formatted;
+    mBank.innerText = banks.innerText;
+    mAccount.innerText = account.innerText;
+    mName.innerText = name.innerText;
 
     model.classList.add("active");
     container.classList.add("active");
 
     if (close) {
-      close.addEventListener("click", (e) => {
+      close.onclick = (e) => {
         e.preventDefault();
         model.classList.remove("active");
         container.classList.remove("active");
-      });
+      };
     }
   });
+
   const { pay } = element.confirmation;
   pay.addEventListener("click", async (e) => {
     e.preventDefault();
     const { model, container } = element.confirmation;
     const { loader } = element.forms;
-    const amountInput = getCleanAmount(element.inputs.amount.value);
-    const recipientInput = element.inputs.recipient;
-    const nameInput = element.inputs.accName;
-    const bankInput = element.inputs.bank;
+
+    const amountVal =
+      element.inputs.amount.dataset.cleanValue ||
+      getCleanAmount(element.inputs.amount);
 
     pay.disabled = true;
     pay.innerText = "Processing...";
@@ -346,30 +319,21 @@ function navigateBack() {
 
     try {
       const formData = new FormData();
-      formData.append("amount", amountInput);
-      formData.append("recipient_account", recipientInput.value);
-      formData.append("recipient_name", nameInput.value);
-      formData.append("bank_code", bankInput.value);
+      formData.append("amount", amountVal);
+      formData.append("recipient_account", element.inputs.recipient.value);
+      formData.append("recipient_name", element.inputs.accName.value);
+      formData.append("bank_code", element.inputs.bank.value);
 
-      const url = "app/handlers/process_transfer.php";
-      const response = await fetch(url, {
+      const response = await fetch("app/handlers/process_transfer.php", {
         method: "POST",
         body: formData,
       });
-
-      const responseText = await response.text();
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok" + responseText);
-      }
-
-      const result = JSON.parse(responseText);
+      const result = await response.json();
 
       await new Promise((resolve) => setTimeout(resolve, config.loader1500));
-      loader.classList.add("hide");
+      loader.classList.remove("hide");
+
       if (result.success) {
-        model.classList.remove("active");
-        container.classList.remove("active");
         window.location.href =
           "transfer_success.php?ref=" + result.transaction_ref;
       } else {
@@ -377,18 +341,13 @@ function navigateBack() {
         pay.innerText = "Proceed";
         model.classList.remove("active");
         container.classList.remove("active");
-
-        element.errors.amount.innerText =
-          result.message || "Transfer failed. Please try again.";
+        element.errors.amount.innerText = result.message || "Transfer failed.";
         element.errors.amount.style.display = "block";
       }
     } catch (error) {
-      console.log("Payment error:", error);
       loader.classList.add("hide");
       pay.disabled = false;
       pay.innerText = "Proceed";
-      model.classList.remove("active");
-      container.classList.remove("active");
     }
   });
 }
@@ -400,6 +359,7 @@ const drag = () => {
   let isDragging = false;
   let startY = 0;
   let currentY = 0;
+
   const startDrag = (e) => {
     isDragging = true;
     startY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY;
@@ -408,48 +368,37 @@ const drag = () => {
 
   const duringDrag = (e) => {
     if (!isDragging) return;
-
     currentY = e.type.includes("touch") ? e.touches[0].clientY : e.clientY;
     let deltaY = currentY - startY;
-    if (deltaY > 0) {
-      model.style.transform = `translateY(${deltaY}px)`;
-      model.style.opacity = 1 - Math.abs(deltaY) / 600;
-    }
+    if (deltaY > 0) model.style.transform = `translateY(${deltaY}px)`;
   };
 
   const endDrag = () => {
     if (!isDragging) return;
     isDragging = false;
-    const finalY = currentY || startY;
-    let deltaY = finalY - startY;
-    currentY = 0;
-
+    let deltaY = (currentY || startY) - startY;
     if (deltaY > 200) {
       model.style.transform = `translateY(100%)`;
-      model.style.transition = "transform 0.4s ease-out";
-      model.style.opacity = 0;
       setTimeout(() => {
         container.classList.remove("active");
         model.classList.remove("active");
-
-        model.style.opacity = "";
         model.style.transform = "";
       }, 400);
     } else {
       model.style.transform = `translateY(0)`;
       model.style.transition = "transform 0.3s ease";
-      model.style.opacity = 1;
     }
+    currentY = 0;
   };
+
   dragHandle.addEventListener("mousedown", startDrag);
   dragHandle.addEventListener("touchstart", startDrag);
-
   window.addEventListener("mousemove", duringDrag);
   window.addEventListener("touchmove", duringDrag);
-
   window.addEventListener("mouseup", endDrag);
   window.addEventListener("touchend", endDrag);
 };
+
 document.addEventListener("DOMContentLoaded", () => {
   initSendMoneyForm();
   navigateBack();

@@ -24,7 +24,7 @@
                 id="amount"
                 placeholder="0.00"
                 inputmode="decimal"
-                data-max="1000000" />
+                data-max="5000000" />
         </div>
         <span class="error" id="amount-error">
             The amount should be within ₦100.00 - ₦5,000,000.00
