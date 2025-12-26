@@ -33,6 +33,7 @@ const element = {
     toggler: {
       iconEye: id("cardToggleIcon"),
       atmNumber: id("cardNumberDisplay"),
+      cvv: id("cvv"),
     },
     noCardSection: id("noCardSection"),
   },

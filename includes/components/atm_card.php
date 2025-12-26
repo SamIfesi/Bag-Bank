@@ -3,7 +3,7 @@
 $hasCard = !empty($user->card_number) && $user->card_status === 'active';
 
 if ($hasCard) {
-    // Format card number with spaces (XXXX XXXX XXXX XXXX)
+    // Format card number with spaces 
     $card_number = $user->card_number;
     $formatted_card = chunk_split($card_number, 4, ' ');
     $formatted_card = trim($formatted_card);
@@ -73,7 +73,7 @@ if ($hasCard) {
                 </div>
                 <div class="card-cvv">
                     <span class="label">CVV</span>
-                    <span class="value">***</span>
+                    <span class="value" id="cvv">***</span>
                 </div>
             </div>
         </div>
