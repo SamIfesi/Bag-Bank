@@ -1,6 +1,16 @@
 <?php
 // Check if user has a card
 $hasCard = !empty($user->card_number) && $user->card_status === 'active';
+$cvv_card = !empty($user->card_cvv) ? $user->card_cvv : null && $hasCard;
+
+if ($cvv_card) {
+    $card_cvv = $user->card_cvv;
+    $formatted_cvv = trim($card_cvv);
+    $masked_cvv = str_repeat('*', strlen($card_cvv));
+
+    $show_cvv = isset($_SESSION['show_full_card']) ? $_SESSION['show_full_card'] : false;
+    $display_cvv = $show_cvv ? $card_cvv : $masked_cvv;
+}
 
 if ($hasCard) {
     // Format card number with spaces 
@@ -73,7 +83,7 @@ if ($hasCard) {
                 </div>
                 <div class="card-cvv">
                     <span class="label">CVV</span>
-                    <span class="value" id="cvv">***</span>
+                    <span class="value" id="cvv" data-full="<?= $formatted_cvv; ?>" data-masked="<?= $masked_cvv; ?>"><?= $display_cvv; ?></span>
                 </div>
             </div>
         </div>

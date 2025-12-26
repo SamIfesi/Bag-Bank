@@ -155,20 +155,25 @@ const initSidebar = () => {
 // ATM Card functionality
 const initCardFunctionality = () => {
   // Card number toggle
-  const { iconEye, atmNumber } = element.cardApply.toggler;
+  const { iconEye, atmNumber, cvv } = element.cardApply.toggler;
 
-  if (iconEye && atmNumber) {
+  if (iconEye && atmNumber && cvv) {
     iconEye.addEventListener("click", function () {
       const cardSpan = atmNumber.querySelector("span");
       const fullCard = atmNumber.getAttribute("data-full");
+      const fullCvv = cvv.getAttribute("data-full");
       const maskedCard = atmNumber.getAttribute("data-masked");
+      const maskedCvv = cvv.getAttribute("data-masked");
       const isCurrentlyMasked = cardSpan.textContent.includes("*");
+      const isCurrentlyMaskedCvv = cvv.textContent.includes("*");
 
-      if (isCurrentlyMasked) {
+      if (isCurrentlyMasked && isCurrentlyMaskedCvv) {
         cardSpan.textContent = fullCard;
+        cvv.textContent = fullCvv;
         iconEye.classList.replace("ti-eye", "ti-eye-off");
       } else {
         cardSpan.textContent = maskedCard;
+        cvv.textContent = maskedCvv;
         iconEye.classList.replace("ti-eye-off", "ti-eye");
       }
 
