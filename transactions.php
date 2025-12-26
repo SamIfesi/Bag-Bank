@@ -37,23 +37,11 @@ $all_transactions = $stmt->fetchAll();
     </header>
 
     <main class="trans-main">
-        <!-- Filter Section -->
-        <div class="filter-section">
-            <!-- Mobile Filter Buttons -->
-            <div class="filter-buttons-mobile">
-                <button class="filter-btn-mobile active" data-filter="all" onclick="filterTransactions('all')">All</button>
-                <button class="filter-btn-mobile" data-filter="credit" onclick="filterTransactions('credit')">Credit</button>
-                <button class="filter-btn-mobile" data-filter="debit" onclick="filterTransactions('debit')">Debit</button>
-                <button class="filter-btn-mobile" data-filter="topup" onclick="filterTransactions('topup')">Top Up</button>
-            </div>
-
-            <!-- Desktop Filter Buttons -->
-            <div class="filter-buttons-desktop">
-                <button class="filter-btn active" data-filter="all" onclick="filterTransactions('all')">All</button>
-                <button class="filter-btn" data-filter="credit" onclick="filterTransactions('credit')">Credit</button>
-                <button class="filter-btn" data-filter="debit" onclick="filterTransactions('debit')">Debit</button>
-                <button class="filter-btn" data-filter="topup" onclick="filterTransactions('topup')">Top Up</button>
-            </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all" onclick="filterTransactions('all')">All</button>
+            <button class="filter-btn" data-filter="credit" onclick="filterTransactions('credit')">Credit</button>
+            <button class="filter-btn" data-filter="debit" onclick="filterTransactions('debit')">Debit</button>
+            <button class="filter-btn" data-filter="topup" onclick="filterTransactions('topup')">Top Up</button>
         </div>
 
         <?php if (count($all_transactions) > 0): ?>
