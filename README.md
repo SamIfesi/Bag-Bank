@@ -49,6 +49,16 @@ A modern, full-featured digital banking application built with PHP, MySQL, and v
   - Amount validation (₦100 - ₦5,000,000 limit)
   - Transaction confirmation modal
   - Real-time balance deduction
+- **Add Money**
+  - Multiple payment methods
+  - Amount input validation
+  - Transaction reference generation
+  - Success confirmation with receipt
+- **ATM Card Management**
+  - Virtual ATM card generation
+  - Card details display
+  - Card balance synchronization
+  - Secure card information
 - **Transaction History**
   - View all credit/debit transactions
   - Filter by transaction type
@@ -129,10 +139,14 @@ D'bag_Bank/
 │   └── config.php                   # Configuration constants
 ├── includes/
 │   ├── components/                  # UI Components only
+│   │   ├── atm_card.php            # ATM card display component
 │   │   ├── dash_card.php           # Dashboard balance card
 │   │   ├── dash_footer.php         # Dashboard footer
 │   │   ├── dash_header.php         # Dashboard header
+│   │   ├── dash_main.php           # Dashboard main content
 │   │   ├── dash_trans.php          # Dashboard transactions
+│   │   ├── footer.php              # Main footer
+│   │   ├── navbar.php              # Navigation bar
 │   │   ├── send_account.php        # Send money step 1
 │   │   ├── send_amount.php         # Send money step 2
 │   │   └── send_header.php         # Send page header
@@ -142,22 +156,32 @@ D'bag_Bank/
 ├── public/
 │   ├── assets/                      # ✨ Organized assets (NEW)
 │   │   ├── css/                    # All stylesheets
-│   │   │   ├── home.css           # Dashboard styles
+│   │   │   ├── add-money.css      # Add money page styles
+│   │   │   ├── dash.css           # Dashboard styles
 │   │   │   ├── index.css          # Landing page styles
+│   │   │   ├── legal-pages.css    # Legal pages styles
+│   │   │   ├── pages.css          # General pages styles
 │   │   │   ├── receipt.css        # Receipt styles
 │   │   │   ├── send.css           # Send money styles
 │   │   │   ├── style.css          # Auth pages styles
+│   │   │   ├── support-pages.css  # Support pages styles
 │   │   │   └── transactions.css   # Transaction history styles
 │   │   └── js/                     # All JavaScript files
+│   │       ├── add-money.js       # Add money page JavaScript
 │   │       ├── dash.js            # Dashboard JavaScript
 │   │       ├── index.js           # Landing page JavaScript
+│   │       ├── legal-pages.js     # Legal pages JavaScript
 │   │       ├── main.js            # Auth pages JavaScript
+│   │       ├── pages.js           # General pages JavaScript
 │   │       ├── receipt.js         # Receipt JavaScript
-│   │       └── send.js            # Send money JavaScript
+│   │       ├── send.js            # Send money JavaScript
+│   │       ├── support-pages.js   # Support pages JavaScript
+│   │       └── transactions.js    # Transaction history JavaScript
 │   ├── favicon.svg                 # Site favicon
 │   ├── logo.svg                    # Full logo
 │   ├── logo-icon.svg               # Logo icon
 │   └── logo-stacked.svg            # Stacked logo
+├── add_money.php                   # Add money page
 ├── dashboard.php                   # User dashboard
 ├── index.php                       # Landing page
 ├── login.php                       # Login page
@@ -166,6 +190,15 @@ D'bag_Bank/
 ├── send.php                        # Send money page
 ├── transactions.php                # Transaction history
 ├── transfer_success.php            # Success page
+├── contact.php                     # Contact page
+├── help-center.php                 # Help center
+├── blog.php                        # Blog page
+├── careers.php                     # Careers page
+├── pricing.php                     # Pricing page
+├── press.php                       # Press page
+├── about_us.php                    # About us page
+├── privacy-policy.php              # Privacy policy
+├── terms-of-service.php            # Terms of service
 └── README.md                       # Project documentation
 ```
 
@@ -355,10 +388,20 @@ The dashboard shows:
 
 - **Account Balance** (with hide/show toggle)
 - **Account Number** (with copy functionality)
+- **ATM Card** - Virtual card with your account details
 - **Quick Actions** (Send Money, Add Money, Transactions)
 - **Recent Transactions** (last 5)
 
-### 4. Send Money
+### 4. Add Money to Account
+
+1. Click **Add Money** from dashboard
+2. Enter the amount you want to add
+3. Select your preferred payment method
+4. Complete the payment process
+5. Receive confirmation with transaction reference
+6. Balance updates in real-time
+
+### 5. Send Money
 
 1. Click **Send Money** from dashboard
 2. **Step 1: Account Details**
@@ -376,7 +419,7 @@ The dashboard shows:
    - Click **Proceed** to complete transfer
 5. Success page displays with transaction reference
 
-### 5. View Transaction History
+### 6. View Transaction History
 
 1. Click **Transactions** from dashboard or menu
 2. View all your transactions with:
@@ -527,6 +570,8 @@ Comprehensive view of all transactions with filters
 
 ## 🚧 Future Enhancements
 
+- [x] ATM card generation and display
+- [x] Add money functionality
 - [ ] Email verification for new accounts
 - [ ] Forgot password functionality
 - [ ] Two-factor authentication (2FA)
