@@ -1,13 +1,13 @@
-<?php require_once __DIR__ . "/includes/check_auth.php"; ?>
+<?php require_once __DIR__ . "/../includes/check_auth.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="public/assets/css/index.css">
-    <link rel="stylesheet" href="public/assets/css/legal-pages.css">
+    <link rel="shortcut icon" href="../public/favicon.svg" type="image/svg" />
+    <link rel="stylesheet" href="../public/assets/css/index.css">
+    <link rel="stylesheet" href="../public/assets/css/legal-pages.css">
     <title>Terms of Service - D'Bag Bank</title>
 </head>
 
@@ -17,7 +17,7 @@
         <div class="nav-container">
             <div class="nav-logo">
                 <a href="index.php">
-                    <img src="public/logo.svg" alt="D'Bag Bank" />
+                    <img src="../public/logo.svg" alt="D'Bag Bank" />
                 </a>
             </div>
             <ul class="nav-links">
@@ -341,7 +341,7 @@
                 <article id="governing-law" class="legal-section">
                     <h2>10. Governing Law</h2>
                     <p>
-                        These Terms shall be governed by and construed in accordance with the laws of the Federal Republic 
+                        These Terms shall be governed by and construed in accordance with the laws of the Federal Re../public 
                         of Nigeria, without regard to its conflict of law provisions. 
                     </p>
                     <p>
@@ -430,9 +430,9 @@
     </section>
 
     <!-- Footer -->
-    <?php require_once __DIR__ .  "/includes/components/footer.php"; ?>
+    <?php require_once __DIR__ .  "/../includes/components/footer.php"; ?>
 
-    <script src="public/assets/js/legal-pages.js"></script>
+    <script src="../public/assets/js/legal-pages.js"></script>
 </body>
 
 </html>

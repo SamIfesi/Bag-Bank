@@ -136,33 +136,6 @@ sectionHeaders.forEach((header) => {
   });
 });
 
-// Reading progress indicator
-const createProgressBar = () => {
-  const progressBar = document.createElement("div");
-  progressBar.id = "reading-progress";
-  progressBar.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 0%;
-    height: 0.25rem;
-    background: linear-gradient(135deg, #5200a3 0%, #6c5ce7 100%);
-    z-index: 9999;
-    transition: width 0.1s ease;
-  `;
-  document.body.appendChild(progressBar);
-
-  window.addEventListener("scroll", () => {
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight - windowHeight;
-    const scrolled = window.scrollY;
-    const progress = (scrolled / documentHeight) * 100;
-
-    progressBar.style.width = `${Math.min(progress, 100)}%`;
-  });
-};
-createProgressBar();
-
 // Back to top button
 const createBackToTop = () => {
   const backToTop = document.createElement("button");

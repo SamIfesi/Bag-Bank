@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once __DIR__ . "/config/functions/utilities.php";
-require_once __DIR__ . "/config/Auth.php";
-require_once __DIR__ . "/includes/check_auth.php";
+require_once __DIR__ . "/../config/functions/utilities.php";
+require_once __DIR__ . "/../config/Auth.php";
+require_once __DIR__ . "/../includes/check_auth.php";
 
 if (!is_logged_in()) {
-    redirect_to("login.php");
+    redirect_to("views/login.php");
     exit();
 }
 
@@ -29,7 +29,7 @@ $all_transactions = $stmt->fetchAll();
 
 <body class="transactions-body">
     <header class="trans-header">
-        <button class="back-btn" onclick="window.location.href='dashboard.php'">
+        <button class="back-btn" onclick="window.location.href='views/dashboard.php'">
             <i class="ti ti-chevron-left"></i>
         </button>
         <h2>Transaction History</h2>
@@ -47,7 +47,7 @@ $all_transactions = $stmt->fetchAll();
         <?php if (count($all_transactions) > 0): ?>
             <ul class="trans-list" id="transactionsList">
                 <?php foreach ($all_transactions as $trans): ?>
-                    <li class="trans-item" data-type="<?= $trans->type ?>" data-description="<?= htmlspecialchars($trans->description) ?>" onclick="window.location.href='transfer_success.php?ref=<?= $trans->reference ?>'">
+                    <li class="trans-item" data-type="<?= $trans->type ?>" data-description="<?= htmlspecialchars($trans->description) ?>" onclick="window.location.href='views/transfer_success.php?ref=<?= $trans->reference ?>'">
                         <div class="trans-icon <?= $trans->type ?>">
                             <i class="ti <?= $trans->type === 'credit' ? 'ti-arrow-down-left' : 'ti-arrow-up-right' ?>"></i>
                         </div>
@@ -71,14 +71,14 @@ $all_transactions = $stmt->fetchAll();
                 <i class="ti ti-receipt-off"></i>
                 <h3>No Transactions Found</h3>
                 <p>No transactions match your selected filter</p>
-                <button class="btn-send-money" onclick="window.location.href='send.php'">Send Money</button>
+                <button class="btn-send-money" onclick="window.location.href='views/send.php'">Send Money</button>
             </div>
         <?php else: ?>
             <div class="empty-state">
                 <i class="ti ti-receipt-off"></i>
                 <h3>No Transactions Yet</h3>
                 <p>Your transaction history will appear here</p>
-                <button class="btn-send-money" onclick="window.location.href='send.php'">Send Money</button>
+                <button class="btn-send-money" onclick="window.location.href='views/send.php'">Send Money</button>
             </div>
         <?php endif; ?>
     </main>

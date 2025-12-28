@@ -166,7 +166,7 @@ elements.form.addEventListener("submit", async (e) => {
 
 // Done button - redirect to dashboard
 elements.doneBtn.addEventListener("click", () => {
-  window.location.href = "dashboard.php";
+  window.location.href = "views/dashboard.php";
 });
 
 // Try again button - close modal

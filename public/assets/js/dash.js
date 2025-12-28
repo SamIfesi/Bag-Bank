@@ -101,7 +101,7 @@ const initActionButtons = () => {
   if (send) {
     send.addEventListener("click", (e) => {
       e.preventDefault();
-      window.location.href = "send.php";
+      window.location.href = "views/send.php";
     });
   }
 };

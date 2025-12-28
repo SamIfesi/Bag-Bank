@@ -1,13 +1,13 @@
-<?php require_once __DIR__ . "/includes/check_auth.php"; ?>
+<?php require_once __DIR__ . "/../includes/check_auth.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="public/assets/css/index.css">
-    <link rel="stylesheet" href="public/assets/css/legal-pages.css">
+    <link rel="shortcut icon" href="../public/favicon.svg" type="image/svg" />
+    <link rel="stylesheet" href="../public/assets/css/index.css">
+    <link rel="stylesheet" href="../public/assets/css/legal-pages.css">
     <title>Privacy Policy - D'Bag Bank</title>
 </head>
 
@@ -17,7 +17,7 @@
         <div class="nav-container">
             <div class="nav-logo">
                 <a href="index.php">
-                    <img src="public/logo.svg" alt="D'Bag Bank" />
+                    <img src="../public/logo.svg" alt="D'Bag Bank" />
                 </a>
             </div>
             <ul class="nav-links">
@@ -46,7 +46,7 @@
             <li><a href="pricing.php">Pricing</a></li>
             <li><a href="help-center.php">Help</a></li>
             <li><a href="contact.php">Contact</a></li>
-            <li><a href="login. php" class="mobile-login">Login</a></li>
+            <li><a href="login.php" class="mobile-login">Login</a></li>
             <li><a href="register.php" class="mobile-signup">Sign Up</a></li>
         </ul>
     </div>
@@ -125,7 +125,7 @@
                     <h3>2.3 Information from Third Parties</h3>
                     <p>
                         We may receive information about you from third parties such as credit reference agencies,
-                        fraud prevention agencies, and publicly available sources to verify your identity and prevent fraud.
+                        fraud prevention agencies, and ../publicly available sources to verify your identity and prevent fraud.
                     </p>
                 </article>
 
@@ -158,7 +158,7 @@
                     </p>
 
                     <h3>4.2 For Legal Reasons</h3>
-                    <p>We may disclose your information if required to do so by law or in response to valid requests by public authorities.</p>
+                    <p>We may disclose your information if required to do so by law or in response to valid requests by ../public authorities.</p>
 
                     <h3>4.3 Business Transfers</h3>
                     <p>
@@ -375,9 +375,9 @@
         </div>
     </section>
 
-    <?php require_once __DIR__ . "/includes/components/footer.php"; ?>
+    <?php require_once __DIR__ . "/../includes/components/footer.php"; ?>
 
-    <script src="public/assets/js/legal-pages.js"></script>
+    <script src="../public/assets/js/legal-pages.js"></script>
 </body>
 
 </html>

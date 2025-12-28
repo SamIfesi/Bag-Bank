@@ -1,4 +1,6 @@
-<?php require_once __DIR__ .  "/includes/check_auth.php"; ?>
+<?php
+require_once __DIR__ . "/includes/check_auth.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,8 +45,8 @@
             <li><a href="#how-it-works">How It Works</a></li>
             <li><a href="#security">Security</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li><a href="login.php" class="mobile-login">Login</a></li>
-            <li><a href="register.php" class="mobile-signup">Sign Up</a></li>
+            <li><a href="views/login.php" class="mobile-login">Login</a></li>
+            <li><a href="views/register.php" class="mobile-signup">Sign Up</a></li>
         </ul>
     </div>
 
@@ -64,7 +66,7 @@
                     and 24/7 access to your finances. Join thousands of users who trust D'Bag Bank.
                 </p>
                 <div class="hero-actions">
-                    <a href="register.php" class="btn-primary">
+                    <a href="views/register.php" class="btn-primary">
                         Get Started Free
                         <i class="ti ti-arrow-right"></i>
                     </a>
@@ -297,15 +299,90 @@
             <h2>Ready to Start Your Digital Banking Journey?</h2>
             <p>Join thousands of satisfied customers and experience banking done right.</p>
             <div class="cta-actions">
-                <a href="register.php" class="btn-primary">
+                <a href="views/register.php" class="btn-primary">
                     Create Free Account
                     <i class="ti ti-arrow-right"></i>
                 </a>
             </div>
         </div>
     </section>
+    <footer class="footer" id="contact">
+        <div class="footer-container">
+            <div class="footer-section">
+                <img src="public/logo-stacked.svg" alt="D'Bag Bank" class="footer-logo" />
+                <p class="footer-about">
+                    Making banking simple, secure, and accessible for everyone.
+                </p>
+                <div class="social-links">
+                    <a href="#"><i class="ti ti-brand-twitter"></i></a>
+                    <a href="#"><i class="ti ti-brand-facebook"></i></a>
+                    <a href="#"><i class="ti ti-brand-instagram"></i></a>
+                    <a href="#"><i class="ti ti-brand-linkedin"></i></a>
+                </div>
+            </div>
 
-    <?php require_once __DIR__ . "/includes/components/footer.php"; ?>
+            <div class="footer-section">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="index.php#features">Features</a></li>
+                    <li><a href="index.php#security">Security</a></li>
+                    <li><a href="views/pricing.php">Pricing</a></li>
+                    <li><a href="#">API</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="views/about_us.php">About Us</a></li>
+                    <li><a href="views/careers.php">Careers</a></li>
+                    <li><a href="views/blog.php">Blog</a></li>
+                    <li><a href="views/press.php">Press</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="views/help-center.php">Help Center</a></li>
+                    <li><a href="views/contact.php">Contact Us</a></li>
+                    <li><a href="views/privacy-policy.php">Privacy Policy</a></li>
+                    <li><a href="views/terms-of-service.php">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 D'Bag Bank. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        const createProgressBar = () => {
+            const progressBar = document.createElement("div");
+            progressBar.id = "reading-progress";
+            progressBar.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 0.25rem;
+            background: linear-gradient(135deg, #5200a3 0%, #6c5ce7 100%);
+            z-index: 9999;
+            transition: width 0.1s ease;
+        `;
+            document.body.appendChild(progressBar);
+
+            window.addEventListener("scroll", () => {
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight - windowHeight;
+                const scrolled = window.scrollY;
+                const progress = (scrolled / documentHeight) * 100;
+
+                progressBar.style.width = `${Math.min(progress, 100)}%`;
+            });
+        };
+        createProgressBar();
+    </script>
 
     <script src="public/assets/js/index.js"></script>
 </body>

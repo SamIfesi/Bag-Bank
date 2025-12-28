@@ -1,13 +1,13 @@
-<?php require_once __DIR__ . "/includes/check_auth.php"; ?>
+<?php require_once __DIR__ . "/../includes/check_auth.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="public/assets/css/index.css">
-    <link rel="stylesheet" href="public/assets/css/support-pages.css">
+    <link rel="shortcut icon" href="../public/favicon.svg" type="image/svg" />
+    <link rel="stylesheet" href="../public/assets/css/index.css">
+    <link rel="stylesheet" href="../public/assets/css/support-pages.css">
     <title>Help Center - D'Bag Bank</title>
 </head>
 
@@ -17,7 +17,7 @@
         <div class="nav-container">
             <div class="nav-logo">
                 <a href="index. php">
-                    <img src="public/logo.svg" alt="D'Bag Bank" />
+                    <img src="../public/logo.svg" alt="D'Bag Bank" />
                 </a>
             </div>
             <ul class="nav-links">
@@ -251,9 +251,9 @@
     </section>
 
     <!-- Footer -->
-    <?php require_once __DIR__ . "/includes/components/footer.php"; ?>
+    <?php require_once __DIR__ . "/../includes/components/footer.php"; ?>
 
-    <script src="public/assets/js/pages.js"></script>
+    <script src="../public/assets/js/pages.js"></script>
 </body>
 
 </html>

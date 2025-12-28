@@ -1,9 +1,9 @@
 <?php
 session_start();
-// require_once __DIR__ . "/config/functions/utilities.php";
-// require_once __DIR__ . "/includes/check_auth.php";
+require_once __DIR__ . "/../config/functions/utilities.php";
+require_once __DIR__ . "/../includes/check_auth.php";
 
-// $user = Auth::user();
+$user = Auth::user();
 ?>
 <!DOCTYPE html>
 <html lang="en">

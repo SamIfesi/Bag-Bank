@@ -241,7 +241,7 @@ function navigateBack() {
       btn: id("backToDashBtn"),
       from: id("account-section"),
       to: null,
-      link: "dashboard.php",
+      link: "views/dashboard.php",
     },
   ];
   backBtns.forEach(({ btn, from, to, link }) => {
@@ -335,7 +335,7 @@ function navigateBack() {
 
       if (result.success) {
         window.location.href =
-          "transfer_success.php?ref=" + result.transaction_ref;
+          "views/transfer_success.php?ref=" + result.transaction_ref;
       } else {
         pay.disabled = false;
         pay.innerText = "Proceed";

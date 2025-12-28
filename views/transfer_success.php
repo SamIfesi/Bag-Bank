@@ -1,24 +1,24 @@
 <?php
 session_start();
-require_once __DIR__ . "/config/functions/utilities.php";
-require_once __DIR__ . "/config/Auth.php";
-require_once __DIR__ . "/includes/check_auth.php";
+require_once __DIR__ . "/../config/functions/utilities.php";
+require_once __DIR__ . "/../config/Auth.php";
+require_once __DIR__ . "/../includes/check_auth.php";
 
 if (!is_logged_in()) {
-    redirect_to("login.php");
+    redirect_to("views/login.php");
     exit();
 }
 
 $transaction_ref = isset($_GET['ref']) ? sanitize_input($_GET['ref']) : '';
 
 if (empty($transaction_ref)) {
-    redirect_to("dashboard.php");
+    redirect_to("views/dashboard.php");
     exit();
 }
 $transaction = Model::find('transactions', 'reference', $transaction_ref);
 
 if (!$transaction) {
-    redirect_to("dashboard.php");
+    redirect_to("views/dashboard.php");
     exit();
 }
 
@@ -30,8 +30,8 @@ $user = Auth::user();
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="public/assets/css/receipt.css">
+    <link rel="shortcut icon" href="../public/favicon.svg" type="image/svg" />
+    <link rel="stylesheet" href="../public/assets/css/receipt.css">
     <title>Transfer Receipt - D'Bag Bank</title>
 </head>
 
@@ -66,7 +66,7 @@ $user = Auth::user();
     <main class="receipt-container hide" id="receiptContainer">
         <div class="receipt-card" id="printArea">
             <div class="receipt-header">
-                <img src="public/logo-stacked.svg" alt="D'Bag Bank" class="receipt-logo" />
+                <img src="../public/logo-stacked.svg" alt="D'Bag Bank" class="receipt-logo" />
                 <h2>Transaction Receipt</h2>
                 <p class="receipt-date"><?= date('F d, Y h:i A', strtotime($transaction->created_at)) ?></p>
             </div>
@@ -139,7 +139,7 @@ $user = Auth::user();
         </div>
     </main>
 
-    <script src="public/assets/js/receipt.js"></script>
+    <script src="../public/assets/js/receipt.js"></script>
 </body>
 
 </html>

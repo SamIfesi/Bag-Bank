@@ -26,15 +26,15 @@
     </div>
 
     <nav class="sidebar-nav">
-        <a href="dashboard.php" class="sidebar-item active">
+        <a href="views/dashboard.php" class="sidebar-item active">
             <i class="ti ti-home"></i>
             <span>Home</span>
         </a>
-        <a href="send.php" class="sidebar-item">
+        <a href="views/send.php" class="sidebar-item">
             <i class="ti ti-send"></i>
             <span>Send Money</span>
         </a>
-        <a href="transactions.php" class="sidebar-item">
+        <a href="views/transactions.php" class="sidebar-item">
             <i class="ti ti-logs"></i>
             <span>Transactions</span>
         </a>

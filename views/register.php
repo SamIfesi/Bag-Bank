@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/includes/check_auth.php";
+require_once __DIR__ . "/../includes/check_auth.php";
 // Get errors from session and clear them
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
 $old_input = isset($_SESSION['old_input']) ? $_SESSION['old_input'] : [];
@@ -12,21 +12,21 @@ unset($_SESSION['old_input']);
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="public/assets/css/style.css" />
+    <link rel="shortcut icon" href="../public/favicon.svg" type="image/svg" />
+    <link rel="stylesheet" href="../public/assets/css/style.css" />
     <title>D'Bag Bank - Register</title>
 </head>
 
 <body class="body">
     <main>
-        <img src="public/logo-stacked.svg" alt="" class="logo" />
+        <img src="../public/logo-stacked.svg" alt="" class="logo" />
         <div class="loader-container hide" id="loader">
             <div class="spinner"></div>
         </div>
         <form action="app/handlers/process_register.php" method="post" id="register-form">
             <!-- Email input form -->
             <div id="email-form">
-                <i class="ti ti-chevron-left back" onclick="window.location.href='index.php'"></i>
+                <i class="ti ti-chevron-left back" onclick="window.location.href='../index.php'"></i>
                 <div class="form-group">
                     <i class="ti ti-mail icon"></i>
                     <input
@@ -120,13 +120,13 @@ unset($_SESSION['old_input']);
 
                 <button type="submit" class="btn-submit" id="registerUser">Register</button>
                 <p class="alt-login">
-                    Already have an account? <a href="login.php">Login here</a>
+                    Already have an account? <a href="ogin.php">Login here</a>
                 </p>
             </div>
         </form>
     </main>
     <span class="msg-success" id="msg-success"></span>
-    <script type="module" src="public/assets/js/main.js"></script>
+    <script type="module" src="../public/assets/js/main.js"></script>
 </body>
 
 </html>

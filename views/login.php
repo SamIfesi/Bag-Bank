@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/includes/check_auth.php";
+require_once __DIR__ . "/../includes/check_auth.php";
 
 // Get errors from session and clear them
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
@@ -11,21 +11,20 @@ unset($_SESSION['errors']);
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="" />
-    <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="public/assets/css/style.css">
+    <link rel="shortcut icon" href="../public/favicon.svg" type="image/svg" />
+    <link rel="stylesheet" href="../public/assets/css/style.css">
     <title>D'Bag Bank - Login</title>
 </head>
 
 <body class="body">
     <main>
-        <img src="public/logo-stacked.svg" alt="" class="logo" />
+        <img src="../public/logo-stacked.svg" alt="" class="logo" />
         <div class="loader-container hide" id="loader">
             <div class="spinner"></div>
         </div>
 
-        <i class="ti ti-chevron-left back" onclick="window.location.href='index.php'"></i>
-        <form action="app/handlers/process_login.php" method="post" id="login-form">
+        <i class="ti ti-chevron-left back" onclick="window.location.href='../index.php'"></i>
+        <form action="../app/handlers/process_login.php" method="post" id="login-form">
             <div id="userLogin-form">
                 <div class="form-group">
                     <i class="ti ti-user icon"></i>
@@ -42,7 +41,7 @@ unset($_SESSION['errors']);
                     <?php endforeach; ?>
                 </span>
                 <button type="submit" class="btn-submit continue" id="continueLogin">Continue</button>
-                <button type="button" id="register" class="btn-submit">Register</button>
+                <button type="button" id="register" class="btn-submit" onclick="window.location.href='register.php'">Register</button>
             </div>
 
             <!-- Password div -->
@@ -67,7 +66,7 @@ unset($_SESSION['errors']);
         </form>
     </main>
     <span class="msg-success" id="msg-success"></span>
-    <script type="module" src="public/assets/js/main.js"></script>
+    <script type="module" src="../public/assets/js/main.js"></script>
 </body>
 
 </html>

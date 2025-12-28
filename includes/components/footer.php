@@ -1,7 +1,7 @@
  <footer class="footer" id="contact">
      <div class="footer-container">
          <div class="footer-section">
-             <img src="public/logo-stacked.svg" alt="D'Bag Bank" class="footer-logo" />
+             <img src="../public/logo-stacked.svg" alt="D'Bag Bank" class="footer-logo" />
              <p class="footer-about">
                  Making banking simple, secure, and accessible for everyone.
              </p>
@@ -16,8 +16,8 @@
          <div class="footer-section">
              <h4>Product</h4>
              <ul>
-                 <li><a href="index.php#features">Features</a></li>
-                 <li><a href="index.php#security">Security</a></li>
+                 <li><a href="../index.php#features">Features</a></li>
+                 <li><a href="../index.php#security">Security</a></li>
                  <li><a href="pricing.php">Pricing</a></li>
                  <li><a href="#">API</a></li>
              </ul>

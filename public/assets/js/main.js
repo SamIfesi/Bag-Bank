@@ -92,7 +92,6 @@ const elements = {
  * @param {boolean} isValid
  *
  * handle navigation to registration page
- * @param {HTMLElement} regBtn - Register button element
  * @param {HTMLElement} currentStep - Div to hide
  * @param {HTMLElement} nextStep - Div to show
  */
@@ -334,14 +333,6 @@ const initUtilities = () => {
       });
     }
   });
-
-  const regBtn = id("register");
-  if (regBtn) {
-    regBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      window.location.href = "register.php";
-    });
-  }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
