@@ -118,3 +118,42 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     }
   });
 });
+// Help Search
+const helpSearch = id("helpSearch");
+if (helpSearch) {
+  const helpSearchForm = helpSearch.closest("form");
+  helpSearchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const query = helpSearch.value;
+    alert(`Searching for: ${query}`);
+  });
+}
+
+// Contact Form Submission
+const contactForm = id("contactForm");
+if (contactForm) {
+  contactForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    alert("Thank you for contacting us! We'll get back to you soon.");
+    contactForm.reset();
+  });
+}
+
+// FAQ Accordion
+const faqQuestions = qa(".faq-question");
+faqQuestions.forEach((question) => {
+  question.addEventListener("click", () => {
+    const faqItem = question.parentElement;
+    const isActive = faqItem.classList.contains("active");
+
+    // Close all other FAQs
+    qa(".faq-item").forEach((item) => {
+      item.classList.remove("active");
+    });
+
+    // Toggle current FAQ
+    if (!isActive) {
+      faqItem.classList.add("active");
+    }
+  });
+});

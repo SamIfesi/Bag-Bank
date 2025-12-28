@@ -440,7 +440,7 @@
     <!-- Footer -->
     <?php require_once __DIR__ .  "/../includes/components/footer.php"; ?>
 
-    <script src="../public/assets/js/pages. js"></script>
+    <script src="../public/assets/js/pages.js"></script>
 </body>
 
 </html>

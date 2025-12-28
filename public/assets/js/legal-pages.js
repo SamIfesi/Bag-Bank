@@ -189,8 +189,6 @@ const createBackToTop = () => {
     backToTop.style.boxShadow = "0 0.25rem 0.75rem rgba(82, 0, 163, 0.3)";
   });
 };
-
-// Initialize back to top button
 createBackToTop();
 
 // Print page functionality
@@ -203,7 +201,6 @@ const addPrintListener = () => {
     console.log("Print completed");
   });
 };
-
 addPrintListener();
 
 // Smooth scroll for all anchor links
