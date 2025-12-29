@@ -4,7 +4,7 @@
     </button>
     <div class="details" id="user">
         <span class="img">
-            <img src="public/logo-icon.svg" alt="bank logo" />
+            <img src="../public/logo-icon.svg" alt="bank logo" />
         </span>
         <span class="user-detail">
             <h3 id="recipient-name"></h3>
@@ -85,7 +85,7 @@
     </div>
 </form>
 </main>
-<script type="module" src="public/assets/js/send.js"></script>
+<script type="module" src="../public/assets/js/send.js"></script>
 </body>
 
 </html>

@@ -160,7 +160,7 @@ const initSendMoneyForm = () => {
 
   // --- Account Lookup Logic ---
   const fetchAccountName = async (accountNumber, bank) => {
-    const url = "app/handlers/resolve_account.php";
+    const url = "../app/handlers/resolve_account.php";
     try {
       const formData = new FormData();
       formData.append("account_number", accountNumber);
@@ -241,7 +241,7 @@ function navigateBack() {
       btn: id("backToDashBtn"),
       from: id("account-section"),
       to: null,
-      link: "views/dashboard.php",
+      link: "dashboard.php",
     },
   ];
   backBtns.forEach(({ btn, from, to, link }) => {
@@ -324,7 +324,7 @@ function navigateBack() {
       formData.append("recipient_name", element.inputs.accName.value);
       formData.append("bank_code", element.inputs.bank.value);
 
-      const response = await fetch("app/handlers/process_transfer.php", {
+      const response = await fetch("../app/handlers/process_transfer.php", {
         method: "POST",
         body: formData,
       });
@@ -335,7 +335,7 @@ function navigateBack() {
 
       if (result.success) {
         window.location.href =
-          "views/transfer_success.php?ref=" + result.transaction_ref;
+          "transfer_success.php?ref=" + result.transaction_ref;
       } else {
         pay.disabled = false;
         pay.innerText = "Proceed";
