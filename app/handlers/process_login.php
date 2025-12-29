@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Login successful
                 $_SESSION['user'] = $user->id;
                 unset($_SESSION['errors']);
-                header("Location: ../../dashboard.php");
+                header("Location: ../../views/dashboard.php");
                 exit();
             } else {
                 $errors[] = "Invalid username or password";
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Store errors in session and redirect back
     if (count($errors) > 0) {
         $_SESSION['errors'] = $errors;
-        header("Location: ../../login.php");
+        header("Location: ../../views/login.php");
         exit();
     }
 }

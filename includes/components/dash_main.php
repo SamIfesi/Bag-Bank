@@ -48,7 +48,7 @@ $hide_home = ($current_page !== 'home') ? 'hide' : '';
 
         <nav class=" quick-actions flex-space">
                 <span class="action-btn">
-                    <i class="ti ti-sort-ascending" id="sendBtn"></i>
+                    <i class="ti ti-sort-ascending" id="sendBtn" onclick="window.location.href='send.php'"></i>
                     <span>Send</span>
                 </span>
                 <span class="action-btn">
@@ -68,12 +68,12 @@ $hide_home = ($current_page !== 'home') ? 'hide' : '';
                 <section class="transactions">
                     <header class="flex-space">
                         <h3>Transactions</h3>
-                        <a href="views/transactions.php">See All</a>
+                        <a href="transactions.php">See All</a>
                     </header>
                     <?php if (count($transactions) > 0): ?>
                         <ul class="transaction-list">
                             <?php foreach ($transactions as $trans): ?>
-                                <li class="transaction flex-" onclick="window.location.href='views/transfer_success.php?ref=<?= $trans->reference ?>'">
+                                <li class="transaction flex-" onclick="window.location.href='transfer_success.php?ref=<?= $trans->reference ?>'">
                                     <div class="trans-icon <?= $trans->type ?>">
                                         <i class="ti <?= $trans->type === 'credit' ? 'ti-arrow-down-left' : 'ti-arrow-up-right' ?>"></i>
                                     </div>

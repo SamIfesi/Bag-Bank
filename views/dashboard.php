@@ -9,7 +9,7 @@ if (!is_logged_in()) {
     exit();
 }
 $user = Auth::user();
-require_once __DIR__ . "/includes/components/dash_header.php";
-require_once __DIR__ . "/includes/components/dash_main.php";
-require_once __DIR__ . "/includes/components/atm_card.php";
-require_once __DIR__ . "/includes/components/dash_footer.php";
+require_once __DIR__ . "/../includes/components/dash_header.php";
+require_once __DIR__ . "/../includes/components/dash_main.php";
+require_once __DIR__ . "/../includes/components/atm_card.php";
+require_once __DIR__ . "/../includes/components/dash_footer.php";

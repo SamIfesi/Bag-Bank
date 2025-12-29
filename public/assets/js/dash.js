@@ -62,7 +62,7 @@ const initDashboard = () => {
         balIcon.classList.add("ti-eye");
       }
 
-      fetch("includes/toggler.php?item=balance", {
+      fetch("../includes/toggler.php?item=balance", {
         method: "POST",
       }).catch((err) => console.error("Failed to save preference", err));
     });
@@ -85,7 +85,7 @@ const initDashboard = () => {
         accNum.textContent = maskedNum;
       }
 
-      fetch("includes/toggler.php?item=account_number", {
+      fetch("../includes/toggler.php?item=account_number", {
         method: "POST",
       }).catch((err) => {
         console.error("Failed to save acct state", err);
@@ -93,17 +93,6 @@ const initDashboard = () => {
     });
   };
   toggleAccountNumber();
-};
-
-// action buttons for reloctions
-const initActionButtons = () => {
-  const send = element.btns?.send;
-  if (send) {
-    send.addEventListener("click", (e) => {
-      e.preventDefault();
-      window.location.href = "views/send.php";
-    });
-  }
 };
 
 // Sidebar collapse toggle
@@ -177,7 +166,7 @@ const initCardFunctionality = () => {
         iconEye.classList.replace("ti-eye-off", "ti-eye");
       }
 
-      fetch("includes/toggler.php?item=card", {
+      fetch("../includes/toggler.php?item=card", {
         method: "POST",
       }).catch((err) => console.error("Failed to save preference", err));
     });
@@ -286,7 +275,7 @@ const navLocation = () => {
       const getPage = btn.getAttribute("data-page");
 
       // Save current page to session
-      fetch("includes/toggler.php?item=page", {
+      fetch("../includes/toggler.php?item=page", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -368,7 +357,6 @@ const drag = () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   initDashboard();
-  initActionButtons();
   initSidebar();
   initCardFunctionality();
   navLocation();

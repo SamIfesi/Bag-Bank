@@ -20,7 +20,7 @@
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <div class="sidebar-logo">
-            <img src="public/logo-icon.svg" alt="D'Bag Bank" class="logo-icon">
+            <img src="../public/logo-icon.svg" alt="D'Bag Bank" class="logo-icon">
             <span class="logo-text">D'Bag Bank</span>
         </div>
     </div>
@@ -60,7 +60,7 @@
         </a>
     </div>
 </aside>
-<script src="public/assets/js/dash.js"></script>
+<script src="../public/assets/js/dash.js"></script>
 </body>
 
 </html>
