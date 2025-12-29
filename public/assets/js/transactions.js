@@ -41,12 +41,29 @@ function updateFilterUI(filterType) {
   const desktopButtons = document.querySelectorAll(
     ".filter-buttons .filter-btn"
   );
+  const noTransactionBtn = document.getElementById("noTransaction");
+
   desktopButtons.forEach((btn) => {
     btn.classList.remove("active");
     if (btn.getAttribute("data-filter") === filterType) {
       btn.classList.add("active");
     }
   });
+
+  // Only update button text if the button exists
+  if (noTransactionBtn) {
+    if (filterType === "topup") {
+      noTransactionBtn.textContent = "add money";
+      noTransactionBtn.addEventListener("click", () => {
+        window.location.href = "add_money.php";
+      });
+    } else {
+      noTransactionBtn.textContent = "Send Money";
+      noTransactionBtn.addEventListener("click", () => {
+        window.location.href = "send.php";
+      });
+    }
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {

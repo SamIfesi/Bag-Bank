@@ -21,7 +21,7 @@ if (elements.viewReceiptBtn) {
 // Back to dashboard from status modal
 if (elements.backToDashBtn) {
   elements.backToDashBtn.addEventListener("click", () => {
-    window.location.href = "views/dashboard.php";
+    window.location.href = "dashboard.php";
   });
 }
 
@@ -42,6 +42,6 @@ if (elements.downloadBtn) {
 // Back to dashboard from receipt
 if (elements.backBtn) {
   elements.backBtn.addEventListener("click", () => {
-    window.location.href = "views/dashboard.php";
+    window.location.href = "dashboard.php";
   });
 }
