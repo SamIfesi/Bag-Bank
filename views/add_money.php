@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . "/../config/functions/utilities.php";
+require_once __DIR__ . "/../config/Auth.php";
 require_once __DIR__ . "/../includes/check_auth.php";
 
 $user = Auth::user();
@@ -11,8 +12,8 @@ $user = Auth::user();
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="public/favicon.svg" type="image/svg" />
-    <link rel="stylesheet" href="public/assets/css/add-money.css">
+    <link rel="shortcut icon" href="../public/favicon.svg" type="image/svg" />
+    <link rel="stylesheet" href="../public/assets/css/add-money.css">
     <title>Add Money - D'Bag Bank</title>
 </head>
 
@@ -35,7 +36,7 @@ $user = Auth::user();
         <!-- Current Balance Display -->
         <section class="balance-display">
             <p class="balance-label">Current Balance</p>
-            <!-- <h1 class="balance-amount">₦<?= number_format($user->balance, 2) ?></h1> -->
+            <h1 class="balance-amount">₦<?= number_format($user->balance, 2) ?></h1>
         </section>
 
         <!-- Add Money Form -->
@@ -122,7 +123,7 @@ $user = Auth::user();
             <i class="ti ti-info-circle"></i>
             <div>
                 <h4>Quick & Secure</h4>
-                <p>Your money will be added instantly to your account.  All transactions are encrypted and secure.</p>
+                <p>Your money will be added instantly to your account. All transactions are encrypted and secure.</p>
             </div>
         </div>
     </main>
@@ -152,7 +153,7 @@ $user = Auth::user();
         </div>
     </div>
 
-    <script src="public/assets/js/add-money.js"></script>
+    <script src="../public/assets/js/add-money.js"></script>
 </body>
 
 </html>
