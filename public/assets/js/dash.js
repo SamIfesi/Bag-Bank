@@ -20,7 +20,7 @@ const element = {
     accNum: id("acctText"),
   },
   card: {
-    show: id("show-card"),
+    sideBarBtn: qa(".sidebar-item"),
     navBtn: qa(".bottom-nav .nav-item"),
     pages: qa(".nav-section"),
   },
@@ -240,13 +240,22 @@ const initCardFunctionality = () => {
 };
 
 const navLocation = () => {
-  const { show, navBtn, pages } = element.card;
+  const { sideBarBtn, navBtn, pages } = element.card;
   const restoreSavedPage = () => {
     // Get the saved page from data attribute (set by PHP)
     const savedPage = document.body.getAttribute("data-current-page");
 
     if (savedPage && navBtn.length > 0) {
       navBtn.forEach((btn) => {
+        const btnPage = btn.getAttribute("data-page");
+        if (btnPage === savedPage) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+
+      sideBarBtn.forEach((btn) => {
         const btnPage = btn.getAttribute("data-page");
         if (btnPage === savedPage) {
           btn.classList.add("active");
@@ -267,9 +276,11 @@ const navLocation = () => {
   };
   restoreSavedPage();
 
+  // Navigation buttons functionality
   navBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
       navBtn.forEach((b) => b.classList.remove("active"));
+      sideBarBtn.forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
 
       const getPage = btn.getAttribute("data-page");
@@ -283,7 +294,35 @@ const navLocation = () => {
         body: JSON.stringify({ page: getPage }),
       }).catch((err) => console.error("Failed to save current page", err));
 
-      // let count = 0;
+      pages.forEach((page) => {
+        const pageName = page.getAttribute("data-name");
+        if (getPage === pageName) {
+          page.classList.remove("hide");
+        } else {
+          page.classList.add("hide");
+        }
+      });
+    });
+  });
+
+  // Sidebar buttons functionality
+  sideBarBtn.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      navBtn.forEach((b) => b.classList.remove("active"));
+      sideBarBtn.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const getPage = btn.getAttribute("data-page");
+
+      // Save current page to session
+      fetch("../includes/toggler.php?item=page", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ page: getPage }),
+      }).catch((err) => console.error("Failed to save current page", err));
+
       pages.forEach((page) => {
         const pageName = page.getAttribute("data-name");
         if (getPage === pageName) {
