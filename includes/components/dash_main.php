@@ -42,7 +42,7 @@ $hide_home = ($current_page !== 'home') ? 'hide' : '';
                 </span>
             </div>
 
-            <button class="btn-add" onclick="window.location.href='views/add_money.php'">Add Money</button>
+            <button class="btn-add" onclick="window.location.href='add_money.php'">Add Money</button>
             </div>
         </section>
 

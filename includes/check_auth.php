@@ -31,7 +31,7 @@ function check_auth($public_pages)
         exit();
     }
     if ($isAuthenticated && $isPublicPage) {
-        header("Location: dashboard.php");
+        header("Location: views/dashboard.php");
         exit();
     }
 }
