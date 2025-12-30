@@ -12,7 +12,7 @@ const elements = {
   form: id("addMoneyForm"),
   amountInput: id("amount"),
   amountError: id("amount-error"),
-  quickBtns: qa(". quick-btn"),
+  quickBtns: qa(".quick-btn"),
   addMoneyBtn: id("addMoneyBtn"),
   loader: id("loader"),
   backBtn: id("backBtn"),
@@ -125,7 +125,7 @@ elements.form.addEventListener("submit", async (e) => {
   elements.addMoneyBtn.disabled = true;
 
   try {
-    const response = await fetch("includes/components/process_add_money.php", {
+    const response = await fetch("../app/handlers/process_add_money.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -137,7 +137,17 @@ elements.form.addEventListener("submit", async (e) => {
       }),
     });
 
-    const data = await response.json();
+    const responseText = await response.text();
+    let data;
+
+    try {
+      data = JSON.parse(responseText);
+    } catch (e) {
+      data = {
+        success: false,
+        message: responseText || "Invalid response from server",
+      };
+    }
 
     // Hide loader
     elements.loader.classList.add("hide");
@@ -166,7 +176,7 @@ elements.form.addEventListener("submit", async (e) => {
 
 // Done button - redirect to dashboard
 elements.doneBtn.addEventListener("click", () => {
-  window.location.href = "views/dashboard.php";
+  window.location.href = "dashboard.php";
 });
 
 // Try again button - close modal

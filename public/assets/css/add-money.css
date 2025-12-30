@@ -29,7 +29,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 html {
-  font-size: 16px;
+  font-size: 1rem;
 }
 body.add-money-body {
   background: var(--bg-body);
@@ -169,7 +169,7 @@ body.add-money-body {
   border: 0.125rem solid transparent;
   border-radius: 0.75rem;
   width: 100%;
-  padding: 1 125rem 1.25rem 1.125rem 3rem;
+  padding: 1.125rem 1.25rem 1.125rem 3rem;
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--text-primary);
@@ -209,7 +209,7 @@ body.add-money-body {
   background: var(--bg-surface-light);
   border: 0.125rem solid #e0e0e0;
   border-radius: 0.75rem;
-  padding: 1rem;
+  padding: .5rem 1rem;
   font-weight: 600;
   font-size: 0.9375rem;
   color: var(--text-primary);
@@ -221,7 +221,6 @@ body.add-money-body {
   background: var(--primary-gradient);
   color: var(--text-white);
   border-color: transparent;
-  transform: translateY(-0.125rem);
 }
 /* Payment Methods */
 .payment-methods {
@@ -242,7 +241,7 @@ body.add-money-body {
   background: var(--bg-surface-light);
   border: 0.125rem solid #e0e0e0;
   border-radius: 0.75rem;
-  padding: 1 25rem 0.75rem;
+  padding: .5rem rem 0.75rem;
   text-align: center;
   transition: all 0.3s ease;
   display: flex;
