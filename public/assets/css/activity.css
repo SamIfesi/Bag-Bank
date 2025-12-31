@@ -1,0 +1,228 @@
+.trans-header {
+  background: var(--secondary-gradient);
+  padding: 1.2rem;
+  text-align: center;
+  color: var(--text-white);
+}
+.trans-header h2 {
+  font-size: 1.2rem;
+}
+.trans-main {
+  padding: 1.2rem;
+  max-width: 50rem;
+  margin: 0 auto;
+}
+.trans-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.trans-item {
+  background: var(--text-white);
+  padding: 1rem;
+  border-radius: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.trans-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.trans-icon {
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.trans-icon.credit {
+  background: rgba(45, 125, 50, 0.1);
+  color: var(--color-success);
+}
+.trans-icon.debit {
+  background: rgba(198, 40, 40, 0.1);
+  color: var(--color-danger);
+}
+.trans-icon i {
+  font-size: 1.5rem;
+}
+.trans-details {
+  flex: 1;
+}
+.trans-title {
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+.trans-desc {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}
+.trans-date {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+.trans-amount-wrapper {
+  text-align: right;
+  align-self: flex-start;
+}
+.trans-amount {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.trans-amount.credit {
+  color: var(--color-success);
+}
+.trans-amount.debit {
+  color: var(--color-danger);
+}
+.trans-status {
+  font-size: 12px;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.5rem;
+  display: inline-block;
+}
+.trans-status.success {
+  background: var(--bg-success-light);
+  color: var(--color-success);
+}
+.trans-status.failed {
+  background: var(--bg-danger-light);
+  color: var(--color-danger);
+}
+.filter-buttons {
+  width: 100%;
+  margin: 0 auto 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.filter-btn {
+  padding: 0.5rem 1.3rem;
+  border: 2px solid var(--bg-surface-light);
+  background: var(--text-white);
+  border-radius: 2rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.filter-btn:hover {
+  border-color: var(--primary-purple);
+  color: var(--primary-purple);
+  box-shadow: 0 0 0 3px rgba(82, 0, 163, 0.1);
+}
+.filter-btn.active {
+  background: var(--primary-purple);
+  color: var(--text-white);
+  border-color: var(--primary-purple);
+}
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3.75rem 1.2rem;
+}
+.empty-state i {
+  font-size: 80px;
+  color: var(--bg-surface-light);
+  margin-bottom: 1.2rem;
+}
+.empty-state h3 {
+  color: var(--text-primary);
+  margin-bottom: 0.7rem;
+}
+.empty-state p {
+  color: var(--text-secondary);
+  margin-bottom: 1.8rem;
+}
+.btn-send-money {
+  background: var(--primary-gradient);
+  color: var(--text-white);
+  padding: 0.8rem 1.8rem;
+  border: none;
+  border-radius: 0.7rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-send-money:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(82, 0, 163, 0.4);
+}
+
+/* Profile page */
+.profile-header {
+  text-align: center;
+  color: var(--text-primary);
+}
+.profile-container {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 10rem);
+  .profile-info {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .profile-btn {
+    max-width: 26rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: transparent;
+    border: 2px solid transparent;
+    outline: transparent;
+    cursor: pointer;
+    padding: 0.8rem 1rem;
+    border-radius: 0.7rem;
+    font-size: 1rem;
+    font-weight: 500;
+    .ti {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    &:hover {
+      border-color: var(--text-secondary);
+    }
+  }
+  .logout-btn{
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+    margin-top: auto;
+    &:hover {
+      background: var(--bg-danger-light);
+    }
+  }
+}
+
+@media (max-width: 38rem) {
+  .trans-item {
+    padding: 0.8rem;
+  }
+  .trans-icon {
+    width: 3rem;
+    height: 3rem;
+  }
+  .trans-title {
+    font-size: 1rem;
+  }
+  .trans-amount {
+    font-size: 1rem;
+  }
+}
