@@ -70,7 +70,7 @@ require_once __DIR__ . "/../includes/check_auth.php";
                 </div>
                 <div class="benefit-card">
                     <div class="benefit-icon">
-                        <i class="ti ti-piggy-bank"></i>
+                        <i class="ti ti-pig-money"></i>
                     </div>
                     <h3>Compensation</h3>
                     <p>Competitive salary, equity options, and performance bonuses.</p>
