@@ -11,6 +11,7 @@ require_once __DIR__ . "/dash_trans.php";
     <link rel="stylesheet" href="" />
     <link rel="shortcut icon" href="../public/favicon.svg" type="image/svg" />
     <link rel="stylesheet" href="../public/assets/css/dash.css">
+    <link rel="stylesheet" href="../public/assets/css/activity.css">
     <title>D'Bag Bank - Dashboard</title>
 </head>
 

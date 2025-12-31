@@ -7,7 +7,7 @@
         <i class="ti ti-logs"></i>
         <span>Activity</span>
     </a>
-    <a href="#" class="nav-item show-card" data-page="card">
+    <a href="#" class="nav-item" data-page="card">
         <i class="ti ti-credit-card"></i>
         <span>Card</span>
     </a>
@@ -26,25 +26,21 @@
     </div>
 
     <nav class="sidebar-nav">
-        <a href="views/dashboard.php" class="sidebar-item active">
+        <a href="#" class="sidebar-item active" data-page="home">
             <i class="ti ti-home"></i>
             <span>Home</span>
         </a>
-        <a href="views/send.php" class="sidebar-item">
-            <i class="ti ti-send"></i>
-            <span>Send Money</span>
-        </a>
-        <a href="views/transactions.php" class="sidebar-item">
+        <a href="#" class="sidebar-item" data-page="transactions">
             <i class="ti ti-logs"></i>
             <span>Transactions</span>
         </a>
-        <a href="#" class="sidebar-item show-card" data-page="card">
+        <a href="#" class="sidebar-item" data-page="card">
             <i class="ti ti-credit-card"></i>
             <span>Cards</span>
         </a>
-        <a href="#" class="sidebar-item">
-            <i class="ti ti-settings"></i>
-            <span>Settings</span>
+        <a href="#" class="sidebar-item" data-page="profile">
+            <i class="ti ti-user"></i>
+            <span>Profile</span>
         </a>
     </nav>
 

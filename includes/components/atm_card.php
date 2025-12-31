@@ -11,6 +11,11 @@ if ($cvv_card) {
     $show_cvv = isset($_SESSION['show_full_card']) ? $_SESSION['show_full_card'] : false;
     $display_cvv = $show_cvv ? $card_cvv : $masked_cvv;
 }
+if (!empty($user->card_number)) {
+    $atm_number = $user->card_number;
+    $formatted_atm = chunk_split($atm_number, 4, '-');
+    $formatted_atm = rtrim($formatted_atm, '-');
+}
 
 if ($hasCard) {
     // Format card number with spaces 
@@ -26,13 +31,9 @@ if ($hasCard) {
 
     $show_full_card = isset($_SESSION['show_full_card']) ? $_SESSION['show_full_card'] : false;
     $display_card = $show_full_card ? $formatted_card : $masked_card;
-
-    // Determine if this section should be shown based on saved page
-    $current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 'home';
-    $hide_card = ($current_page !== 'card') ? 'hide' : '';
 ?>
 
-    <section class="atm-card-container <?= $hide_card; ?> nav-section" data-name="card">
+    <section class="atm-card-container <?= $hide_card; ?> section nav-section" data-name="card">
         <header class="home-header flex-space card-header">
             <div class="topbar-left">
                 <h2>
@@ -87,18 +88,38 @@ if ($hasCard) {
                 </div>
             </div>
         </div>
+        <div class="group-card-info">
+            <div class="card-info">
+                <label for="card-number">Card Number</label>
+                <span class="label-copy hide" id="copied">Copied!</span>
+                <div>
+                    <i class="ti ti-copy" id="copy"></i>
+                    <input type="text" id="card-number" value="<?= $formatted_atm ?>" readonly />
+                </div>
+            </div>
+            <div class="card-exp">
+                <span>
+                    <label for="card-expiry">Expiry Date</label>
+                    <input type="text" id="card-expiry" value="<?= $user->card_expiry ?>" readonly />
+                </span>
+                <span>
+                    <label for="card-cvv">CVV</label>
+                    <input type="number" id="card-cvv" value="<?= $user->card_cvv ?>" readonly />
+
+                </span>
+            </div>
+            <div class="card-info">
+                <label for="card-name">Card Holder Name</label>
+                <input type="text" id="card-name" value="<?= strtoupper($user->name) ?>" readonly />
+            </div>
+        </div>
     </section>
 
 <?php
 } else {
     // User doesn't have a card - show apply button
 ?>
-    <?php
-    // Determine if this section should be shown based on saved page
-    $current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 'home';
-    $hide_card = ($current_page !== 'card') ? 'hide' : '';
-    ?>
-    <section class="atm-card-container <?= $hide_card; ?> nav-section" data-name="card">
+    <section class="atm-card-container <?= $hide_card; ?> nav-section " data-name="card">
         <header class="home-header flex-space card-header">
             <div class="topbar-left">
                 <h2>

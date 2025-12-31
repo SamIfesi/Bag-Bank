@@ -36,8 +36,31 @@ const element = {
       cvv: id("cvv"),
     },
     noCardSection: id("noCardSection"),
+    copySection: {
+      copyBtn: id("copy"),
+      copiedLabel: id("copied"),
+      cardNumber: id("card-number"),
+    },
   },
 };
+
+const copy = () => {
+  const { copyBtn, copiedLabel, cardNumber } = element.cardApply.copySection;
+  if (!copyBtn || !copiedLabel) return;
+  copyBtn.addEventListener("click", () => {
+    navigator.clipboard
+      .writeText(cardNumber.value.trim().replace(/-/g, ''))
+      .then(() => {
+        copiedLabel.classList.remove("hide");
+        setTimeout(() => {
+          copiedLabel.classList.add("hide");
+        }, 2000);
+      })
+      .catch((err) => {
+        console.error("Failed to copy card number: ", err);
+      });
+  })
+}
 
 // Initialize all functionalities on DashBoard
 const initDashboard = () => {
@@ -400,4 +423,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initCardFunctionality();
   navLocation();
   drag();
+  copy();
 });
