@@ -26,8 +26,8 @@ require_once __DIR__ . "/includes/check_auth.php";
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <div class="nav-actions">
-                <a href="login.php" class="btn-login">Login</a>
-                <a href="register.php" class="btn-signup">Sign Up</a>
+                <a href="views/login.php" class="btn-login">Login</a>
+                <a href="views/register.php" class="btn-signup">Sign Up</a>
             </div>
             <button class="mobile-menu-toggle" id="mobileMenuToggle">
                 <i class="ti ti-menu-2"></i>
@@ -324,8 +324,8 @@ require_once __DIR__ . "/includes/check_auth.php";
             <div class="footer-section">
                 <h4>Product</h4>
                 <ul>
-                    <li><a href="index.php#features">Features</a></li>
-                    <li><a href="index.php#security">Security</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#security">Security</a></li>
                     <li><a href="views/pricing.php">Pricing</a></li>
                     <li><a href="#">API</a></li>
                 </ul>
