@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         $_SESSION['errors'] = ["An error occurred while creating the account. Please try again."];
-        header("Location: ../../register.php");
+        header("Location: ../views/register.php");
         exit();
     }
 }

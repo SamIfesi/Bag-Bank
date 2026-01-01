@@ -18,3 +18,18 @@ DROP COLUMN `card_cvv`,
 DROP COLUMN `card_expiry`,
 DROP COLUMN `card_status`,
 DROP COLUMN `card_issued_at`;
+
+-- Add new profile columns to users table
+ALTER TABLE users
+ADD COLUMN IF NOT EXISTS date_of_birth DATE,
+ADD COLUMN IF NOT EXISTS gender ENUM('male', 'female'),
+ADD COLUMN IF NOT EXISTS phone_number VARCHAR(20),
+ADD COLUMN IF NOT EXISTS address TEXT,
+ADD COLUMN IF NOT EXISTS city VARCHAR(100),
+ADD COLUMN IF NOT EXISTS state VARCHAR(100),
+ADD COLUMN IF NOT EXISTS occupation VARCHAR(150),
+ADD COLUMN IF NOT EXISTS bio TEXT,
+ADD COLUMN IF NOT EXISTS user_image VARCHAR(255);
+
+-- Create uploads directory structure (do this manually)
+-- public/uploads/profiles/

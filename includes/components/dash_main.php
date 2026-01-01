@@ -2,7 +2,7 @@
     <header class="home-header flex-space">
         <div class="topbar-left">
             <h2>Hi,
-                <span><?php echo htmlspecialchars($user->username); ?></span>
+                <span><?= htmlspecialchars(ucfirst($user->username)); ?></span>
             </h2>
             <p>How are you today?</p>
         </div>

@@ -1,10 +1,17 @@
 <section class="nav-section section <?= $hide_profile; ?>" data-name="profile">
     <header class="profile-header">
-        <h2>My Profile</h2>
+        <h2>Profile</h2>
     </header>
+    <div class="profile-header-content">
+        <img src="<?= $user->user_image ? '../' . htmlspecialchars($user->user_image) : '../public/avatar.svg'; ?>" alt="Profile" class="profile-avatar">
+        <div class="profile-details">
+            <h3><?= htmlspecialchars(ucfirst($user->username ?? 'User')); ?></h3>
+            <p><?= htmlspecialchars($user->email ?? 'email@example.com'); ?></p>
+        </div>
+    </div>
     <div class="profile-container">
         <div class="profile-info">
-            <button class="profile-btn">
+            <button class="profile-btn" onclick="window.location.href='my_profile.php'">
                 <i class="ti ti-user"></i>
                 My profile
             </button>
