@@ -23,7 +23,7 @@ unset($_SESSION['old_input']);
         <div class="loader-container hide" id="loader">
             <div class="spinner"></div>
         </div>
-        <form action="app/handlers/process_register.php" method="post" id="register-form">
+        <form action="../app/handlers/process_register.php" method="post" id="register-form">
             <!-- Email input form -->
             <div id="email-form">
                 <i class="ti ti-chevron-left back" onclick="window.location.href='../index.php'"></i>
