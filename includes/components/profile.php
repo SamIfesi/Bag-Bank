@@ -23,9 +23,9 @@
                 <i class="ti ti-bell"></i>
                 Notification
             </button>
-            <button class="profile-btn" onclick="window.location.href='transactions.php'">
-                <i class="ti ti-receipt"></i>
-                Transaction History
+            <button class="profile-btn" onclick="window.location.href='live-chat.php'">
+                <i class="ti ti-bubble-text"></i>
+                Live Support
             </button>
             <button class="profile-btn">
                 <i class="ti ti-help-circle"></i>

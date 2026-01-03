@@ -1,0 +1,140 @@
+<?php
+// Disable HTML error output
+ini_set('display_errors', 0);
+error_reporting(0);
+
+session_start();
+
+// 1. Load Configurations
+require_once __DIR__ . "/../../config/functions/utilities.php";
+require_once __DIR__ . "/../../config/Auth.php";
+require_once __DIR__ . "/../../config/api/api_key.php";
+
+// Auth Check
+if (!isset($_SESSION['user'])) {
+    header('Content-Type: application/json');
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+    exit;
+}
+
+// JSON Header
+header('Content-Type: application/json');
+
+// User Data
+$user = Auth::user();
+$input = file_get_contents('php://input');
+$data = json_decode($input, true);
+$user_message = trim($data['message'] ?? '');
+
+if (empty($user_message)) {
+    echo json_encode(['success' => false, 'message' => 'Say something!']);
+    exit;
+}
+
+// System Prompt
+$balance_fmt = number_format($user->balance, 2);
+$context = "
+ROLE: You are 'Baggy', a helpful financial AI for D'Bag Bank.
+USER: {$user->name}, Balance: ₦{$balance_fmt}, Account: {$user->account_number}
+PERSONALITY: Warm, professional, helpful. Use Nigerian Naira (₦).
+MESSAGE: \"{$user_message}\"
+REPLY:
+";
+
+try {
+    // Call AI
+    $ai_response = callGeminiAPI($context);
+
+    if ($ai_response['success']) {
+        echo json_encode([
+            'success' => true,
+            'message' => $ai_response['message'],
+            'timestamp' => date('g:i A')
+        ]);
+    } else {
+        // Pass the specific error up
+        throw new Exception($ai_response['error']);
+    }
+} catch (Exception $e) {
+    // Log error for server admin
+    error_log("AI API Error: " . $e->getMessage());
+
+    // Fallback response for user
+    $fallback = getSmartFallback($user_message, $user);
+
+    // Send fallback + Log the error in the console message for debugging
+    // (Remove the 'debug_error' part when going live)
+    echo json_encode([
+        'success' => true,
+        'message' => $fallback,
+        'timestamp' => date('g:i A'),
+        'debug_error' => $e->getMessage()
+    ]);
+}
+exit;
+
+function callGeminiAPI($prompt)
+{
+    $api_key = trim(GEMINI_API_KEY);
+    
+    $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $api_key;
+
+    $body = [
+        'contents' => [
+            [
+                'parts' => [
+                    ['text' => $prompt]]]
+        ]
+    ];
+    $json_body = json_encode($body);
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+    'Content-Length: ' . strlen($json_body)
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_body);
+
+    // SSL Bypass for Localhost
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+    $response = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curl_error = curl_error($ch);
+    curl_close($ch);
+
+    if ($curl_error) {
+        return ['success' => false, 'error' => "Connection Error: $curl_error"];
+    }
+
+    $result = json_decode($response, true);
+
+    if ($http_code === 200 && isset($result['candidates'][0]['content']['parts'][0]['text'])) {
+        return [
+            'success' => true,
+            'message' => $result['candidates'][0]['content']['parts'][0]['text']
+        ];
+    }
+
+    // Capture the actual Google Error Message
+    $google_error_msg = $result['error']['message'] ?? 'Unknown Error';
+    return ['success' => false, 'error' => "API Error ($http_code): $google_error_msg"];
+}
+
+// ---------------------------------------------------------
+// 🛡️ SMART FALLBACK
+// ---------------------------------------------------------
+function getSmartFallback($msg, $user)
+{
+    $msg = strtolower($msg);
+    $bal = number_format($user->balance, 2);
+
+    if (strpos($msg, 'balance') !== false) return "Your balance is **₦{$bal}**.";
+    if (strpos($msg, 'transfer') !== false) return "Click **Transfer** on your dashboard to send money.";
+
+    return "I'm having a connection issue (Error 404), but I can still see your balance is **₦{$bal}**.";
+}

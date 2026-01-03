@@ -1,0 +1,4 @@
+.env
+/config/api/api_key.php
+/vendor/
+.DS_Store
