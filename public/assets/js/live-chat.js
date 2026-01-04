@@ -10,7 +10,18 @@ const elements = {
   typingIndicator: id("typingIndicator"),
   suggestedActions: id("suggestedActions"),
   clearChatBtn: id("clearChatBtn"),
+  menuBtn: id("menuBtn"),
+  quickMenu: id("quickMenu"),
+  menuOverlay: id("menuOverlay"),
 };
+
+elements.menuBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  elements.quickMenu.classList.toggle("hide");
+});
+elements.menuOverlay.addEventListener("click", () => {
+  elements.quickMenu.classList.add("hide");
+});
 
 // 1. Auto-resize textarea
 elements.messageInput.addEventListener("input", function () {
@@ -40,7 +51,6 @@ elements.chatForm.addEventListener("submit", async function (e) {
   // Add User Message
   addMessage("user", message, getCurrentTime());
 
-  // Reset Input
   elements.messageInput.value = "";
   elements.messageInput.style.height = "auto";
   elements.charCounter.textContent = "0/1000";
@@ -50,7 +60,6 @@ elements.chatForm.addEventListener("submit", async function (e) {
   if (elements.suggestedActions)
     elements.suggestedActions.classList.add("hide");
 
-  // Show typing indicator inside chat messages
   showTypingIndicator();
   scrollToBottom();
 
@@ -94,22 +103,16 @@ elements.chatForm.addEventListener("submit", async function (e) {
 });
 
 // 4. UI Helper Functions
-function addMessage(type, text, time) {
+function addMessage(type, text, time, skipSave = false) {
   const group = document.createElement("div");
   group.className = `message-group ${type}`;
 
   // Avatar for bot
   const avatar =
     type === "bot"
-      ? `<div class="message-avatar"><i class="ti ti-robot"></i></div>`
+      ? `<div class="message-avatar"><i class="ti ti-sparkles"></i></div>`
       : "";
-
-  // Format text (convert newlines to paragraphs)
-  const formattedText = text
-    .split("\n")
-    .filter((t) => t.trim())
-    .map((t) => `<p>${t}</p>`)
-    .join("");
+  const formattedText = formatText(text);
 
   group.innerHTML = `
     ${type === "bot" ? avatar : ""}
@@ -124,8 +127,9 @@ function addMessage(type, text, time) {
   elements.chatMessages.appendChild(group);
   scrollToBottom();
 
-  // Save to LocalStorage
-  saveChat(type, text, time);
+  if (!skipSave) {
+    saveChat(type, text, time);
+  }
 }
 
 function scrollToBottom() {
@@ -135,7 +139,6 @@ function scrollToBottom() {
 }
 
 function showTypingIndicator() {
-  // Remove existing typing indicator if any
   removeTypingIndicator();
 
   const group = document.createElement("div");
@@ -170,27 +173,32 @@ function getCurrentTime() {
   });
 }
 
-// 5. Local Storage (History)
 function saveChat(type, text, time) {
-  const history = JSON.parse(localStorage.getItem("chatHistory") || "[]");
+  const history = JSON.parse(sessionStorage.getItem("chatHistory") || "[]");
   history.push({ type, text, time });
-  localStorage.setItem("chatHistory", JSON.stringify(history));
+  sessionStorage.setItem("chatHistory", JSON.stringify(history));
 }
 
 function loadChat() {
-  const history = JSON.parse(localStorage.getItem("chatHistory") || "[]");
-  history.forEach((msg) => addMessage(msg.type, msg.text, msg.time));
+  const history = JSON.parse(sessionStorage.getItem("chatHistory") || "[]");
+  history.forEach((msg) => addMessage(msg.type, msg.text, msg.time, true));
   if (history.length > 0 && elements.suggestedActions)
     elements.suggestedActions.classList.add("hide");
 }
 
 elements.clearChatBtn.addEventListener("click", () => {
   if (confirm("Clear conversation history?")) {
-    localStorage.removeItem("chatHistory");
+    sessionStorage.removeItem("chatHistory");
     location.reload();
   }
 });
 
-// Load history on init
-loadChat(); // Uncomment if you want persistence
+function formatText(text) {
+  let formatted = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+  formatted = formatted.replace(/\*(.*?)\*/g, "<i>$1</i>");
+  formatted = formatted.replace(/\n/g, "<br>");
+  return formatted;
+}
+
+loadChat();
 scrollToBottom();

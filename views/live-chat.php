@@ -5,8 +5,8 @@ require_once  __DIR__ . "/../config/Auth.php";
 require_once __DIR__ . "/../includes/check_auth.php";
 
 if (!is_logged_in()) {
-  redirect_to("login.php");
-  exit();
+    redirect_to("login.php");
+    exit();
 }
 $user = Auth::user();
 ?>
@@ -31,7 +31,7 @@ $user = Auth::user();
             <div class="agent-info">
                 <div class="agent-avatar">
                     <div class="avatar-img">
-                        <i class="ti ti-robot"></i>
+                        <i class="ti ti-sparkles"></i>
                     </div>
                     <span class="status-indicator online"></span>
                 </div>
@@ -56,7 +56,7 @@ $user = Auth::user();
         <!-- Welcome Message -->
         <div class="message-group bot">
             <div class="message-avatar">
-                <i class="ti ti-robot"></i>
+                <i class="ti ti-sparkles"></i>
             </div>
             <div class="message-wrapper">
                 <div class="message bot">
@@ -92,7 +92,7 @@ $user = Auth::user();
         <!-- Typing Indicator (hidden by default) -->
         <div class="typing-indicator hide" id="typingIndicator">
             <div class="message-avatar">
-                <i class="ti ti-robot"></i>
+                <i class="ti ti-sparkles"></i>
             </div>
             <div class="typing-dots">
                 <span></span>
@@ -109,9 +109,9 @@ $user = Auth::user();
                 <i class="ti ti-paperclip"></i>
             </button>
             <div class="input-wrapper">
-                <textarea 
-                    id="messageInput" 
-                    placeholder="Type your message..." 
+                <textarea
+                    id="messageInput"
+                    placeholder="Type your message..."
                     rows="1"
                     maxlength="1000"></textarea>
                 <span class="char-counter" id="charCounter">0/1000</span>
