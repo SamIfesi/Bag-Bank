@@ -139,7 +139,7 @@ $user = Auth::user();
                 <i class="ti ti-help"></i>
                 Help & FAQs
             </button>
-            <button class="menu-item danger" data-action="clear">
+            <button class="menu-item danger" data-action="clear-chat">
                 <i class="ti ti-trash"></i>
                 Clear All Messages
             </button>

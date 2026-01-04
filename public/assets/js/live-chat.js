@@ -13,7 +13,17 @@ const elements = {
   menuBtn: id("menuBtn"),
   quickMenu: id("quickMenu"),
   menuOverlay: id("menuOverlay"),
+  menuItems: qa(".menu-item"),
 };
+
+elements.menuItems.forEach((item) => {
+  item.addEventListener("click", () => {
+    const action = item.getAttribute("data-action");
+    if (action === "clear-chat") {
+      elements.clearChatBtn.click();
+    }
+  });
+});
 
 elements.menuBtn.addEventListener("click", (e) => {
   e.stopPropagation();
