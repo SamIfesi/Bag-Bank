@@ -22,6 +22,37 @@ $user = Auth::user();
 </head>
 
 <body class="chat-body">
+    <!-- Notification Banner -->
+    <div class="notification-banner hide" id="notificationBanner">
+        <div class="banner-content">
+            <span class="banner-icon"><i class="ti ti-info-circle"></i></span>
+            <span class="banner-message" id="bannerMessage">Notification message here</span>
+            <button class="banner-close" id="bannerClose">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="confirmation-modal hide" id="confirmationModal">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Confirm Action</h3>
+                <button class="modal-close" id="modalClose">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage">Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" id="modalCancel">Cancel</button>
+                <button class="modal-btn confirm" id="modalConfirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Chat Header -->
     <header class="chat-header">
         <div class="header-left">

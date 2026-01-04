@@ -14,6 +14,16 @@ const elements = {
   quickMenu: id("quickMenu"),
   menuOverlay: id("menuOverlay"),
   menuItems: qa(".menu-item"),
+  notificationBanner: id("notificationBanner"),
+  bannerMessage: id("bannerMessage"),
+  bannerClose: id("bannerClose"),
+  confirmationModal: id("confirmationModal"),
+  modalOverlay: id("modalOverlay"),
+  modalTitle: id("modalTitle"),
+  modalMessage: id("modalMessage"),
+  modalConfirm: id("modalConfirm"),
+  modalCancel: id("modalCancel"),
+  modalClose: id("modalClose"),
 };
 
 elements.menuItems.forEach((item) => {
@@ -197,10 +207,15 @@ function loadChat() {
 }
 
 elements.clearChatBtn.addEventListener("click", () => {
-  if (confirm("Clear conversation history?")) {
-    sessionStorage.removeItem("chatHistory");
-    location.reload();
-  }
+  showConfirmationModal(
+    "Clear Chat?",
+    "All messages will be deleted. This action cannot be undone.",
+    () => {
+      sessionStorage.removeItem("chatHistory");
+      showBanner("Chat cleared successfully", "success", 3000);
+      location.reload();
+    }
+  );
 });
 
 function formatText(text) {
@@ -209,6 +224,49 @@ function formatText(text) {
   formatted = formatted.replace(/\n/g, "<br>");
   return formatted;
 }
+
+// ===== NOTIFICATION BANNER FUNCTIONS =====
+function showBanner(message, type = "success", duration = 5000) {
+  elements.bannerMessage.textContent = message;
+  elements.notificationBanner.classList.remove("hide");
+
+  // Auto-hide after duration
+  if (duration > 0) {
+    setTimeout(() => hideBanner(), duration);
+  }
+}
+
+function hideBanner() {
+  elements.notificationBanner.classList.add("hide");
+}
+
+elements.bannerClose.addEventListener("click", hideBanner);
+
+// ===== CONFIRMATION MODAL FUNCTIONS =====
+let confirmCallback = null;
+
+function showConfirmationModal(title, message, onConfirm) {
+  elements.modalTitle.textContent = title;
+  elements.modalMessage.textContent = message;
+  confirmCallback = onConfirm;
+  elements.confirmationModal.classList.remove("hide");
+}
+
+function hideConfirmationModal() {
+  elements.confirmationModal.classList.add("hide");
+  confirmCallback = null;
+}
+
+elements.modalConfirm.addEventListener("click", () => {
+  if (confirmCallback) {
+    confirmCallback();
+  }
+  hideConfirmationModal();
+});
+
+elements.modalCancel.addEventListener("click", hideConfirmationModal);
+elements.modalClose.addEventListener("click", hideConfirmationModal);
+elements.modalOverlay.addEventListener("click", hideConfirmationModal);
 
 loadChat();
 scrollToBottom();

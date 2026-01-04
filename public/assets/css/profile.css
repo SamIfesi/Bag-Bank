@@ -410,6 +410,7 @@ body.profile-body {
 .hide {
   display: none;
 }
+
 /* Error Banner */
 .error-banner {
   position: fixed;
