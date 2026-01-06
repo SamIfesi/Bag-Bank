@@ -19,7 +19,7 @@
                 <i class="ti ti-settings"></i>
                 Settings
             </button>
-            <button class="profile-btn">
+            <button class="profile-btn" onclick="window.location.href='notification.php'">
                 <i class="ti ti-bell"></i>
                 Notification
             </button>
