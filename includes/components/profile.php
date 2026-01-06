@@ -27,7 +27,7 @@
                 <i class="ti ti-bubble-text"></i>
                 Live Support
             </button>
-            <button class="profile-btn">
+            <button class="profile-btn" onclick="window.location.href='faq.php'">
                 <i class="ti ti-help-circle"></i>
                 FAQ
             </button>

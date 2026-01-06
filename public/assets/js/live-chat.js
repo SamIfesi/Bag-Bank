@@ -166,7 +166,7 @@ function showTypingIndicator() {
   group.id = "typingIndicatorMessage";
 
   group.innerHTML = `
-    <div class="message-avatar"><i class="ti ti-robot"></i></div>
+    <div class="message-avatar"><i class="ti ti-sparkles"></i></div>
     <div class="typing-dots">
         <span></span>
         <span></span>
