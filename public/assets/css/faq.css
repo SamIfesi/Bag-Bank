@@ -1,0 +1,223 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Stack+Sans+Text:wght@200..700&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css");
+:root {
+    --primary-color: #5200a3; /* Your brand purple */
+    --primary-dark: #3a0075;
+    --text-dark: #1e1e2d;
+    --text-gray: #6c757d;
+    --bg-light: #f8f9fa;
+    --white: #ffffff;
+    --border-color: #e9ecef;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+body {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+}
+
+/* HEADER */
+.help-header {
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 1.5rem 1.2rem 3rem 1.2rem; /* Extra bottom padding for search bar overlap */
+    border-bottom-left-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+    position: relative;
+}
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+.header-top h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+.back-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: var(--white);
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+.placeholder {
+    width: 2.2rem;
+}
+
+/* Search Bar */
+.search-container {
+    background: var(--white);
+    padding: 0.8rem 1rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    position: absolute;
+    bottom: -1.5rem; /* Half overlapping header */
+    left: 1.2rem;
+    right: 1.2rem;
+}
+@media (min-width: 768px) {
+    .search-container {
+        max-width: 36rem;
+        padding: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+.search-container i {
+    color: var(--text-gray);
+    font-size: 1.2rem;
+}
+.search-container input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+}
+
+/* MAIN CONTENT */
+.help-content {
+    padding: 3rem 1.2rem 2rem 1.2rem;
+    max-width: 600px; /* Constrain width on desktop */
+    margin: 0 auto;
+}
+
+/* Support Cards */
+.support-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.support-card {
+    background: var(--white);
+    padding: 1rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    transition: transform 0.2s ease;
+}
+.support-card:active {
+    transform: scale(0.98);
+}
+.support-card.highlight {
+    background: linear-gradient(135deg, #fdfbfd 0%, #fff 100%);
+    border: 1px solid rgba(82, 0, 163, 0.1);
+}
+.icon-box {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: rgba(82, 0, 163, 0.1);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+.icon-box.blue {
+    background: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+}
+.card-text {
+    flex: 1;
+}
+.card-text h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+.card-text p {
+    font-size: 0.8rem;
+    color: var(--text-gray);
+}
+
+.support-card > i {
+    color: #ccc;
+}
+
+/* FAQ Section */
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+.faq-category {
+    margin-bottom: 1.5rem;
+}
+.category-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-gray);
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+}
+
+/* Accordion */
+.accordion-item {
+    background: var(--white);
+    border-radius: 0.8rem;
+    margin-bottom: 0.6rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+.accordion-header {
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    cursor: pointer;
+}
+.accordion-header i {
+    color: var(--primary-color);
+    transition: transform 0.3s ease;
+}
+.accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: #fafafa;
+}
+.accordion-body p {
+    padding: 1rem;
+    padding-top: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #555;
+}
+/* Active State */
+.accordion-item.active .accordion-header i {
+    transform: rotate(45deg); /* Turn + into x */
+}
+.accordion-item.active .accordion-body {
+    max-height: 200px; /* Arbitrary height for expansion */
+}
