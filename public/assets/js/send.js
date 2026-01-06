@@ -341,6 +341,7 @@ function navigateBack() {
         pay.innerText = "Proceed";
         model.classList.remove("active");
         container.classList.remove("active");
+        loader.classList.add("hide");
         element.errors.amount.innerText = result.message || "Transfer failed.";
         element.errors.amount.style.display = "block";
       }
