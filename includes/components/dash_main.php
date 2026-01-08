@@ -12,7 +12,7 @@
                 <i class="ti ti-gift"></i>
                 <span>Reward</span>
             </button>
-            <button class="notifications">
+            <button class="notifications" onclick="window.location.href='notification.php'">
                 <i class="ti ti-bell"></i>
             </button>
         </div>
