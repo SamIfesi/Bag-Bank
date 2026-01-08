@@ -50,7 +50,7 @@
             <i class="ti ti-layout-sidebar-left-collapse" id="collapse-icon"></i>
             <span>Collapse</span>
         </button>
-        <a href="logout.php" class="sidebar-item logout">
+        <a href="../logout.php" class="sidebar-item logout">
             <i class="ti ti-logout"></i>
             <span>Logout</span>
         </a>
