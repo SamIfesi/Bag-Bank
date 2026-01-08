@@ -103,7 +103,7 @@ elements.amountInput.addEventListener("input", () => {
 
 // Back button
 elements.backBtn.addEventListener("click", () => {
-  window.location.href = "dashboard. php";
+  window.location.href = "dashboard.php";
 });
 
 // Form submission

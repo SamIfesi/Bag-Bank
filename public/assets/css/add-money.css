@@ -241,7 +241,7 @@ body.add-money-body {
   background: var(--bg-surface-light);
   border: 0.125rem solid #e0e0e0;
   border-radius: 0.75rem;
-  padding: .5rem rem 0.75rem;
+  padding: .5rem 0.75rem;
   text-align: center;
   transition: all 0.3s ease;
   display: flex;

@@ -6,7 +6,7 @@ session_start();
 require_once __DIR__ . "/../../app/model/model.php";
 require_once __DIR__ . "/../../config/functions/utilities.php";
 require_once __DIR__ . "/../../config/Auth.php";
-require_once __DIR__ . "/../check_auth.php";
+require_once __DIR__ . "/../../includes/check_auth.php";
 
 // Set JSON header
 header('Content-Type: application/json');
@@ -101,6 +101,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             'user_id' => $user->id,
             'type' => 'credit',
             'amount' => $amount,
+            'recipient_name' => null,     
+            'recipient_account' => null,
             'sender_account' => $payment_method,
             'sender_name' => ucfirst($payment_method) . ' Payment',
             'bank_name' => "D'bag Bank",
@@ -108,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             'description' => $description,
             'status' => 'success',
             'reference' => $transaction_ref,
-            'created_at' => date('Y-m-d H: i:s'),
+            'created_at' => date('Y-m-d H:i:s'),
         ];
 
         $createTransaction = Model::create('transactions', $transactionData);
