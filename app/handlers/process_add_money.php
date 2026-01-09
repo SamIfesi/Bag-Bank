@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Create transaction record
         $transactionData = [
             'user_id' => $user->id,
-            'type' => 'credit',
+            'type' => 'top_up',
             'amount' => $amount,
             'recipient_name' => null,     
             'recipient_account' => null,

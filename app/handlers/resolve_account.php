@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     if ($bank_code !== my_bank) {
-        echo json_encode(['success' => false, 'message' => 'Amount not found in selected bank']);
+        echo json_encode(['success' => false, 'message' => 'Account not found in selected bank']);
         exit;
     }
 

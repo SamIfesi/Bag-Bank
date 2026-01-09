@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             'amount' => $amount,
             'recipient_account' => $recipient_acc,
             'recipient_name' => $recipient_name,
-            'bank_name' => 'External Bank', // or get from banks table
+            'bank_name' => $bank_code, 
             'bank_code' => $bank_code,
             'description' => "Transfer to $recipient_name",
             'status' => 'success',
