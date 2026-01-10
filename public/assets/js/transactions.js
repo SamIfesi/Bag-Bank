@@ -1,12 +1,13 @@
 function filterTransactions(filterType) {
   const transactionsList = document.getElementById("transactionsList");
+  if (!transactionsList) return;
+  
   const items = transactionsList.querySelectorAll(".trans-item");
-  const emptyState = document.getElementById("emptyState");
+  const emptyState = document.getElementById("emptyTrans");
   let visibleCount = 0;
 
   items.forEach((item) => {
     const type = item.getAttribute("data-type");
-    const description = item.getAttribute("data-description");
     let shouldShow = false;
 
     if (filterType === "all") {
@@ -15,7 +16,7 @@ function filterTransactions(filterType) {
       shouldShow = true;
     } else if (filterType === "debit" && type === "debit") {
       shouldShow = true;
-    } else if (filterType === "topup" && description === "Top Up") {
+    } else if (filterType === "top_up" && type === "top_up") {
       shouldShow = true;
     }
 
@@ -38,9 +39,7 @@ function filterTransactions(filterType) {
 
 function updateFilterUI(filterType) {
   // Update desktop buttons
-  const desktopButtons = document.querySelectorAll(
-    ".filter-buttons .filter-btn"
-  );
+  const desktopButtons = document.querySelectorAll(".filter-btn");
   const noTransactionBtn = document.getElementById("noTransaction");
 
   desktopButtons.forEach((btn) => {
@@ -52,7 +51,7 @@ function updateFilterUI(filterType) {
 
   // Only update button text if the button exists
   if (noTransactionBtn) {
-    if (filterType === "topup") {
+    if (filterType === "top_up") {
       noTransactionBtn.textContent = "add money";
       noTransactionBtn.addEventListener("click", () => {
         window.location.href = "add_money.php";

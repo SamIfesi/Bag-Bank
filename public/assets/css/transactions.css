@@ -109,6 +109,10 @@ body.transactions-body {
   background: rgba(198, 40, 40, 0.1);
   color: var(--color-danger);
 }
+.trans-icon.top_up {
+  background: rgba(255, 193, 7, 0.15);
+  color: #ffc107;
+}
 .trans-icon i {
   font-size: 1.5rem;
 }
@@ -127,7 +131,7 @@ body.transactions-body {
 }
 .trans-date {
   color: var(--text-secondary);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 .trans-amount-wrapper {
   text-align: right;
@@ -186,6 +190,9 @@ body.transactions-body {
   background: var(--primary-purple);
   color: var(--text-white);
   border-color: var(--primary-purple);
+}
+.hide {
+  display: none;
 }
 /* Empty State */
 .empty-state {
