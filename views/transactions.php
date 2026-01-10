@@ -38,10 +38,10 @@ $all_transactions = $stmt->fetchAll();
 
     <main class="trans-main">
         <div class="filter-buttons">
-            <button class="filter-btn active" data-filter="all" onclick="filterTransactions('all')">All</button>
-            <button class="filter-btn" data-filter="credit" onclick="filterTransactions('credit')">Credit</button>
-            <button class="filter-btn" data-filter="debit" onclick="filterTransactions('debit')">Debit</button>
-            <button class="filter-btn" data-filter="top_up" onclick="filterTransactions('top_up')">Top Up</button>
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="credit">Credit</button>
+            <button class="filter-btn" data-filter="debit">Debit</button>
+            <button class="filter-btn" data-filter="top_up">Top Up</button>
         </div>
 
         <?php if (count($all_transactions) > 0): ?>
@@ -67,7 +67,7 @@ $all_transactions = $stmt->fetchAll();
                     </li>
                 <?php endforeach; ?>
             </ul>
-            <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-state" id="emptyTrans" style="display: none;">
                 <i class="ti ti-receipt-off"></i>
                 <h3>No Transactions Found</h3>
                 <p>No transactions match your selected filter</p>
@@ -78,7 +78,7 @@ $all_transactions = $stmt->fetchAll();
                 <i class="ti ti-receipt-off"></i>
                 <h3>No Transactions Yet</h3>
                 <p>Your transaction history will appear here</p>
-                <button class="btn-send-money" onclick="window.location.href='send.php'">Send Money</button>
+                <button class="btn-send-money" id="noTransactionYet">Send Money</button>
             </div>
         <?php endif; ?>
     </main>

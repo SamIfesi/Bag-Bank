@@ -194,6 +194,9 @@ body.transactions-body {
 .hide {
   display: none;
 }
+.trans-item.hidden {
+  display: none !important;
+}
 /* Empty State */
 .empty-state {
   text-align: center;
