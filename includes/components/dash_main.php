@@ -66,27 +66,34 @@
             <a href="transactions.php">See All</a>
         </header>
         <?php if (count($transactions) > 0): ?>
-            <ul class="transaction-list">
-                <?php foreach ($transactions as $trans): ?>
-                    <li class="transaction flex-" onclick="window.location.href='transfer_success.php?ref=<?= $trans->reference ?>'">
+            <ul class="trans-list" id="transactionsList">
+                <?php foreach ($all_transactions as $trans): ?>
+                    <li class="trans-item" data-type="<?= $trans->type ?>" data-description="<?= htmlspecialchars($trans->description) ?>" onclick="window.location.href='transfer_success.php?ref=<?= $trans->reference ?>'">
                         <div class="trans-icon <?= $trans->type ?>">
-                            <i class="ti <?= $trans->type === 'credit' ? 'ti-arrow-down-left' : 'ti-arrow-up-right' ?>"></i>
+                            <i class="ti <?= $trans->type === 'credit' ? 'ti-arrow-down-left' : ($trans->type === 'top_up' ? 'ti-credit-card' : 'ti-arrow-up-right') ?>"></i>
                         </div>
-                        <div class="trans-info">
-                            <span class="trans-name bold"><?= ucfirst($trans->type) ?></span>
-                            <span class="trans-time"><?= date('M d, g:i A', strtotime($trans->created_at)) ?></span>
+                        <div class="trans-details">
+                            <h4 class="trans-title">
+                                <?= $trans->type === 'credit' ? 'Received' : ($trans->type === 'top_up' ? 'Top Up' : 'Transfer') ?>
+                            </h4>
+                            <p class="trans-date"><?= date('M d, Y - g:i A', strtotime($trans->created_at)) ?></p>
                         </div>
-                        <div class="amount">
-                            <span class="trans-amount bold <?= $trans->type === 'credit' ? 'credit' : 'debit' ?>">
-                                <?= $trans->type === 'credit' ? '+' : '-' ?>₦<?= number_format($trans->amount, 2) ?>
+                        <div class="trans-amount-wrapper">
+                            <span class="trans-amount <?= $trans->type ?>">
+                                <?= $trans->type === 'credit' ?  '+' : '-' ?>₦<?= number_format($trans->amount, 2) ?>
                             </span>
-                            <span class="trans-type <?= $trans->type ?>"><?= $trans->type === 'credit' ? 'Received' : 'Sent' ?></span>
+                            <span class="trans-status <?= $trans->status ?>"><?= ucfirst($trans->status) ?></span>
                         </div>
                     </li>
                 <?php endforeach; ?>
             </ul>
         <?php else: ?>
-            <p class="no-transactions">No transactions yet</p>
+            <div class="empty-state">
+                <i class="ti ti-receipt-off"></i>
+                <h3>No Transactions Yet</h3>
+                <p>Your transaction history will appear here</p>
+                <button class="btn-send-money" onclick="window.location.href='send.php'">Send Money</button>
+            </div>
         <?php endif; ?>
     </section>
 </section>

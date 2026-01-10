@@ -58,5 +58,6 @@
 </aside>
 <script src="../public/assets/js/dash.js"></script>
 </body>
+<script src="../public/assets/js/transactions.js"></script>
 
 </html>
