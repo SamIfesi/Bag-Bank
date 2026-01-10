@@ -50,11 +50,18 @@
   background: rgba(198, 40, 40, 0.1);
   color: var(--color-danger);
 }
+.trans-icon.top_up {
+  background: rgba(81, 0, 163, 0.1);
+  color: var(--primary-purple);
+}
 .trans-icon i {
   font-size: 1.5rem;
 }
 .trans-details {
   flex: 1;
+  h4{
+    margin-bottom: .5rem;
+  }
 }
 .trans-title {
   color: var(--text-primary);
@@ -64,11 +71,10 @@
 .trans-desc {
   color: var(--text-secondary);
   font-size: 0.8rem;
-  margin-bottom: 4px;
 }
 .trans-date {
   color: var(--text-secondary);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 .trans-amount-wrapper {
   text-align: right;
@@ -85,6 +91,9 @@
 }
 .trans-amount.debit {
   color: var(--color-danger);
+}
+.trans-amount.top_up {
+  color: var(--color-success);
 }
 .trans-status {
   font-size: 12px;
@@ -131,7 +140,7 @@
 /* Empty State */
 .empty-state {
   text-align: center;
-  padding: 3.75rem 1.2rem;
+  padding: 3rem 1.2rem;
 }
 .empty-state i {
   font-size: 80px;
@@ -210,7 +219,14 @@
     }
   }
 }
+/* Optimized Filtering Logic */
+[data-active-filter="all"] .trans-item { display: flex !important; }
 
+[data-active-filter="credit"] .trans-item:not([data-type="credit"]),
+[data-active-filter="debit"] .trans-item:not([data-type="debit"]),
+[data-active-filter="top_up"] .trans-item:not([data-type="top_up"]) {
+    display: none !important;
+}
 @media (max-width: 38rem) {
   .trans-item {
     padding: 0.8rem;
@@ -261,4 +277,7 @@
   font-size: 0.95rem;
   color: var(--text-secondary);
   margin: 0;
+}
+.trans-item.hidden{
+  display: none;
 }
