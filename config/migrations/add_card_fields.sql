@@ -33,3 +33,7 @@ ADD COLUMN IF NOT EXISTS user_image VARCHAR(255);
 
 -- Create uploads directory structure (do this manually)
 -- public/uploads/profiles/
+
+-- Modify transactions table to include 'top_up' type
+ALTER TABLE `transactions` 
+MODIFY COLUMN `type` ENUM('credit', 'debit', 'top_up') NOT NULL;
