@@ -535,7 +535,8 @@
   .sidebar {
     display: flex;
     position: fixed;
-    left: calc(50% - 30rem);
+    left: 0;
+    /* left: calc(50% - 30rem); */
     top: 0;
     height: 100vh;
     width: 16rem;
@@ -699,7 +700,6 @@
   }
   .home-body {
     max-width: 60rem;
-    margin: 0 auto;
     padding: 2rem;
     padding-left: calc(16rem + 2rem);
     min-height: 100vh;
