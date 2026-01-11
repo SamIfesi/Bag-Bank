@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (count($errors) > 0) {
         $_SESSION['errors'] = $errors;
         $_SESSION['old_input'] = $_POST;
-        header("Location: ../../register.php");
+        header("Location: ../../views/register.php");
         exit();
     }
 
@@ -75,16 +75,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user'] = $user->id;
             unset($_SESSION['errors']);
             unset($_SESSION['old_input']);
-            header("Location: ../../dashboard.php");
+            header("Location: ../../views/dashboard.php");
             exit();
         } else {
             $_SESSION['errors'] = ["User created but couldn't retrieve user data."];
-            header("Location: ../../register.php");
+            header("Location: ../../views/register.php");
             exit();
         }
     } else {
         $_SESSION['errors'] = ["An error occurred while creating the account. Please try again."];
-        header("Location: ../views/register.php");
+        header("Location: ../../views/register.php");
         exit();
     }
 }
