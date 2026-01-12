@@ -35,9 +35,6 @@ $destPDO->exec("SET FOREIGN_KEY_CHECKS=0");
 
 $tables = $sourcePDO->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
 foreach ($tables as $table) {
-
-    // echo "Migrating table: $table\n";
-
     // 1. Get CREATE TABLE statement
     $createTableSQL = $sourcePDO
         ->query("SHOW CREATE TABLE `$table`")
@@ -74,38 +71,41 @@ foreach ($tables as $table) {
     $destPDO->commit();
 }
 $destPDO->exec("SET FOREIGN_KEY_CHECKS=1");
-// echo "Data migration completed successfully.\n";
 
 class Database
 {
-    private $host = "localhost";
-    private $user = "samrose";
-    private $password = "password";
-    private $database = "mob_bank";
-    private $charset = "utf8mb4";
-    protected $pdo;
-    private $error;
+    protected PDO $pdo;
+
+    private string $host = "switchyard.proxy.rlwy.net";
+    private string $user = "root";
+    private string $password = "xMrXpkbEskhUgfagrbAQJBgOdUmucUce";
+    private string $database = "railway";
+    private int $port = 28712;
+    private string $charset = "utf8mb4";
 
     public function __construct()
     {
-        $dns = "mysql:host=$this->host;
-        dbname=$this->database;
-        charset=$this->charset";
+        $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->database};charset={$this->charset}";
+
         try {
-            $this->pdo = new PDO($dns, $this->user, $this->password);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+            $this->pdo = new PDO(
+                $dsn,
+                $this->user,
+                $this->password,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                ]
+            );
         } catch (PDOException $e) {
-            header("Content-Type: application/json");
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Database connection failed.' . $e->getMessage()
-            ]);
-            exit;
+            throw new RuntimeException(
+                "Database connection failed: " . $e->getMessage()
+            );
         }
     }
-    public function getPdo()
+
+    public function getPdo(): PDO
     {
         return $this->pdo;
     }
