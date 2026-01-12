@@ -10,7 +10,7 @@ class Database
         $port = $_ENV['DB_PORT'] ?? 28712;
         $db   = $_ENV['DB_NAME'] ?? 'railway';
         $user = $_ENV['DB_USER'] ?? 'root';
-        $pass = $_ENV['DB_PASS'] ?? 'YOUR_PASSWORD';
+        $pass = $_ENV['DB_PASS'] ?? 'xMrXpkbEskhUgfagrbAQJBgOdUmucUce';
 
         $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
 
