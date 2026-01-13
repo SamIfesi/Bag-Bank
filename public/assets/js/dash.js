@@ -201,7 +201,7 @@ const initCardFunctionality = () => {
 
   if (!applyBtn || !loading || !msg || !icon || !messageText) return;
   applyBtn.addEventListener("click", async () => {
-    const url = "app/handlers/apply_card.php";
+    const url = "../app/handlers/apply_card.php";
     noCardSection.classList.add("hide");
     loading.classList.remove("hide");
     msg.classList.remove("hidden");
