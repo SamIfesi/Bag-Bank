@@ -105,15 +105,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $upload_path = $upload_dir .  $new_filename;
 
             // Move uploaded file
+            // ... inside the file upload check ...
             if (move_uploaded_file($file_tmp, $upload_path)) {
-                // Delete old image if exists
-                if (! empty($user->user_image) && file_exists(__DIR__ . '/../../' . $user->user_image)) {
-                    unlink(__DIR__ . '/../../' . $user->user_image);
-                }
-
+                // ... delete old image logic ...
                 $updateData['user_image'] = 'public/uploads/' . $new_filename;
             } else {
-                $errors[] = "Failed to upload image";
+                // Do NOT echo the error directly if you plan to redirect later
+                $errors[] = "Failed to upload image (Permission Denied or Folder missing)";
+                error_log("Upload failed: " . print_r(error_get_last(), true)); // Log it instead
             }
         }
     }
