@@ -425,4 +425,3 @@ document.addEventListener("DOMContentLoaded", () => {
   drag();
   copy();
 });
-r
