@@ -27,6 +27,45 @@ class Database
                 PDO::ATTR_EMULATE_PREPARES => false,
             ]
         );
+
+        $this->ensureSchema($db);
+    }
+
+    private function ensureSchema(string $dbName): void
+    {
+        $autoImport = getenv('AUTO_SCHEMA_IMPORT') ?: '0';
+        if ($autoImport !== '1') {
+            return;
+        }
+
+        if ($this->tableExists($dbName, 'users')) {
+            return;
+        }
+
+        $schemaPath = __DIR__ . '/../../schema.sql';
+        if (!file_exists($schemaPath)) {
+            return;
+        }
+
+        $sql = file_get_contents($schemaPath);
+        if ($sql === false) {
+            return;
+        }
+
+        $this->pdo->exec($sql);
+    }
+
+    private function tableExists(string $dbName, string $tableName): bool
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT 1 FROM information_schema.tables WHERE table_schema = :db AND table_name = :table LIMIT 1'
+        );
+        $stmt->execute([
+            ':db' => $dbName,
+            ':table' => $tableName,
+        ]);
+
+        return (bool) $stmt->fetchColumn();
     }
 
     public function getPdo(): PDO
