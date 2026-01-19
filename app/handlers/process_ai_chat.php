@@ -1,9 +1,15 @@
 <?php
-// Disable HTML error output
-ini_set('display_errors', 0);
-error_reporting(0);
+// Disable HTML error output - TEMPORARILY ENABLED FOR DEBUGGING
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 session_start();
+
+// Handle Preflight OPTIONS request (if CORS is an issue, though same-origin usually fine)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header("HTTP/1.1 200 OK");
+    exit;
+}
 
 // 1. Load Configurations
 require_once __DIR__ . "/../../config/functions/utilities.php";
