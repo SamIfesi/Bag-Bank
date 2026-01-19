@@ -9,4 +9,4 @@ nixPkgs = [
 ]
 
 [deploy]
-startCommand = "php -S 0.0.0.0:$PORT"
+startCommand = "bash -lc 'php -S 0.0.0.0:$PORT'"
