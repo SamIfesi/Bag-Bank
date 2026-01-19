@@ -120,7 +120,7 @@ unset($_SESSION['old_input']);
 
                 <button type="submit" class="btn-submit" id="registerUser">Register</button>
                 <p class="alt-login">
-                    Already have an account? <a href="ogin.php">Login here</a>
+                    Already have an account? <a href="login.php">Login here</a>
                 </p>
             </div>
         </form>
