@@ -27,7 +27,7 @@ try {
     if (!$user) {
         throw new Exception("User not found or Database Error");
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     echo json_encode(['success' => false, 'message' => 'System Error: ' . $e->getMessage()]);
     exit;
 }
@@ -69,7 +69,7 @@ REPLY:
         // Pass the specific error up
         throw new Exception($ai_response['error']);
     }
-} catch (Exception $e) {
+} catch (Throwable $e) {
     // Log error for server admin
     error_log("AI API/System Error: " . $e->getMessage());
 
@@ -96,7 +96,7 @@ function callGeminiAPI($prompt)
     }
 
     // Use gemini-1.5-flash as it is more stable/confirmed working in tests
-    $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $api_key;
+    $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . $api_key;
 
     $body = [
         'contents' => [
