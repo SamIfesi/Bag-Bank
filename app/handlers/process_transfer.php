@@ -97,6 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         $transaction_ref = 'TXN' . time() . rand(1000, 9999);
+        $debit_ref = $transaction_ref . '_D';
 
         $debitData = [
             'user_id' => $sender->id,
@@ -108,9 +109,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             'bank_code' => $bank_code,
             'description' => "Transfer to $recipient_name",
             'status' => 'success',
-            'reference' => $transaction_ref,
+            'reference' => $debit_ref,
             'created_at' => date('Y-m-d H:i:s'),
         ];
+
 
         $debitTransaction = Model::create('transactions', $debitData);
 
@@ -133,6 +135,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     exit;
                 }
 
+                $credit_ref = $transaction_ref . '_C';
+
                 $creditData = [
                     'user_id' => $recipient->id,
                     'type' => 'credit',
@@ -143,7 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     'bank_code' => $bank_code,
                     'description' => "Transfer from {$sender->name}",
                     'status' => 'success',
-                    'reference' => $transaction_ref,
+                    'reference' => $credit_ref,
                     'created_at' => date('Y-m-d H:i:s'),
                 ];
 
@@ -162,7 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         echo json_encode([
             'success' => true,
             'message' => 'Transfer successful',
-            'transaction_ref' => $transaction_ref
+            'transaction_ref' => $debit_ref
         ]);
     } catch (Exception $e) {
         if (isset($pdo) && $pdo->inTransaction()) {
@@ -173,7 +177,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         echo json_encode([
             'success' => false,
-            'message' => 'DB Error: ' . $e->getMessage(),
+            'message' => 'Transfer failed. Please try again.',
             'error' => $e->getMessage(),
         ]);
     }
