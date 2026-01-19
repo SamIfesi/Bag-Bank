@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         $transaction_ref = 'TXN' . time() . rand(1000, 9999);
-        $debit_ref = $transaction_ref . '_D';
+        $debit_ref = $transaction_ref . 'D';
 
         $debitData = [
             'user_id' => $sender->id,
@@ -135,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     exit;
                 }
 
-                $credit_ref = $transaction_ref . '_C';
+                $credit_ref = $transaction_ref . 'C';
 
                 $creditData = [
                     'user_id' => $recipient->id,

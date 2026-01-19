@@ -105,11 +105,12 @@ elements.chatForm.addEventListener("submit", async function (e) {
     if (data.success) {
       addMessage("bot", data.message, data.timestamp);
     } else {
-      addMessage(
-        "bot",
-        "My connection is a bit fuzzy. Can you say that again?",
-        getCurrentTime()
-      );
+      if (data.error) console.error("Chat Error:", data.error);
+      const errorMsg =
+        data.error && data.error.includes("API Key")
+          ? "I'm having a configuration issue (API Key). Please check the console."
+          : "My connection is a bit fuzzy. Can you say that again?";
+      addMessage("bot", errorMsg, getCurrentTime());
     }
   } catch (error) {
     console.error(error);
@@ -117,7 +118,7 @@ elements.chatForm.addEventListener("submit", async function (e) {
     addMessage(
       "bot",
       "Oops! I'm having trouble connecting to the server. Please check your internet.",
-      getCurrentTime()
+      getCurrentTime(),
     );
   }
 });
@@ -214,7 +215,7 @@ elements.clearChatBtn.addEventListener("click", () => {
       sessionStorage.removeItem("chatHistory");
       showBanner("Chat cleared successfully", "success", 3000);
       location.reload();
-    }
+    },
   );
 });
 

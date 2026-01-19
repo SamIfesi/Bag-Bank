@@ -21,8 +21,17 @@ if (!isset($_SESSION['user'])) {
 // JSON Header
 header('Content-Type: application/json');
 
-// User Data
-$user = Auth::user();
+try {
+    // User Data
+    $user = Auth::user();
+    if (!$user) {
+        throw new Exception("User not found or Database Error");
+    }
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => 'System Error: ' . $e->getMessage()]);
+    exit;
+}
+
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 $user_message = trim($data['message'] ?? '');
@@ -32,17 +41,21 @@ if (empty($user_message)) {
     exit;
 }
 
-// System Prompt
-$balance_fmt = number_format($user->balance, 2);
-$context = "
+try {
+    // 2. Prepare Context (safely)
+    $name = $user->name ?? 'User';
+    $acct = $user->account_number ?? 'N/A';
+    $bal  = isset($user->balance) ? number_format($user->balance, 2) : '0.00';
+
+    // System Prompt
+    $context = "
 ROLE: You are 'Baggy', a helpful financial AI for D'Bag Bank.
-USER: {$user->name}, Balance: ₦{$balance_fmt}, Account: {$user->account_number}
+USER: {$name}, Balance: ₦{$bal}, Account: {$acct}
 PERSONALITY: Warm, professional, helpful. Use Nigerian Naira (₦).
 MESSAGE: \"{$user_message}\"
 REPLY:
 ";
 
-try {
     // Call AI
     $ai_response = callGeminiAPI($context);
 
@@ -58,13 +71,12 @@ try {
     }
 } catch (Exception $e) {
     // Log error for server admin
-    error_log("AI API Error: " . $e->getMessage());
+    error_log("AI API/System Error: " . $e->getMessage());
 
     // Fallback response for user
     $fallback = getSmartFallback($user_message, $user);
 
     // Send fallback + Log the error in the console message for debugging
-    // (Remove the 'debug_error' part when going live)
     echo json_encode([
         'success' => true,
         'message' => $fallback,
@@ -77,14 +89,22 @@ exit;
 function callGeminiAPI($prompt)
 {
     $api_key = trim(GEMINI_API_KEY);
-    
+
+    // Explicit check for missing API key
+    if (empty($api_key)) {
+        return ['success' => false, 'error' => "API Key is missing in environment variables."];
+    }
+
+    // Use gemini-1.5-flash as it is more stable/confirmed working in tests
     $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $api_key;
 
     $body = [
         'contents' => [
             [
                 'parts' => [
-                    ['text' => $prompt]]]
+                    ['text' => $prompt]
+                ]
+            ]
         ]
     ];
     $json_body = json_encode($body);
@@ -94,7 +114,7 @@ function callGeminiAPI($prompt)
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
-    'Content-Length: ' . strlen($json_body)
+        'Content-Length: ' . strlen($json_body)
     ]);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $json_body);
 
@@ -131,7 +151,7 @@ function callGeminiAPI($prompt)
 function getSmartFallback($msg, $user)
 {
     $msg = strtolower($msg);
-    $bal = number_format($user->balance, 2);
+    $bal = isset($user->balance) ? number_format($user->balance, 2) : '0.00';
 
     if (strpos($msg, 'balance') !== false) return "Your balance is **₦{$bal}**.";
     if (strpos($msg, 'transfer') !== false) return "Click **Transfer** on your dashboard to send money.";
