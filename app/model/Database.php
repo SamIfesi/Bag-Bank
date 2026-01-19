@@ -1,16 +1,18 @@
 <?php
 
+require_once __DIR__ . '/../../config/env.php';
+
 class Database
 {
     protected PDO $pdo;
 
     public function __construct()
     {
-        $host = $_ENV['DB_HOST'] ?? 'switchyard.proxy.rlwy.net';
-        $port = $_ENV['DB_PORT'] ?? 28712;
-        $db   = $_ENV['DB_NAME'] ?? 'railway';
+        $host = $_ENV['DB_HOST'] ?? 'localhost';
+        $port = $_ENV['DB_PORT'] ?? 3306;
+        $db   = $_ENV['DB_NAME'] ?? 'mob_bank';
         $user = $_ENV['DB_USER'] ?? 'root';
-        $pass = $_ENV['DB_PASS'] ?? 'xMrXpkbEskhUgfagrbAQJBgOdUmucUce';
+        $pass = $_ENV['DB_PASS'] ?? '';
 
         $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
 
