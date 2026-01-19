@@ -13,6 +13,11 @@ class Model extends Database
         return self::$db;
     }
 
+    public static function pdo(): PDO
+    {
+        return self::db();
+    }
+
     public static function create(string $table, array $data)
     {
         $fields = implode(', ', array_keys($data));

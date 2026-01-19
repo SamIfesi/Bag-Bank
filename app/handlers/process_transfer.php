@@ -84,14 +84,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     try {
-        $db = new Database();
-        $db->getPdo()->beginTransaction();
+        $pdo = Model::pdo();
+        $pdo->beginTransaction();
 
         $newSenderBalance = $sender->balance - $amount;
         $updateSender = Model::update('users', ['balance' => $newSenderBalance], $sender->id);
 
         if (!$updateSender) {
-            $db->getPdo()->rollBack();
+            $pdo->rollBack();
             echo json_encode(['success' => false, 'message' => 'Failed to update sender balance']);
             exit;
         }
@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             'amount' => $amount,
             'recipient_account' => $recipient_acc,
             'recipient_name' => $recipient_name,
-            'bank_name' => $bank_code, 
+            'bank_name' => $bank_code,
             'bank_code' => $bank_code,
             'description' => "Transfer to $recipient_name",
             'status' => 'success',
@@ -115,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $debitTransaction = Model::create('transactions', $debitData);
 
         if (!$debitTransaction) {
-            $db->getPdo()->rollBack();
+            $pdo->rollBack();
             echo json_encode(['success' => false, 'message' => 'Failed to create transaction record']);
             exit;
         }
@@ -128,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $updateRecipient = Model::update('users', ['balance' => $newRecipientBalance], $recipient->id);
 
                 if (!$updateRecipient) {
-                    $db->getPdo()->rollBack();
+                    $pdo->rollBack();
                     echo json_encode(['success' => false, 'message' => 'Failed to update recipient balance']);
                     exit;
                 }
@@ -150,14 +150,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $creditTransaction = Model::create('transactions', $creditData);
 
                 if (!$creditTransaction) {
-                    $db->getPdo()->rollBack();
+                    $pdo->rollBack();
                     echo json_encode(['success' => false, 'message' => 'Failed to create recipient transaction record']);
                     exit;
                 }
             }
         }
 
-        $db->getPdo()->commit();
+        $pdo->commit();
 
         echo json_encode([
             'success' => true,
@@ -165,8 +165,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             'transaction_ref' => $transaction_ref
         ]);
     } catch (Exception $e) {
-        if (isset($db) && $db->getPdo()->inTransaction()) {
-            $db->getPdo()->rollBack();
+        if (isset($pdo) && $pdo->inTransaction()) {
+            $pdo->rollBack();
         }
 
         error_log("Transfer Error: " . $e->getMessage());
