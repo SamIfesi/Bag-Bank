@@ -1,171 +1,208 @@
 <?php
-// Disable HTML error output - TEMPORARILY ENABLED FOR DEBUGGING
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+ini_set('display_errors', 0);
+error_reporting(0);
 
 session_start();
 
-// Handle Preflight OPTIONS request (if CORS is an issue, though same-origin usually fine)
+// ---------------------------------------------------------
+// Dependencies
+// ---------------------------------------------------------
+require_once __DIR__ . "/../../config/functions/utilities.php";
+require_once __DIR__ . "/../../config/Auth.php";
+
+// ---------------------------------------------------------
+// Constants
+// ---------------------------------------------------------
+define('GEMINI_API_KEY', getenv('GEMINI_API_KEY') ?: ($_ENV['GEMINI_API_KEY'] ?? '') ?: ($_SERVER['GEMINI_API_KEY'] ?? ''));
+define('GEMINI_MODEL', 'gemini-2.5-flash');
+define('GEMINI_API_URL', 'https://generativelanguage.googleapis.com/v1beta/models/' . GEMINI_MODEL . ':generateContent');
+
+// ---------------------------------------------------------
+// CORS Preflight Handler
+// ---------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header("HTTP/1.1 200 OK");
     exit;
 }
 
-require_once __DIR__ . "/../../config/functions/utilities.php";
-require_once __DIR__ . "/../../config/Auth.php";
-
-// Load Gemini API Key from environment (Railway sets this directly)
-// Use getenv() FIRST - it's the most reliable for Railway
-// Then fall back to $_ENV and $_SERVER for local development
-$gemini_key = getenv('GEMINI_API_KEY') ?: ($_ENV['GEMINI_API_KEY'] ?? '') ?: ($_SERVER['GEMINI_API_KEY'] ?? '') ?: '';
-define('GEMINI_API_KEY', $gemini_key);
-
-// Auth Check
+// ---------------------------------------------------------
+// Authentication Check
+// ---------------------------------------------------------
 if (!isset($_SESSION['user'])) {
-    header('Content-Type: application/json');
-    http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
-    exit;
+    sendJsonResponse(false, 'Unauthorized', 401);
 }
 
-// JSON Header
+// ---------------------------------------------------------
+// Set Response Headers
+// ---------------------------------------------------------
 header('Content-Type: application/json');
 
+// ---------------------------------------------------------
+// Get Authenticated User
+// ---------------------------------------------------------
 try {
-    // User Data
     $user = Auth::user();
     if (!$user) {
-        throw new Exception("User not found or Database Error");
+        throw new Exception("User not found");
     }
 } catch (Throwable $e) {
-    echo json_encode(['success' => false, 'message' => 'System Error: ' . $e->getMessage()]);
-    exit;
+    sendJsonResponse(false, 'System Error: ' . $e->getMessage());
 }
 
-$input = file_get_contents('php://input');
-$data = json_decode($input, true);
-$user_message = trim($data['message'] ?? '');
+// ---------------------------------------------------------
+// Parse & Validate Input
+// ---------------------------------------------------------
+$input = json_decode(file_get_contents('php://input'), true);
+$userMessage = trim($input['message'] ?? '');
 
-if (empty($user_message)) {
-    echo json_encode(['success' => false, 'message' => 'Say something!']);
-    exit;
+if (empty($userMessage)) {
+    sendJsonResponse(false, 'Please enter a message');
 }
 
+// ---------------------------------------------------------
+// Process Chat Request
+// ---------------------------------------------------------
 try {
-    // 2. Prepare Context (safely)
-    $name = $user->name ?? 'User';
-    $acct = $user->account_number ?? 'N/A';
-    $bal  = isset($user->balance) ? number_format($user->balance, 2) : '0.00';
+    $prompt = buildPrompt($user, $userMessage);
+    $aiResponse = callGeminiAPI($prompt);
 
-    // System Prompt
-    $context = "
-ROLE: You are 'Baggy', a helpful financial AI for D'Bag Bank.
-USER: {$name}, Balance: ₦{$bal}, Account: {$acct}
-PERSONALITY: Warm, professional, helpful. Use Nigerian Naira (₦).
-MESSAGE: \"{$user_message}\"
-REPLY:
-";
-
-    // Call AI
-    $ai_response = callGeminiAPI($context);
-
-    if ($ai_response['success']) {
-        echo json_encode([
-            'success' => true,
-            'message' => $ai_response['message'],
-            'timestamp' => date('g:i A')
-        ]);
+    if ($aiResponse['success']) {
+        sendJsonResponse(true, $aiResponse['message']);
     } else {
-        // Pass the specific error up
-        throw new Exception($ai_response['error']);
+        throw new Exception($aiResponse['error']);
     }
 } catch (Throwable $e) {
-    // Log error for server admin
-    error_log("AI API/System Error: " . $e->getMessage());
-
-    // Fallback response for user
-    $fallback = getSmartFallback($user_message, $user);
-
-    // Send fallback + Log the error in the console message for debugging
-    echo json_encode([
-        'success' => true,
-        'message' => $fallback,
-        'timestamp' => date('g:i A'),
-        'debug_error' => $e->getMessage()
-    ]);
+    error_log("AI Chat Error: " . $e->getMessage());
+    $fallback = getSmartFallback($userMessage, $user);
+    sendJsonResponse(true, $fallback);
 }
-exit;
 
-function callGeminiAPI($prompt)
+// =============================================================================
+// HELPER FUNCTIONS
+// =============================================================================
+
+/**
+ * Send a JSON response and exit
+ */
+function sendJsonResponse(bool $success, string $message, int $httpCode = 200): void
 {
-    $api_key = trim(GEMINI_API_KEY);
+    header('Content-Type: application/json');
+    http_response_code($httpCode);
+    echo json_encode([
+        'success'   => $success,
+        'message'   => $message,
+        'timestamp' => date('g:i A')
+    ]);
+    exit;
+}
 
-    // Explicit check for missing API key
-    if (empty($api_key)) {
-        return ['success' => false, 'error' => "API Key is missing in environment variables."];
+/**
+ * Build the AI prompt with user context
+ */
+function buildPrompt(object $user, string $message): string
+{
+    $name    = $user->name ?? 'User';
+    $account = $user->account_number ?? 'N/A';
+    $balance = isset($user->balance) ? number_format($user->balance, 2) : '0.00';
+
+    return <<<PROMPT
+ROLE: You are 'Baggy', a helpful financial AI assistant for D'Bag Bank.
+
+USER CONTEXT:
+- Name: {$name}
+- Account Number: {$account}
+- Current Balance: ₦{$balance}
+
+GUIDELINES:
+- Be warm, professional, and helpful
+- Always use Nigerian Naira (₦) for currency
+- Keep responses concise but informative
+- If asked about transactions, guide them to the appropriate dashboard feature
+
+USER MESSAGE: "{$message}"
+
+YOUR RESPONSE:
+PROMPT;
+}
+
+/**
+ * Call Google Gemini API
+ */
+function callGeminiAPI(string $prompt): array
+{
+    $apiKey = trim(GEMINI_API_KEY);
+
+    if (empty($apiKey)) {
+        return ['success' => false, 'error' => 'API key not configured'];
     }
 
-    // Use gemini-1.5-flash as it is more stable/confirmed working in tests
-    $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $api_key;
+    $url = GEMINI_API_URL . '?key=' . $apiKey;
 
-    $body = [
+    $payload = json_encode([
         'contents' => [
-            [
-                'parts' => [
-                    ['text' => $prompt]
-                ]
-            ]
+            ['parts' => [['text' => $prompt]]]
         ]
-    ];
-    $json_body = json_encode($body);
+    ]);
 
     $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-        'Content-Length: ' . strlen($json_body)
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST           => true,
+        CURLOPT_HTTPHEADER     => [
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($payload)
+        ],
+        CURLOPT_POSTFIELDS     => $payload,
+        CURLOPT_SSL_VERIFYHOST => 0,
+        CURLOPT_SSL_VERIFYPEER => 0,
+        CURLOPT_TIMEOUT        => 30
     ]);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_body);
 
-    // SSL Bypass for Localhost
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-
-    $response = curl_exec($ch);
-    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $curl_error = curl_error($ch);
+    $response  = curl_exec($ch);
+    $httpCode  = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
     curl_close($ch);
 
-    if ($curl_error) {
-        return ['success' => false, 'error' => "Connection Error: $curl_error"];
+    if ($curlError) {
+        return ['success' => false, 'error' => "Connection failed: $curlError"];
     }
 
     $result = json_decode($response, true);
 
-    if ($http_code === 200 && isset($result['candidates'][0]['content']['parts'][0]['text'])) {
+    if ($httpCode === 200 && isset($result['candidates'][0]['content']['parts'][0]['text'])) {
         return [
             'success' => true,
             'message' => $result['candidates'][0]['content']['parts'][0]['text']
         ];
     }
 
-    // Capture the actual Google Error Message
-    $google_error_msg = $result['error']['message'] ?? 'Unknown Error';
-    $raw_response = substr($response, 0, 500); // First 500 chars for debugging
-    return ['success' => false, 'error' => "API Error ($http_code): $google_error_msg | Key length: " . strlen($api_key)];
+    $errorMessage = $result['error']['message'] ?? 'Unknown API error';
+    return ['success' => false, 'error' => "API Error ($httpCode): $errorMessage"];
 }
 
-// ---------------------------------------------------------
-// 🛡️ SMART FALLBACK
-// ---------------------------------------------------------
-function getSmartFallback($msg, $user)
+/**
+ * Generate smart fallback responses when AI is unavailable
+ */
+function getSmartFallback(string $message, object $user): string
 {
-    $msg = strtolower($msg);
-    $bal = isset($user->balance) ? number_format($user->balance, 2) : '0.00';
+    $message = strtolower($message);
+    $balance = isset($user->balance) ? number_format($user->balance, 2) : '0.00';
 
-    if (strpos($msg, 'balance') !== false) return "Your balance is **₦{$bal}**.";
-    if (strpos($msg, 'transfer') !== false) return "Click **Transfer** on your dashboard to send money.";
+    $responses = [
+        'balance'  => "Your current balance is **₦{$balance}**.",
+        'transfer' => "To send money, click **Transfer** on your dashboard.",
+        'send'     => "To send money, click **Transfer** on your dashboard.",
+        'card'     => "You can manage your ATM card from the **Cards** section.",
+        'help'     => "I'm here to help! You can ask about your balance, transfers, or account details.",
+        'hello'    => "Hello! 👋 How can I assist you today?",
+        'hi'       => "Hi there! 👋 What can I help you with?",
+    ];
 
-    return "I'm having a connection issue (Error 404), but I can still see your balance is **₦{$bal}**.";
+    foreach ($responses as $keyword => $response) {
+        if (strpos($message, $keyword) !== false) {
+            return $response;
+        }
+    }
+
+    return "I'm experiencing a brief connection issue, but I can still help! Your balance is **₦{$balance}**. Try asking again in a moment.";
 }
