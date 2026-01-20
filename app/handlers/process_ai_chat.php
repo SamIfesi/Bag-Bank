@@ -11,13 +11,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// 1. Load Configurations
 require_once __DIR__ . "/../../config/functions/utilities.php";
 require_once __DIR__ . "/../../config/Auth.php";
 
 // Load Gemini API Key from environment (Railway sets this directly)
-// Check multiple sources for compatibility
-$gemini_key = $_ENV['GEMINI_API_KEY'] ?? $_SERVER['GEMINI_API_KEY'] ?? getenv('GEMINI_API_KEY') ?: '';
+// Use getenv() FIRST - it's the most reliable for Railway
+// Then fall back to $_ENV and $_SERVER for local development
+$gemini_key = getenv('GEMINI_API_KEY') ?: ($_ENV['GEMINI_API_KEY'] ?? '') ?: ($_SERVER['GEMINI_API_KEY'] ?? '') ?: '';
 define('GEMINI_API_KEY', $gemini_key);
 
 // Auth Check
@@ -106,7 +106,7 @@ function callGeminiAPI($prompt)
     }
 
     // Use gemini-1.5-flash as it is more stable/confirmed working in tests
-    $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . $api_key;
+    $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" . $api_key;
 
     $body = [
         'contents' => [
@@ -152,7 +152,8 @@ function callGeminiAPI($prompt)
 
     // Capture the actual Google Error Message
     $google_error_msg = $result['error']['message'] ?? 'Unknown Error';
-    return ['success' => false, 'error' => "API Error ($http_code): $google_error_msg"];
+    $raw_response = substr($response, 0, 500); // First 500 chars for debugging
+    return ['success' => false, 'error' => "API Error ($http_code): $google_error_msg | Key length: " . strlen($api_key)];
 }
 
 // ---------------------------------------------------------
