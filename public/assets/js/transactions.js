@@ -69,6 +69,8 @@ const TransactionFilter = {
         noTransactionBtn.textContent = "Add Money";
         noTransactionBtn.onclick = () =>
           (window.location.href = "add_money.php");
+      } else if (filterType === "credit") {
+        noTransactionBtn.classList.add("hide");
       } else {
         noTransactionBtn.textContent = "Send Money";
         noTransactionBtn.onclick = () => (window.location.href = "send.php");
@@ -81,6 +83,8 @@ const TransactionFilter = {
         noTransactionYetBtn.textContent = "Add Money";
         noTransactionYetBtn.onclick = () =>
           (window.location.href = "add_money.php");
+      } else if (filterType === "credit") {
+        noTransactionYetBtn.classList.add("hide");
       } else {
         noTransactionYetBtn.textContent = "Send Money";
         noTransactionYetBtn.onclick = () => (window.location.href = "send.php");
