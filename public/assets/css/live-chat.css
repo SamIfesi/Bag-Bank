@@ -35,7 +35,7 @@ html {
 }
 body.chat-body {
   background: var(--chat-bg);
-  height: 100vh;
+  height:  calc(100vh - 2rem);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -362,7 +362,7 @@ body.chat-body {
 .input-wrapper {
   flex: 1;
   background: white;
-  border-radius: 1 25rem;
+  border-radius: 1.25rem;
   padding: 0.625rem 1rem;
   position: relative;
 }
