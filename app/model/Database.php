@@ -43,35 +43,20 @@ class Database
 
   public function __construct()
   {
-    // Prefer URL-style connection vars when available (common on hosted platforms).
-    $mysqlUrl = $this->envFirst(['MYSQL_URL', 'MYSQL_PUBLIC_URL', 'MYSQL_PRIVATE_URL', 'DATABASE_URL']);
-    $parsed = $mysqlUrl ? $this->parseMysqlUrl($mysqlUrl) : [];
-
-    $isRailway = getenv('RAILWAY_PROJECT_ID') !== false || getenv('RAILWAY_ENVIRONMENT') !== false;
-
-    // Support both Railway-style and local .env naming conventions.
-    $host = $parsed['host'] ?? $this->envFirst(['MYSQLHOST', 'MYSQL_HOST', 'DB_HOST'], $isRailway ? null : '127.0.0.1');
-    $port = $parsed['port'] ?? $this->envFirst(['MYSQLPORT', 'MYSQL_PORT', 'DB_PORT'], '3306');
-    $db   = $parsed['db'] ?? $this->envFirst(['MYSQLDATABASE', 'MYSQL_DATABASE', 'DB_NAME'], 'railway');
-    $user = $parsed['user'] ?? $this->envFirst(['MYSQLUSER', 'MYSQL_USER', 'DB_USER'], 'root');
-    $pass = $parsed['pass'] ?? $this->envFirst(['MYSQLPASSWORD', 'MYSQL_PASSWORD', 'DB_PASS'], '');
-
-    if ($isRailway && !$host) {
-      throw new RuntimeException('Railway DB variables are missing in this service. Add a Variable Reference from your MySQL service (MYSQL_URL or MYSQLHOST/MYSQLPORT/MYSQLDATABASE/MYSQLUSER/MYSQLPASSWORD).');
-    }
+    // Railway uses MYSQLHOST (no underscore). Try both.
+    $host = getenv('MYSQLHOST') ?: getenv('MYSQL_HOST') ?: 'localhost';
+    $port = getenv('MYSQLPORT') ?: getenv('MYSQL_PORT') ?: 3306;
+    $db   = getenv('MYSQLDATABASE') ?: getenv('MYSQL_DATABASE') ?: 'railway';
+    $user = getenv('MYSQLUSER') ?: getenv('MYSQL_USER') ?: 'root';
+    $pass = getenv('MYSQLPASSWORD') ?: getenv('MYSQL_PASSWORD') ?: '';
 
     $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
 
-    $this->pdo = new PDO(
-      $dsn,
-      $user,
-      $pass,
-      [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
-        PDO::ATTR_EMULATE_PREPARES => false,
-      ]
-    );
+    $this->pdo = new PDO($dsn, $user, $pass, [
+      PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+      PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+      PDO::ATTR_EMULATE_PREPARES   => false,
+    ]);
 
     $this->ensureSchema($db);
   }
