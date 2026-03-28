@@ -6,14 +6,53 @@ class Database
 {
   protected PDO $pdo;
 
+  private function envFirst(array $keys, ?string $default = null): ?string
+  {
+    foreach ($keys as $key) {
+      $value = getenv($key);
+      if ($value === false && isset($_ENV[$key])) {
+        $value = $_ENV[$key];
+      }
+
+      if ($value !== false && $value !== null && $value !== '') {
+        return (string) $value;
+      }
+    }
+
+    return $default;
+  }
+
+  private function parseMysqlUrl(string $url): array
+  {
+    $parts = parse_url($url);
+    if ($parts === false) {
+      return [];
+    }
+
+    $path = $parts['path'] ?? '';
+    $dbName = ltrim($path, '/');
+
+    return [
+      'host' => $parts['host'] ?? null,
+      'port' => isset($parts['port']) ? (string) $parts['port'] : null,
+      'db' => $dbName !== '' ? $dbName : null,
+      'user' => $parts['user'] ?? null,
+      'pass' => $parts['pass'] ?? null,
+    ];
+  }
+
   public function __construct()
   {
-    // Use getenv() to read Railway's environment variables
-    $host = getenv('MYSQL_HOST') ?: 'localhost';
-    $port = getenv('MYSQL_PORT') ?: 3306;
-    $db   = getenv('MYSQL_DATABASE') ?: 'railway';
-    $user = getenv('MYSQL_USER') ?: 'root';
-    $pass = getenv('MYSQL_PASSWORD') ?: '';
+    // Prefer URL-style connection vars when available (common on hosted platforms).
+    $mysqlUrl = $this->envFirst(['MYSQL_URL', 'MYSQL_PUBLIC_URL', 'DATABASE_URL']);
+    $parsed = $mysqlUrl ? $this->parseMysqlUrl($mysqlUrl) : [];
+
+    // Support both Railway-style and local .env naming conventions.
+    $host = $parsed['host'] ?? $this->envFirst(['MYSQLHOST', 'MYSQL_HOST', 'DB_HOST'], 'localhost');
+    $port = $parsed['port'] ?? $this->envFirst(['MYSQLPORT', 'MYSQL_PORT', 'DB_PORT'], '3306');
+    $db   = $parsed['db'] ?? $this->envFirst(['MYSQLDATABASE', 'MYSQL_DATABASE', 'DB_NAME'], 'railway');
+    $user = $parsed['user'] ?? $this->envFirst(['MYSQLUSER', 'MYSQL_USER', 'DB_USER'], 'root');
+    $pass = $parsed['pass'] ?? $this->envFirst(['MYSQLPASSWORD', 'MYSQL_PASSWORD', 'DB_PASS'], '');
 
     $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
 
