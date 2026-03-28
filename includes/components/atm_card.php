@@ -1,7 +1,7 @@
 <?php
 // Check if user has a card
 $hasCard = !empty($user->card_number) && $user->card_status === 'active';
-$cvv_card = !empty($user->card_cvv) ? $user->card_cvv : null && $hasCard;
+$cvv_card = ($hasCard && !empty($user->card_cvv)) ? $user->card_cvv : null;
 
 if ($cvv_card) {
     $card_cvv = $user->card_cvv;

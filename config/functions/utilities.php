@@ -19,7 +19,7 @@ function is_empty($value)
 {
     return !isset($value) || (trim($value) === '');
 }
-function check_empty_fields(array $required_fields, array $user_inputs, array $error)
+function check_empty_fields(array $required_fields, array $user_inputs, array &$errors)
 {
     foreach ($user_inputs as $key => $value) {
         if (in_array($key, $required_fields) && strlen($value) < 1) {
@@ -49,12 +49,10 @@ function is_match($value1, $value2)
 // generate account number
 function generate_account_number()
 {
-    // create first two digits
-    $unqiue_code = 103;
-    // generate random 7 digits
-    $random_number = strval(time());
-    $account_number = $unqiue_code . substr($random_number, -7);
-    return $account_number;
+  do {
+    $account_number = '103' . str_pad(random_int(0, 9999999), 7, '0', STR_PAD_LEFT);
+  } while (Model::find('users', 'account_number', $account_number));
+  return $account_number;
 }
 
 // generate 16-digit card number
@@ -111,10 +109,8 @@ function generate_cvv()
 // generate card expiry (format: MM/YYYY)
 function generate_card_expiry()
 {
-    $current_year = date('Y');
-    $expiry_year = $current_year + 4; // Card valid for 5 years
-    $month = str_pad(rand(1, 12), 2, '0', STR_PAD_LEFT);
-    return $month . '/' . $expiry_year;
+    $expiry_date = new DateTime('+5 years');
+    return $expiry_date->format('m/Y');
 }
 
 // redirect to a given location

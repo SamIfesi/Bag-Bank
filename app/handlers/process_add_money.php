@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $newBalance = $user->balance + $amount;
         $updateUser = Model::update('users', ['balance' => $newBalance], $user->id);
 
-        if (! $updateUser) {
+        if (!$updateUser) {
             $db->getPdo()->rollBack();
             throw new Exception('Failed to update balance');
         }

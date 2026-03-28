@@ -80,7 +80,7 @@
                         </div>
                         <div class="trans-amount-wrapper">
                             <span class="trans-amount <?= $trans->type ?>">
-                                <?= $trans->type === 'credit' ?  '+' : '-' ?>₦<?= number_format($trans->amount, 2) ?>
+                                <?= $trans->type === 'credit' ?  '+' : ($trans->type === 'top_up' ? '+' : '-') ?>₦<?= number_format($trans->amount, 2) ?>
                             </span>
                             <span class="trans-status <?= $trans->status ?>"><?= ucfirst($trans->status) ?></span>
                         </div>

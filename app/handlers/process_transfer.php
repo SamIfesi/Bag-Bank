@@ -3,7 +3,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 session_start();
-require_once __DIR__ . "/../model/model.php";
+require_once __DIR__ . "/../../core/Config.php";
+require_once __DIR__ . "/../../app/model/model.php";
 require_once __DIR__ . "/../../config/functions/utilities.php";
 require_once __DIR__ . "/../../config/Auth.php";
 require_once __DIR__ . "/../../includes/check_auth.php";
