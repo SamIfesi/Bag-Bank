@@ -72,7 +72,7 @@ class Database
 
   private function ensureSchema(string $dbName): void
   {
-    $autoImport = getenv('AUTO_SCHEMA_IMPORT') ?: '0';
+    $autoImport = getenv('AUTO_SCHEMA_IMPORT') ?: '1';
     if ($autoImport !== '1') {
       return;
     }
