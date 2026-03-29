@@ -1,51 +1,43 @@
 <?php
 session_start();
-require_once __DIR__ . "/../../core/Config.php";
 
+require_once __DIR__ . "/../../core/Config.php";
+require_once ROOT . "/app/model/model.php";
 require_once ROOT . "/config/functions/utilities.php";
 require_once ROOT . "/config/Auth.php";
 
-// Check if user is logged in
+header('Content-Type: application/json');
+
 if (!is_logged_in()) {
-  header("Content-Type: application/json");
   http_response_code(401);
-  echo json_encode([
-    'success' => false,
-    'message' => 'Unauthorized access'
-  ]);
-  exit();
+  echo json_encode(['success' => false, 'message' => 'Unauthorized access']);
+  exit;
 }
 
-// Check if request method is POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-  header("Content-Type: application/json");
   http_response_code(405);
-  echo json_encode([
-    'success' => false,
-    'message' => 'Method not allowed'
-  ]);
-  exit();
+  echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+  exit;
 }
 
 try {
   $user = Auth::user();
-  // Check if user already has a card
-  if ($user->card_status !== 'none' && !empty($user->card_number)) {
-    header("Content-Type: application/json");
-    http_response_code(400);
-    echo json_encode([
-      'success' => false,
-      'message' => 'You already have a card'
-    ]);
-    exit();
+
+  if (!$user) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized access']);
+    exit;
   }
 
-  // Generate card details
-  $card_number = generate_card_number();
-  $cvv = generate_cvv();
-  $expiry = generate_card_expiry();
+  // Prevent issuing a second card
+  if ($user->card_status !== 'none' && !empty($user->card_number)) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'You already have a card']);
+    exit;
+  }
 
-  // Make sure card number is unique
+  // Generate a unique card number (max 10 attempts)
+  $card_number = generate_card_number();
   $max_attempts = 10;
   $attempts = 0;
 
@@ -55,40 +47,38 @@ try {
   }
 
   if ($attempts >= $max_attempts) {
-    throw new Exception('Failed to generate unique card number');
+    throw new RuntimeException('Failed to generate a unique card number');
   }
 
-  // Update user record with card details
-  $card_data = [
-    'card_number' => $card_number,
-    'card_cvv' => $cvv,
-    'card_expiry' => $expiry,
-    'card_status' => 'active',
-    'card_issued_at' => date('Y-m-d H:i:s')
-  ];
+  // Persist card details
+  $updated = Model::update('users', [
+    'card_number'    => $card_number,
+    'card_cvv'       => generate_cvv(),
+    'card_expiry'    => generate_card_expiry(),
+    'card_status'    => 'active',
+    'card_issued_at' => date('Y-m-d H:i:s'),
+  ], $user->id);
 
-  $updated = Model::update('users', $card_data, $user->id);
-
-  if ($updated) {
-    header("Content-Type: application/json");
-    http_response_code(200);
-    echo json_encode([
-      'success' => true,
-      'message' => 'Card issued successfully!',
-      'card' => [
-        'number' => $card_number,
-        'expiry' => $expiry
-      ]
-    ]);
-  } else {
-    throw new Exception('Failed to issue card');
+  if (!$updated) {
+    throw new RuntimeException('Failed to save card to database');
   }
+
+  http_response_code(200);
+  echo json_encode([
+    'success' => true,
+    'message' => 'Card issued successfully!',
+    'card'    => [
+      'number' => $card_number,
+      'expiry' => generate_card_expiry(),
+    ],
+  ]);
 } catch (Exception $e) {
-  header("Content-Type: application/json");
+  error_log('apply_card error [user=' . ($_SESSION['user'] ?? 'unknown') . ']: ' . $e->getMessage());
+
   http_response_code(500);
   echo json_encode([
     'success' => false,
-    'message' => 'Error issuing card: ' . $e->getMessage()
+    'message' => 'Error issuing card: ' . $e->getMessage(),
   ]);
 }
-exit();
+exit;
