@@ -1,7 +1,8 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+
+require_once __DIR__ . "/../core/Session.php";
+
+Session::start();
 
 $public_pages = [
     'index.php',
@@ -18,21 +19,21 @@ $public_pages = [
     'terms-of-service.php',
 ];
 
-function check_auth($public_pages)
+function check_auth(array $public_pages): void
 {
     $isAuthenticated = isset($_SESSION['user']) && !empty($_SESSION['user']);
-    $currentPage = basename($_SERVER['PHP_SELF']);
+    $currentPage     = basename($_SERVER['PHP_SELF']);
+    $isPublicPage    = in_array($currentPage, $public_pages, true);
 
-    $isPublicPage = in_array($currentPage, $public_pages);
-
-    // --- Redirection Logic ---
     if (!$isAuthenticated && !$isPublicPage) {
-        header("Location: login.php");
-        exit();
+        header('Location: /views/login.php');
+        exit;
     }
+
     if ($isAuthenticated && $isPublicPage) {
-        header("Location: views/dashboard.php");
-        exit();
+        header('Location: /views/dashboard.php');
+        exit;
     }
 }
+
 check_auth($public_pages);
