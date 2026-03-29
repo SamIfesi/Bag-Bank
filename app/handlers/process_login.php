@@ -1,56 +1,47 @@
 <?php
-session_start();
+
 require_once __DIR__ . "/../../core/Config.php";
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
+require_once __DIR__ . "/../../core/Session.php";
 require_once ROOT . "/config/functions/utilities.php";
 require_once ROOT . "/app/controller/userController.php";
 
+Session::start(); // also resets $_SESSION['last_activity']
+
 $userController = new userController();
-$errors = [];
+$errors         = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
   $username = isset($_POST['username']) ? sanitize_input(trim($_POST['username'])) : '';
   $password = isset($_POST['password']) ? $_POST['password'] : '';
 
-  // Validate username
   if (empty($username)) {
-    $errors[] = "Username is required";
+    $errors[] = 'Username is required';
   }
 
-  // Validate password
   if (empty($password)) {
-    $errors[] = "Password is required";
+    $errors[] = 'Password is required';
   }
 
-  // If no validation errors, proceed with login
-  if (count($errors) < 1) {
-    // Check if user exists
+  if (empty($errors)) {
     $user = $userController->get_user($username);
 
-    if ($user) {
-      // Verify password
-      if (password_verify($password, $user->password)) {
-        // Login successful
-        $_SESSION['user'] = $user->id;
-        unset($_SESSION['errors']);
-        header("Location: ../../views/dashboard.php");
-        exit();
-      } else {
-        $errors[] = "Invalid username or password";
-      }
-    } else {
-      $errors[] = "Invalid username or password";
+    if ($user && password_verify($password, $user->password)) {
+      session_regenerate_id(true);
+
+      $_SESSION['user'] = $user->id;
+      $_SESSION['last_activity'] = time();   // initialise inactivity timer
+      unset($_SESSION['errors']);
+      
+      header('Location: /views/dashboard.php');
+      exit;
     }
+
+    $errors[] = 'Invalid username or password';
   }
 
-  // Store errors in session and redirect back
-  if (count($errors) > 0) {
-    $_SESSION['errors'] = $errors;
-    header("Location: ../../views/login.php");
-    exit();
-  }
+  $_SESSION['errors'] = $errors;
+
+  header('Location: /views/login.php');
+  exit;
 }
