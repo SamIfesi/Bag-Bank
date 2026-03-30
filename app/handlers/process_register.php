@@ -1,10 +1,10 @@
 <?php
-session_start();
 require_once __DIR__ . "/../../core/Config.php";
-
+require_once __DIR__ . "/../../core/Session.php";
 require_once ROOT . "/config/functions/utilities.php";
 require_once ROOT . "/app/controller/userController.php";
 
+Session::start();
 $userController = new userController();
 $errors = [];
 

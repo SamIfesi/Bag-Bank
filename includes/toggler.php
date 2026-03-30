@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once __DIR__ . "/../core/Session.php"; 
+Session::start();
 
 $valid_items = ['balance', 'account_number', 'card', 'page'];
 $item_key = isset($_GET['item']) ? $_GET['item'] : '';
