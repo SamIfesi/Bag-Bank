@@ -1,13 +1,6 @@
 <?php
-
-/**
- * Load environment variables from .env file or Railway environment
- * This allows the app to work with both local and hosting databases
- */
 function loadEnv($filePath)
 {
-    // If .env file doesn't exist, we're likely on a hosting platform
-    // that sets environment variables directly (like Railway)
     if (!file_exists($filePath)) {
         return;
     }
@@ -15,7 +8,6 @@ function loadEnv($filePath)
     $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
     foreach ($lines as $line) {
-        // Skip comments
         if (strpos(trim($line), '#') === 0) {
             continue;
         }
@@ -41,7 +33,3 @@ function loadEnv($filePath)
 
 // Load .env from project root (local development)
 loadEnv(__DIR__ . '/../.env');
-
-// On hosting platforms like Railway, environment variables are already available
-// They'll be automatically loaded into $_ENV and accessible via getenv()
-// No additional action needed - they're already available!
