@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $_SESSION['last_activity'] = time();   // initialise inactivity timer
       unset($_SESSION['errors']);
       
-      header('Location: /views/dashboard.php');
+      header('Location: ../../views/dashboard.php');
       exit;
     }
 
@@ -42,6 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $_SESSION['errors'] = $errors;
 
-  header('Location: /views/login.php');
+  header('Location: ../../views/login.php');
   exit;
 }

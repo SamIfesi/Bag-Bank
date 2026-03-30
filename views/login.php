@@ -30,7 +30,7 @@ unset($_SESSION['errors']);
         You were logged out after 10 minutes of inactivity. Please sign in again.
       </p>
     <?php endif; ?>
-    
+
     <form action="../app/handlers/process_login.php" method="post" id="login-form">
       <div id="userLogin-form">
         <div class="form-group">
