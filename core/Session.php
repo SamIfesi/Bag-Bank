@@ -9,6 +9,24 @@ class Session
      */
     private const TIMEOUT_SECONDS = 600;
 
+    private static function app_base_path(): string
+    {
+        $projectRoot = realpath(dirname(__DIR__));
+        $documentRoot = isset($_SERVER['DOCUMENT_ROOT']) ? realpath($_SERVER['DOCUMENT_ROOT']) : false;
+
+        if ($projectRoot !== false && $documentRoot !== false) {
+            $normalizedProjectRoot = str_replace('\\', '/', $projectRoot);
+            $normalizedDocumentRoot = str_replace('\\', '/', $documentRoot);
+
+            if (strpos($normalizedProjectRoot, $normalizedDocumentRoot) === 0) {
+                $relativePath = trim(substr($normalizedProjectRoot, strlen($normalizedDocumentRoot)), '/');
+                return $relativePath === '' ? '' : '/' . $relativePath;
+            }
+        }
+
+        return '';
+    }
+
     public static function start(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -66,7 +84,7 @@ class Session
                 // Wipe session data before destroying so nothing leaks
                 session_unset();
                 session_destroy();
-                header('Location: /views/login.php?timeout=1');
+                header('Location: ' . self::app_base_path() . '/views/login.php?timeout=1');
                 exit;
             }
         }
